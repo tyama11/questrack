@@ -5,6 +5,7 @@
 
 import {
   AppExportData,
+  FilterStatus,
   Question,
   Subject,
   Workbook,
@@ -592,3 +593,44 @@ export const mergeImportedData = (
     subjects: mergedSubjects,
   };
 };
+
+// ==========================================
+// フィルタリング・検索ユーティリティ
+// ==========================================
+/**
+ * 問題リストを指定されたステータスおよび検索クエリ（問題番号またはメモ）で絞り込む
+ * - status: 'all' | 'incorrect_only' | 'correct_only' | 'unanswered_only'
+ * - searchQuery: "15", "q15", "問15", "#15" 等の問題番号、またはメモの部分一致（大文字小文字無視）
+ */
+export const filterQuestions = (
+  questions: Question[],
+  status: FilterStatus = 'all',
+  searchQuery: string = ''
+): Question[] => {
+  return questions.filter((q) => {
+    // 1. ステータスフィルター
+    if (status === 'incorrect_only' && q.status !== 'incorrect') {
+      return false;
+    }
+    if (status === 'correct_only' && q.status !== 'correct') {
+      return false;
+    }
+    if (status === 'unanswered_only' && q.status !== 'unanswered') {
+      return false;
+    }
+
+    // 2. 検索クエリフィルター (問題番号またはメモ)
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return true;
+
+    // 問題番号マッチ (例: "15", "q15", "問15", "#15", "q 15")
+    const numMatch = query.replace(/^[q問#\s]+/i, '').trim();
+    if (numMatch && !isNaN(Number(numMatch)) && q.number === Number(numMatch)) {
+      return true;
+    }
+
+    // メモマッチ (大文字小文字を区別せず部分一致)
+    return (q.note || '').toLowerCase().includes(query);
+  });
+};
+

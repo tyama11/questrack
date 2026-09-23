@@ -1,4 +1,4 @@
-name: CI - TypeCheck & Frontend Build
+name: CI - Test & TypeCheck
 
 on:
   push:
@@ -16,8 +16,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  frontend-check:
-    name: Frontend Typecheck & Build
+  test-and-typecheck:
+    name: Run Tests & TypeCheck
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -31,5 +31,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Type check & Build Frontend
+      - name: Run Unit Tests
+        run: npm test
+
+      - name: Type check & Build
         run: npm run build

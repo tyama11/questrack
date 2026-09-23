@@ -32,6 +32,7 @@ import {
   createEmptyQuestions,
   DEFAULT_SUBJECTS,
   exportDataToJsonString,
+  filterQuestions,
   INITIAL_SEED_WORKBOOKS,
   loadStoredActiveWorkbookId,
   loadStoredSubjects,
@@ -435,32 +436,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   // ==========================================
   const filteredQuestions = useMemo(() => {
     if (!activeWorkbook) return [];
-
-    return activeWorkbook.questions.filter((q) => {
-      // 1. ステータスフィルター
-      if (filterOptions.status === 'incorrect_only' && q.status !== 'incorrect') {
-        return false;
-      }
-      if (filterOptions.status === 'correct_only' && q.status !== 'correct') {
-        return false;
-      }
-      if (filterOptions.status === 'unanswered_only' && q.status !== 'unanswered') {
-        return false;
-      }
-
-      // 2. 検索クエリフィルター (問題番号またはメモ)
-      const query = filterOptions.searchQuery.trim().toLowerCase();
-      if (!query) return true;
-
-      // 問題番号マッチ (例: "15", "q15", "問15")
-      const numMatch = query.replace(/^[q問#\s]+/i, '');
-      if (numMatch && !isNaN(Number(numMatch)) && q.number === Number(numMatch)) {
-        return true;
-      }
-
-      // メモマッチ
-      return q.note.toLowerCase().includes(query);
-    });
+    return filterQuestions(activeWorkbook.questions, filterOptions.status, filterOptions.searchQuery);
   }, [activeWorkbook, filterOptions.status, filterOptions.searchQuery]);
 
   // ==========================================

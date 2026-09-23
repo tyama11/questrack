@@ -1,175 +1,119 @@
 # Questrack (クエストラック) 🎯
 
-> **100問などの問題集の正否（◯/✕）を高速入力・メモ記録し、✕（不正解）のみを抽出して効率的に復習できる次世代型デスクトップアプリ**
+> ### **「◯（正解）は安心を生むが、実力を伸ばすのは常に【✕（不正解）】だ。」**
+> 
+> 100問演習で浮き彫りになった弱点（✕）を徹底的に炙り出し、**✕だけを撃破すれば、点数は確実に跳ね上がる。**  
+> 試験本番までにすべての✕をゼロにする―― **Questrack** は、合格を掴み取るための最速・最強の学習トラッカーです。
 
-![Questrack App Icon](app-icon.png)
-
----
-
-## 📖 概要
-
-**Questrack** は、資格試験、大学受験、学校の定期試験などの「100問トレーニング」「過去問演習」を強力にサポートする問題演習追跡デスクトップアプリです。
-
-- **超高速入力**: ワンクリックまたはキーボードショートカット（`O`: 正解, `X`: 不正解, `U`: 未解答）でテンポよく正否をトグル
-- **✕（不正解）のみ抽出**: ワンタップで間違えた問題だけを瞬時にフィルタリング
-- **問題メモ機能**: 「なぜ間違えたか」「解法の要点」を問題ごとにメモ保存
-- **復習・間違い直しモード**: 間違えた問題だけを1問ずつ集中的に解き直し、正解に塗り替える苦手克服フロー
-- **教科・問題集管理**: 数学、英語、理科、社会、国家試験など自由な教科分類と複数問題集の管理
-- **ローカル完結 & 高速動作**: Tauri v2 + React 18 + Vite + TailwindCSS による超軽量・ネイティブ動作
+<div align="center">
+  <img src="app-icon.png" alt="Questrack App Icon" width="128" />
+  <p><strong>〜 弱点を炙り出し、✕を一網打尽にする問題演習トラッカー 〜</strong></p>
+</div>
 
 ---
 
-## 📥 最新版ダウンロード (v0.2.0)
+## ⚡ 今すぐ始める（ワンクリックダウンロード）
 
-GitHub Actions CI によって自動ビルドされた公式インストーラーです（問題集の削除機能・カスタム確認モーダルを完備）：
+お使いのパソコンに合わせてインストーラーをダウンロードし、すぐに学習を開始できます。
 
-- 💻 **macOS (Intel Mac 対応)**:
-  - **[Questrack_0.2.0_x64.dmg (Intel Mac用)](https://github.com/tyama11/questrack/releases/download/v0.2.0/Questrack_0.2.0_x64.dmg)**
-- 🍏 **macOS (Apple Silicon M1〜M4 対応)**:
-  - **[Questrack_0.2.0_aarch64.dmg (M1〜M4 Mac用)](https://github.com/tyama11/questrack/releases/download/v0.2.0/Questrack_0.2.0_aarch64.dmg)**
-- 🪟 **Windows (64-bit)**:
-  - **[Questrack_0.2.0_x64-setup.exe (推奨インストーラー)](https://github.com/tyama11/questrack/releases/download/v0.2.0/Questrack_0.2.0_x64-setup.exe)**
-  - **[Questrack_0.2.0_x64_en-US.msi (MSIパッケージ)](https://github.com/tyama11/questrack/releases/download/v0.2.0/Questrack_0.2.0_x64_en-US.msi)**
+| OS / CPU | ダウンロードリンク | 形式 |
+| :--- | :--- | :--- |
+| 🍏 **Mac (Apple Silicon)** | **[Questrack (M1/M2/M3/M4 Mac用)](https://github.com/tyama11/questrack/releases/download/v0.1.2/Questrack_0.1.0_aarch64.dmg)** | `.dmg` |
+| 💻 **Mac (Intel CPU)** | **[Questrack (Intel Mac用)](https://github.com/tyama11/questrack/releases/download/v0.1.2/Questrack_0.1.0_x64.dmg)** | `.dmg` |
+| 🪟 **Windows (10/11 64bit)** | **[Questrack (Windows インストーラー)](https://github.com/tyama11/questrack/releases/download/v0.1.2/Questrack_0.1.0_x64-setup.exe)** | `.exe` |
+| 🪟 **Windows (MSIパッケージ)** | **[Questrack (Windows MSI)](https://github.com/tyama11/questrack/releases/download/v0.1.2/Questrack_0.1.0_x64_en-US.msi)** | `.msi` |
 
----
-
-## 🚀 GitHub Actions による自動ビルド & インストーラー入手方法
-
-ローカルに Rust や Node.js の開発環境がなくても、**GitHub 上ですべての OS 向けインストーラーを自動ビルド**できます。
-
-### 方法 1: GitHub Actions の画面から手動実行（ワンクリック）
-
-1. GitHub のリポジトリページを開きます。
-2. 上部メニューの **「Actions」** タブをクリックします。
-3. 左側のワークフロー一覧から **「Release & Build App」** を選択します。
-4. 右上の **「Run workflow」** ボタンをクリックします。
-5. ビルドが完了（約 3〜6分）すると、画面下部の **Artifacts** に各 OS 用のインストーラーが出力されます：
-   - 🍏 **`questrack-macOS-AppleSilicon-arm64`**: M1/M2/M3/M4 Mac 向け `.dmg`
-   - 💻 **`questrack-macOS-Intel-x86_64`**: Intel Mac 向け `.dmg`
-   - 🪟 **`questrack-Windows-x64`**: Windows 向けセットアップ `.exe` / `.msi`
-   - 🐧 **`questrack-Linux-x64`**: Ubuntu/Debian 向け `.deb` / `.AppImage`
-6. 該当の Artifact をダウンロードして展開し、インストールしてください。
-
-### 方法 2: バージョンタグを打って GitHub Releases から配布
-
-リポジトリでタグをプッシュすると、自動的にマルチプラットフォーム向けバイナリがコンパイルされ、GitHub Releases に公開されます。
-
-```bash
-git tag v0.1.0
-git push origin v0.1.0
-```
-
-GitHub の **Releases** ページにインストーラーが自動添付されます。
+> 📦 すべてのバージョン・過去のリリースは **[GitHub Releases 一覧](https://github.com/tyama11/questrack/releases)** から確認できます。  
+> 💡 *Macで「開発元が未確認」と表示された場合は、ファイルを「右クリック（二本指タップ） ➔ 開く」を選択して起動してください。*
 
 ---
 
-## 🛠️ GitHub リポジトリ作成からプッシュまでの完全ガイド
+## 🔥 なぜ Questrack で点数が爆伸びするのか？
 
-本プロジェクトをご自身の GitHub アカウントにアップロードする手順です。
+### ❌ 正解した問題を何度も解き直していませんか？
+「すでに解ける問題」を何周も解いて満足するのは、ただの作業です。  
+あなたの偏差値や得点を引き上げるのは、**「昨日解けなかった問題が、今日解けるようになること」**、それだけです。
 
-### 1. GitHub 上で新規リポジトリを作成
-1. [GitHub: New Repository](https://github.com/new) にアクセスします。
-2. Repository name に `questrack` と入力します。
-3. Public または Private を選択し、**「Initialize this repository with:」のチェックボックスはすべて外した状態**で「Create repository」をクリックします。
-
-### 2. ローカルからの初回プッシュ手順
-
-ターミナルで本プロジェクトのディレクトリに移動し、以下のコマンドを順番に実行します：
-
-```bash
-# プロジェクトディレクトリへ移動
-cd /Users/tyam/.gemini/antigravity/scratch/questrack
-
-# Git リポジトリの初期化
-git init
-
-# 全ファイルをステージング
-git add .
-
-# 初期コミットの作成
-git commit -m "feat: initial commit for Questrack desktop app"
-
-# デフォルトブランチを main に設定
-git branch -M main
-
-# リモートリポジトリの URL を設定 (YOUR_USERNAME をご自身のアカウント名に置き換えてください)
-git remote add origin https://github.com/YOUR_USERNAME/questrack.git
-
-# GitHub にプッシュ
-git push -u origin main
-```
-
-> **Tips:** 最初のプッシュが完了すると、自動的に `.github/workflows/ci.yml` が動作し、コードの健全性とビルドが検証されます。
+### 🎯 弱点（✕）だけを狙い撃ちにする圧倒的効率
+Questrack は、100問解いたあとに**「間違えた問題だけ」を1秒で抽出し、ピンポイントで解き直す**ことに特化しています。  
+ノートに赤ペンでチェックを入れたり、付箋を貼ったり剥がしたりする無駄な時間はすべてゼロに。  
+あなたの貴重な勉強時間を、100%「弱点克服」に集中させます！
 
 ---
 
-## 💻 ローカル開発環境での起動方法
+## 📚 超実践！活用シナリオ（こんな試験に効果絶大）
 
-ローカルマシンで開発・動作確認を行う場合の手順です。
+### 【シナリオ 1】資格試験の過去問100本ノック
+**対象**: ITパスポート、基本情報技術者、簿記、TOEIC、宅建、行政書士、FPなど
+1. 過去問1回分（100問）を本番同様の制限時間で一気に解く。
+2. キーボードでテンポよく正誤を入力（所要時間：わずか1分）。
+3. **「✕（不正解）」ボタンをクリックし、間違えた23問だけを画面に固定。**
+4. 解説を読み、「なぜ間違えたのか（計算ミス・用語の勘違いなど）」をメモ欄に記録。
+5. 翌日、**「集中復習モード」** でその23問だけを再テスト。すべて◯になったら完全撃破！
 
-### 前提条件
-- **Node.js**: v18 以上 (v20 推奨)
-- **Rust**: 最新 stable (`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`)
-- **OS固有のツール**:
-  - macOS: Xcode Command Line Tools (`xcode-select --install`)
-  - Linux: `libwebkit2gtk-4.1-dev`, `build-essential`, `curl`, `wget`, `libssl-dev`, `libayatana-appindicator3-dev`, `librsvg2-dev`
-  - Windows: Visual Studio C++ Build Tools
-
-### 起動手順
-
-```bash
-# 依存関係のインストール
-npm install
-
-# フロントエンド開発サーバーの起動 (ブラウザで http://localhost:1420 を確認)
-npm run dev
-
-# Tauri デスクトップアプリとしての起動
-npm run tauri dev
-
-# プロダクションビルド
-npm run tauri build
-```
+### 【シナリオ 2】大学・高校受験の周回マスター
+**対象**: 共通テスト（数学・英語・国語・理科・社会）、単語帳100語テスト、重要問題集
+1. 「共通テスト数学 100問演習」の問題集を作成。
+2. 解き進めながら、マウスや `O` / `X` キーで直感的に正否を記録。
+3. 浮き彫りになった苦手単元（確率、ベクトルの特定問題など）の✕に絞り込み。
+4. 解法のポイントをメモに残しながら、**すべてのマスが鮮やかなグリーン（◯）に染まるまで周回！**
 
 ---
 
-## 📂 プロジェクト構成
+## 🚀 直感的な4ステップ！使い方ガイド
 
 ```
-questrack/
-├── .github/
-│   └── workflows/
-│       ├── ci.yml                 # 型検査・フロントエンドビルド自動テスト
-│       └── build-and-release.yml  # macOS/Windows/Linux向け完全ビルド＆自動リリース
-├── public/
-│   └── app-icon.png              # Web/ファビコン用アセット
-├── src/                          # フロントエンド (React 18 + TypeScript)
-│   ├── components/               # UI コンポーネント群
-│   ├── context/                  # 状態管理 (AppContext)
-│   └── types/                    # TypeScript 型定義
-├── src-tauri/                    # Tauri v2 (Rust)
-│   ├── capabilities/             # Tauri v2 権限設定 (default.json)
-│   ├── icons/                    # 各OS向けアイコンアセット (.icns, .ico, 各種png)
-│   ├── src/
-│   │   ├── lib.rs                # Tauri 実行エントリーポイント
-│   │   └── main.rs               # アプリケーション起動関数
-│   ├── Cargo.toml                # Rust 依存関係・設定
-│   ├── build.rs                  # ビルドスクリプト
-│   └── tauri.conf.json           # Tauri ウィンドウ・バンドル設定
-├── app-icon.png                  # アプリアイコン原画 (高解像度)
-├── generate_icons.py             # 各種OS用アイコン自動生成スクリプト
-├── index.html                    # メイン HTML
-├── package.json                  # Node.js パッケージ定義
-├── postcss.config.js             # PostCSS 設定
-├── tailwind.config.js            # TailwindCSS デザインシステム設定
-├── tsconfig.json                 # TypeScript 設定
-├── tsconfig.node.json            # Vite 用 TypeScript 設定
-├── vite.config.ts                # Vite バンドラー設定
-└── README.md                     # 本ドキュメント
+ [Step 1]                [Step 2]                [Step 3]                [Step 4]
+ 1秒で問題集作成   ➔   テンポよく◯✕入力   ➔   ✕（不正解）を一撃抽出   ➔   集中復習モードで撃破！
+ (科目・100問即生成)      (キーボードで爆速判定)      (苦手だけを画面に固定)      (カード形式で1問ずつ制覇)
 ```
+
+### Step 1: 【1秒で問題集作成】
+- 科目（数学、英語、過去問など）を選び、問題集の名前を入力。
+- 「100問」ボタンを押せば、一瞬で1〜100番までの問題マスが自動生成されます。
+
+### Step 2: 【テンポよく◯✕入力】
+- 画面のマスをクリックするか、キーボードのショートカットでサクサク判定：
+  - **`O` キー**: ◯（正解）
+  - **`X` キー**: ✕（不正解）
+  - **`U` キー**: 未解答に戻す
+- リズムよく入力できるので、100問の丸付けもあっという間に完了します。
+
+### Step 3: 【✕（不正解）を一撃抽出】
+- 上部のフィルターバーで **「✕ 不正解」** をクリック！
+- 合格を阻む「間違えた問題」だけが画面にズラリと並びます。何が自分の弱点なのかが一目で判明！
+
+### Step 4: 【集中復習モード & メモで完全撃破】
+- 間違えた理由や覚えておくべき公式を **問題メモ（💭）** にサッとメモ。
+- **「復習モード」** を起動すると、間違えた問題が1問ずつ大きなカード形式で表示されます。
+- 解き直して正解できたら、その場で◯に書き換え！すべての✕が消える快感を味わってください。
 
 ---
 
-## 📜 ライセンス
+## 💡 モチベーションを加速させる「神機能」
 
-MIT License
+- ⚡ **超爆速・快適レスポンス**:  
+  無駄な待ち時間はゼロ。デスクトップアプリならではの軽快さで、勉強の集中力を一切途切れさせません。
+- 📊 **リアルタイム進捗・正答率バー**:  
+  解いた問題数と正答率がリアルタイムにグラフ化。進捗が目に見えるから、勉強のドーパミンが止まらない！
+- 📴 **完全オフライン対応 & 安心のローカル保存**:  
+  ネット環境がなくてもどこでも使えます。SNSの通知や誘惑に邪魔されず、机の上の勉強に没頭できます。
+- 📝 **思考のクセを記録する問題メモ**:  
+  「ケアレスミス」「公式ど忘れ」「問題文の読み落とし」など、自分のミスの傾向を言語化して蓄積できます。
+
+---
+
+## 🏆 さあ、次の試験で最高の結果を掴み取ろう！
+
+> **「試験本番で合格点を取るために、今ここで間違えたのだ。」**  
+> 間違いを見つけた瞬間こそが、あなたが一番成長している瞬間です。  
+> Questrack と一緒に、目の前の✕を1つずつ◯に変えていきましょう！
+
+**今すぐダウンロードして、最初の100問に挑戦しよう！**  
+👉 **[最新版をダウンロードする（GitHub Releases）](https://github.com/tyama11/questrack/releases)**
+
+---
+
+<div align="center">
+  <sub>Crafted for ambitious learners with passion 🎯</sub>
+</div>
