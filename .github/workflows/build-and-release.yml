@@ -55,20 +55,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      - name: Setup Node.js 22 (LTS)
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.targets }}
 
-      - name: Rust Cache (ビルド時間を最大70%高速化)
+      - name: Rust Cache (ビルド高速化)
         uses: swatinem/rust-cache@v2
         with:
-          workspaces: './src-tauri -> target'
+          workspaces: "./src-tauri -> target"
+          prefix-key: "rust-${{ matrix.arch_name }}"
+          shared-key: "questrack-${{ matrix.arch_name }}"
+          cache-on-failure: true
 
       - name: Install frontend dependencies
         run: npm install
