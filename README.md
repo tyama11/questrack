@@ -19,6 +19,18 @@
 
 ---
 
+## 📥 最新版ダウンロード (v0.1.0)
+
+GitHub Actions CI によって自動ビルドされた公式インストーラーを今すぐダウンロードできます：
+
+- 🍏 **macOS (Apple Silicon M1〜M4 対応)**:
+  - **[Questrack_0.1.0_aarch64.dmg (3.9 MB)](https://github.com/tyama11/questrack/releases/download/v0.1.0/Questrack_0.1.0_aarch64.dmg)**
+- 🪟 **Windows (64-bit)**:
+  - **[Questrack_0.1.0_x64-setup.exe (2.5 MB - 推奨)](https://github.com/tyama11/questrack/releases/download/v0.1.0/Questrack_0.1.0_x64-setup.exe)**
+  - **[Questrack_0.1.0_x64_en-US.msi (3.7 MB - MSI版)](https://github.com/tyama11/questrack/releases/download/v0.1.0/Questrack_0.1.0_x64_en-US.msi)**
+
+---
+
 ## 🚀 GitHub Actions による自動ビルド & インストーラー入手方法
 
 ローカルに Rust や Node.js の開発環境がなくても、**GitHub 上ですべての OS 向けインストーラーを自動ビルド**できます。
