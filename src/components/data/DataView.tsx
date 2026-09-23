@@ -9,6 +9,7 @@ import {
   AlertTriangle,
   Calendar,
   X,
+  FileUp,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { useI18n } from '../../context/I18nContext';
@@ -27,7 +28,7 @@ export const DataView: React.FC = () => {
 
   // インポート設定
   const [importMode, setImportMode] = useState<ImportMode>('merge');
-  const [importText, setImportText] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
   const [importStatus, setImportStatus] = useState<{
     type: 'success' | 'error' | null;
     message: string;
@@ -69,51 +70,27 @@ export const DataView: React.FC = () => {
   };
 
   // ----------------------------------------------------
-  // インポート: テキスト貼り付けから実行
+  // インポート: JSONファイルの読み込み共通処理
   // ----------------------------------------------------
-  const handleImportSubmit = () => {
-    if (!importText.trim()) {
+  const processImportFile = (file: File) => {
+    if (!file.name.endsWith('.json') && file.type !== 'application/json' && file.type !== '') {
       setImportStatus({
         type: 'error',
-        message: dict.data.noJsonInput,
+        message: currentLanguage === 'ja' ? 'JSONファイル形式 (.json) を選択してください。' : 'Please select a valid .json file.',
       });
       return;
     }
-
-    const res = importData(importText.trim(), importMode);
-    if (res.success) {
-      setImportStatus({
-        type: 'success',
-        message: t('data.importSuccess', { count: res.count ?? 0 }),
-      });
-      setImportText('');
-    } else {
-      setImportStatus({
-        type: 'error',
-        message: res.error || dict.data.importError,
-      });
-    }
-  };
-
-  // ----------------------------------------------------
-  // インポート: ファイル選択 / ドロップ
-  // ----------------------------------------------------
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
 
     const reader = new FileReader();
     reader.onload = (event) => {
       const content = event.target?.result as string;
       if (content) {
-        setImportText(content);
         const res = importData(content, importMode);
         if (res.success) {
           setImportStatus({
             type: 'success',
             message: t('data.importFileSuccess', { name: file.name, count: res.count ?? 0 }),
           });
-          setImportText('');
         } else {
           setImportStatus({
             type: 'error',
@@ -123,7 +100,37 @@ export const DataView: React.FC = () => {
       }
     };
     reader.readAsText(file);
+  };
+
+  // ファイル選択インプット
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    processImportFile(file);
     e.target.value = '';
+  };
+
+  // ドラッグ＆ドロップ ハンドラー
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      processImportFile(file);
+    }
   };
 
   // ----------------------------------------------------
@@ -262,7 +269,7 @@ export const DataView: React.FC = () => {
           </div>
         </div>
 
-        {/* インポート (復元・移行) */}
+        {/* インポート (復元・移行 - ファイル管理に一本化) */}
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
@@ -316,35 +323,42 @@ export const DataView: React.FC = () => {
             </div>
           </div>
 
-          <div className="space-y-2">
-            {/* ファイル選択インプット */}
-            <label className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 cursor-pointer transition-colors border border-slate-200 dark:border-slate-700">
-              <Upload className="w-4 h-4" />
-              <span>{dict.data.selectFile}</span>
-              <input
-                type="file"
-                accept=".json,application/json"
-                onChange={handleFileUpload}
-                className="hidden"
-              />
-            </label>
+          {/* ドラッグ＆ドロップ対応ファイル選択ドロップゾーン */}
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={`border-2 border-dashed rounded-2xl p-5 text-center transition-all ${
+              isDragging
+                ? 'border-brand-500 bg-brand-50/50 dark:bg-brand-950/30 scale-101'
+                : 'border-slate-200 dark:border-slate-700/80 bg-slate-50/50 dark:bg-slate-800/40 hover:border-slate-300 dark:hover:border-slate-600'
+            }`}
+          >
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <div className="w-10 h-10 rounded-2xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 flex items-center justify-center">
+                <FileUp className="w-5 h-5" />
+              </div>
+              <div className="space-y-0.5">
+                <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
+                  {currentLanguage === 'ja' ? 'JSONファイルをドラッグ＆ドロップ' : 'Drag & drop JSON file here'}
+                </p>
+                <p className="text-[11px] text-slate-400">
+                  {currentLanguage === 'ja' ? 'または下のボタンからファイルを選択' : 'or browse from your computer'}
+                </p>
+              </div>
 
-            {/* テキスト入力トグルまたはテキストエリア */}
-            <textarea
-              rows={2}
-              value={importText}
-              onChange={(e) => setImportText(e.target.value)}
-              placeholder={dict.data.orPasteText}
-              className="w-full p-2.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 font-mono"
-            />
-            {importText && (
-              <button
-                onClick={handleImportSubmit}
-                className="w-full py-2 px-3 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 transition-colors"
-              >
-                {dict.data.runImport}
-              </button>
-            )}
+              {/* ファイル選択インプット */}
+              <label className="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 cursor-pointer shadow-sm shadow-brand-600/30 transition-all active:scale-95">
+                <Upload className="w-3.5 h-3.5" />
+                <span>{dict.data.selectFile}</span>
+                <input
+                  type="file"
+                  accept=".json,application/json"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+              </label>
+            </div>
           </div>
         </div>
       </div>
