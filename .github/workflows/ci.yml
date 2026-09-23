@@ -11,7 +11,7 @@ on:
       - master
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -57,18 +57,28 @@ jobs:
         run: npm test
 
       - name: Type check & Build
+        id: build
         run: |
-          echo "## Build Diagnostics" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          npm run build 2>&1 | tee build_log.txt || BUILD_EXIT=$?
-          cat build_log.txt >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          if [ "${BUILD_EXIT:-0}" -ne 0 ]; then
-            exit $BUILD_EXIT
-          fi
+          npm run build 2>&1 | tee build_log.txt
+        continue-on-error: true
+
+      - name: Capture Failure Diagnostics
+        if: steps.build.outcome == 'failure'
+        run: |
+          echo "=== BUILD FAILURE LOG ==="
+          cat build_log.txt
+          git config user.name "CI Diagnostics Bot"
+          git config user.email "bot@github.com"
+          git checkout -B ci-diagnostics
+          echo "=== BUILD FAILURE LOG ===" > build_error.log
+          cat build_log.txt >> build_error.log
+          git add build_error.log
+          git commit -m "chore: save CI failure log [skip ci]"
+          git push -f origin ci-diagnostics
+          exit 1
 
       - name: Upload GitHub Pages artifact
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: steps.build.outcome == 'success' && github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist
@@ -84,4 +94,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
