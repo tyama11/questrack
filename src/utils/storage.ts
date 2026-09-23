@@ -10,7 +10,6 @@ import {
   Workbook,
   WorkbookStats,
   StorageUsageSummary,
-  ImportResult,
 } from '../types';
 
 // ==========================================

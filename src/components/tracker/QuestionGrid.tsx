@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Check,
   X,
   FileText,
-  HelpCircle,
-  Sparkles,
   MessageSquare,
   AlertCircle,
 } from 'lucide-react';

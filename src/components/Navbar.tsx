@@ -1,5 +1,5 @@
 import React from 'react';
-import { Target, FolderKanban, Database, CheckCircle2, XCircle, Sparkles } from 'lucide-react';
+import { Target, FolderKanban, Database, CheckCircle2, XCircle } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export type ActiveTab = 'tracker' | 'management' | 'data';

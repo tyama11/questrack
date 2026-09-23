@@ -1,16 +1,12 @@
 import React, { useState } from 'react';
 import {
   BookOpen,
-  Plus,
   Calendar,
   Layers,
-  ChevronDown,
-  Sparkles,
   ArrowRight,
-  Target,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { Question, QuestionStatus } from '../../types';
+import { Question } from '../../types';
 import { StatsBar } from './StatsBar';
 import { FilterBar } from './FilterBar';
 import { QuestionGrid } from './QuestionGrid';

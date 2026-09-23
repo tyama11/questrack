@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Database,
   Download,
   Upload,
   Copy,
@@ -10,10 +9,7 @@ import {
   HardDrive,
   FileJson,
   AlertTriangle,
-  FileText,
   Calendar,
-  Layers,
-  HelpCircle,
   X,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';

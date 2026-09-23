@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  FolderKanban,
   BookOpen,
   Plus,
   Edit2,
@@ -10,9 +9,6 @@ import {
   TrendingUp,
   XCircle,
   CheckCircle2,
-  HelpCircle,
-  Sparkles,
-  Layers,
   X,
   Palette,
   Check,

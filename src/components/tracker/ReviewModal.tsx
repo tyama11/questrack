@@ -12,7 +12,7 @@ import {
   Trophy,
   RotateCcw,
 } from 'lucide-react';
-import { Question, Workbook } from '../../types';
+import { Workbook } from '../../types';
 
 interface ReviewModalProps {
   isOpen: boolean;
