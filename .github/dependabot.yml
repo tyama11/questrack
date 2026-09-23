@@ -14,6 +14,13 @@ updates:
       - "frontend"
     commit-message:
       prefix: "chore(deps)"
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   # Cargo / Rust dependencies (Tauri v2 / Rust Crates)
   - package-ecosystem: "cargo"
@@ -29,6 +36,13 @@ updates:
       - "rust"
     commit-message:
       prefix: "chore(deps)"
+    groups:
+      minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
 
   # GitHub Actions workflows
   - package-ecosystem: "github-actions"
@@ -44,3 +58,7 @@ updates:
       - "ci"
     commit-message:
       prefix: "chore(deps)"
+    groups:
+      all-actions:
+        patterns:
+          - "*"
