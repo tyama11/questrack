@@ -1,21 +1,22 @@
 name: Dependabot Auto-Merge
 
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
       - synchronize
       - reopened
+  workflow_dispatch:
 
 permissions:
   contents: write
   pull-requests: write
 
 jobs:
-  dependabot:
-    name: Approve and Auto-Merge
+  dependabot-single:
+    name: Approve and Auto-Merge Single PR
     runs-on: ubuntu-latest
-    if: github.actor == 'dependabot[bot]'
+    if: github.event_name == 'pull_request_target' && github.actor == 'dependabot[bot]'
     steps:
       - name: Dependabot metadata
         id: metadata
@@ -33,4 +34,24 @@ jobs:
         run: gh pr merge --auto --squash "$PR_URL"
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  dependabot-all:
+    name: Batch Approve and Enable Auto-Merge
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Process all open Dependabot PRs
+        run: |
+          prs=$(gh pr list --app dependabot --state open --json number,url --jq '.[] | .url')
+          if [ -z "$prs" ]; then
+            echo "No open Dependabot PRs found."
+            exit 0
+          fi
+          for pr in $prs; do
+            echo "Processing PR: $pr"
+            gh pr review --approve "$pr" || true
+            gh pr merge --auto --squash "$pr" || true
+          done
+        env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
