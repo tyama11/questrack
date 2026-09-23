@@ -19,15 +19,17 @@
 
 ---
 
-## 📥 最新版ダウンロード (v0.1.0)
+## 📥 最新版ダウンロード (v0.1.2)
 
-GitHub Actions CI によって自動ビルドされた公式インストーラーを今すぐダウンロードできます：
+GitHub Actions CI によって自動ビルドされた公式インストーラーです：
 
+- 💻 **macOS (Intel Mac 対応)**:
+  - **[Questrack_0.1.0_x64.dmg (3.65 MB - Intel Mac用)](https://github.com/tyama11/questrack/releases/download/v0.1.2/Questrack_0.1.0_x64.dmg)**
 - 🍏 **macOS (Apple Silicon M1〜M4 対応)**:
-  - **[Questrack_0.1.0_aarch64.dmg (3.9 MB)](https://github.com/tyama11/questrack/releases/download/v0.1.0/Questrack_0.1.0_aarch64.dmg)**
+  - **[Questrack_0.1.0_aarch64.dmg (3.63 MB - M1〜M4 Mac用)](https://github.com/tyama11/questrack/releases/download/v0.1.2/Questrack_0.1.0_aarch64.dmg)**
 - 🪟 **Windows (64-bit)**:
-  - **[Questrack_0.1.0_x64-setup.exe (2.5 MB - 推奨)](https://github.com/tyama11/questrack/releases/download/v0.1.0/Questrack_0.1.0_x64-setup.exe)**
-  - **[Questrack_0.1.0_x64_en-US.msi (3.7 MB - MSI版)](https://github.com/tyama11/questrack/releases/download/v0.1.0/Questrack_0.1.0_x64_en-US.msi)**
+  - **[Questrack_0.1.0_x64-setup.exe (2.16 MB - 推奨インストーラー)](https://github.com/tyama11/questrack/releases/download/v0.1.2/Questrack_0.1.0_x64-setup.exe)**
+  - **[Questrack_0.1.0_x64_en-US.msi (3.18 MB - MSIパッケージ)](https://github.com/tyama11/questrack/releases/download/v0.1.2/Questrack_0.1.0_x64_en-US.msi)**
 
 ---
 
