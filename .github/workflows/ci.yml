@@ -53,6 +53,9 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Run Strict Linter (Zero Warnings Allowed)
+        run: npm run lint
+
       - name: Run Unit Tests
         run: npm test
 

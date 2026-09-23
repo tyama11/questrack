@@ -124,8 +124,8 @@
 
 ---
 
-## CL-8: CIインフラ最適化 (Rust Cache根本修正 & Node.js 22 LTS化)
-- [x] Node.js を非推奨となった 20 から最新推奨LTS `22` へ更新 (`ci.yml`, `build-and-release.yml`)
+## CL-8: CIインフラ最適化 (Rust Cache根本修正 & Node.js 24化)
+- [x] Node.js を非推奨となったバージョンから最新推奨 `24` へ更新 (`ci.yml`, `build-and-release.yml`)
 - [x] Rust Cache のホストOS・CPUキー衝突の解消:
   - `prefix-key: "rust-${{ matrix.arch_name }}"` および `shared-key: "questrack-${{ matrix.arch_name }}"` を導入
   - macOS Intel と Apple Silicon のキャッシュ上書き・消滅を防止
@@ -163,5 +163,19 @@
   - 定期的な JSON バックアップ（エクスポート）の推奨、およびデータが消えないデスクトップ版（Mac/Windows）の案内リンクを追加
 - [x] **README.md への Web 版リンク追加**:
   - インストール不要ですぐ試せる GitHub Pages リンクを掲載
+
+---
+
+## CL-11: CI最厳格Lintパイプライン導入 & 全警告ゼロ検証
+- [x] **全環境の Node.js 24 統一点検**:
+  - 仕様書および全 CI ワークフローにおいて Node.js 24 が完全に整合していることを確認
+- [x] **ESLint 9/10 フラット設定 (`eslint.config.js`) による最厳格ルールの導入**:
+  - `typescript-eslint` の `strict` + `stylistic` 推奨構成
+  - React Hooks 規則およびコンポーネント Export 規則の厳格適用
+  - `any` 型の完全禁止、未使用変数（`_` プレフィックス除外）の厳格エラー化
+  - `eslint . --max-warnings 0` による警告（Warnings）1件すら許容しないゼロ・トレランス設定
+- [x] **CI パイプライン (`ci.yml`) への Lint ステップ組み込み**:
+  - テストおよび Pages デプロイの前に最厳格 Lint を実行し、警告が1件でもあれば即座にビルド・デプロイを中断する堅牢なゲートを構築
+
 
 
