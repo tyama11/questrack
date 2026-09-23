@@ -35,43 +35,46 @@ import {
 import { Question, Subject, Workbook, OverallStats } from '../types';
 
 // =================================================================
+// グローバル LocalStorage モックのセットアップ (全テストスイート共通)
+// =================================================================
+let mockStore: Record<string, string> = {};
+
+const mockLocalStorage = {
+  getItem: vi.fn((key: string): string | null => {
+    return mockStore[key] ?? null;
+  }),
+  setItem: vi.fn((key: string, value: string): void => {
+    mockStore[key] = value;
+  }),
+  removeItem: vi.fn((key: string): void => {
+    delete mockStore[key];
+  }),
+  clear: vi.fn((): void => {
+    mockStore = {};
+  }),
+};
+
+const originalWindow = typeof window !== 'undefined' ? window : undefined;
+
+beforeEach(() => {
+  mockStore = {};
+  vi.clearAllMocks();
+
+  // グローバル window.localStorage をモック
+  (globalThis as unknown as { window: { localStorage: Storage } }).window = {
+    localStorage: mockLocalStorage as unknown as Storage,
+  };
+});
+
+afterEach(() => {
+  (globalThis as unknown as { window: unknown }).window = originalWindow;
+  vi.restoreAllMocks();
+});
+
+// =================================================================
 // 1. LocalStorage 操作 (safeStorage) のテスト
 // =================================================================
 describe('LocalStorage 操作 (safeStorage)', () => {
-  // メモリベースの簡易モックストレージ
-  let mockStore: Record<string, string> = {};
-
-  const mockLocalStorage = {
-    getItem: vi.fn((key: string): string | null => {
-      return mockStore[key] ?? null;
-    }),
-    setItem: vi.fn((key: string, value: string): void => {
-      mockStore[key] = value;
-    }),
-    removeItem: vi.fn((key: string): void => {
-      delete mockStore[key];
-    }),
-    clear: vi.fn((): void => {
-      mockStore = {};
-    }),
-  };
-
-  const originalWindow = typeof window !== 'undefined' ? window : undefined;
-
-  beforeEach(() => {
-    mockStore = {};
-    vi.clearAllMocks();
-
-    // グローバル window.localStorage をモック
-    (globalThis as unknown as { window: { localStorage: Storage } }).window = {
-      localStorage: mockLocalStorage as unknown as Storage,
-    };
-  });
-
-  afterEach(() => {
-    (globalThis as unknown as { window: unknown }).window = originalWindow;
-    vi.restoreAllMocks();
-  });
 
   it('setItem, getItem, removeItem が正しく読み書きできること', () => {
     expect(safeStorage.setItem('test_key', 'hello_questrack')).toBe(true);
@@ -802,107 +805,545 @@ describe('初期シードデータの整合性', () => {
 });
 
 // =================================================================
-// 8. 任意問題数および問題集削除時のやり残し再計算テスト
+// 8. 問題集削除と全体統計（やり残し・未解答）の連動テスト
 // =================================================================
-describe('任意問題数追跡 & 問題集削除時のやり残し再計算', () => {
-  it('10問・50問・120問など任意の問題数でやり残し（未解答数）が正確に算出されること', () => {
-    // 10問の小テスト (◯7, ✕2, 未解答1)
-    const wb10: Workbook = {
-      id: 'wb-10',
-      title: '単元確認10問テスト',
+describe('問題集削除と全体統計（やり残し）の連動テスト', () => {
+  it('複数問題集（問題集A 50問中未解答30問、問題集B 100問中未解答80問）から問題集Bを削除した際に、残った問題集Aのみで全体統計（総問題数: 50問、やり残し: 30問）が正確に再計算されること', () => {
+    // 問題集A: 50問 (◯15問, ✕5問, 未解答30問)
+    const questionsA: Question[] = [
+      ...Array.from({ length: 15 }, (_, i) => ({
+        id: `wb-a-${i + 1}`,
+        number: i + 1,
+        status: 'correct' as const,
+        note: '',
+      })),
+      ...Array.from({ length: 5 }, (_, i) => ({
+        id: `wb-a-${i + 16}`,
+        number: i + 16,
+        status: 'incorrect' as const,
+        note: '要復習',
+      })),
+      ...Array.from({ length: 30 }, (_, i) => ({
+        id: `wb-a-${i + 21}`,
+        number: i + 21,
+        status: 'unanswered' as const,
+        note: '',
+      })),
+    ];
+
+    const wbA: Workbook = {
+      id: 'wb-a',
+      title: '問題集A (50問)',
       subjectId: 'sub-math',
-      totalQuestions: 10,
-      questions: [
-        ...Array.from({ length: 7 }, (_, i) => ({ id: `q10-${i + 1}`, number: i + 1, status: 'correct' as const, note: '' })),
-        ...Array.from({ length: 2 }, (_, i) => ({ id: `q10-${i + 8}`, number: i + 8, status: 'incorrect' as const, note: '' })),
-        { id: 'q10-10', number: 10, status: 'unanswered', note: '' },
-      ],
-      createdAt: '2026-09-23',
-      updatedAt: '2026-09-23',
+      totalQuestions: 50,
+      questions: questionsA,
+      createdAt: '2026-09-23T00:00:00.000Z',
+      updatedAt: '2026-09-23T00:00:00.000Z',
     };
 
-    const stats10 = calculateWorkbookStats(wb10);
-    expect(stats10.total).toBe(10);
-    expect(stats10.answered).toBe(9);
-    expect(stats10.unanswered).toBe(1);
-    expect(stats10.accuracyRate).toBe(77.8); // 7/9 = 77.77% -> 77.8%
-    expect(stats10.progressRate).toBe(90);
+    // 問題集B: 100問 (◯12問, ✕8問, 未解答80問)
+    const questionsB: Question[] = [
+      ...Array.from({ length: 12 }, (_, i) => ({
+        id: `wb-b-${i + 1}`,
+        number: i + 1,
+        status: 'correct' as const,
+        note: '',
+      })),
+      ...Array.from({ length: 8 }, (_, i) => ({
+        id: `wb-b-${i + 13}`,
+        number: i + 13,
+        status: 'incorrect' as const,
+        note: 'ミス注意',
+      })),
+      ...Array.from({ length: 80 }, (_, i) => ({
+        id: `wb-b-${i + 21}`,
+        number: i + 21,
+        status: 'unanswered' as const,
+        note: '',
+      })),
+    ];
 
-    // 120問の模試 (◯80, ✕20, 未解答20)
-    const wb120: Workbook = {
-      id: 'wb-120',
-      title: '共通テスト総合模試120問',
-      subjectId: 'sub-math',
-      totalQuestions: 120,
-      questions: [
-        ...Array.from({ length: 80 }, (_, i) => ({ id: `q120-${i + 1}`, number: i + 1, status: 'correct' as const, note: '' })),
-        ...Array.from({ length: 20 }, (_, i) => ({ id: `q120-${i + 81}`, number: i + 81, status: 'incorrect' as const, note: '' })),
-        ...Array.from({ length: 20 }, (_, i) => ({ id: `q120-${i + 101}`, number: i + 101, status: 'unanswered' as const, note: '' })),
-      ],
-      createdAt: '2026-09-23',
-      updatedAt: '2026-09-23',
+    const wbB: Workbook = {
+      id: 'wb-b',
+      title: '問題集B (100問)',
+      subjectId: 'sub-eng',
+      totalQuestions: 100,
+      questions: questionsB,
+      createdAt: '2026-09-23T00:00:00.000Z',
+      updatedAt: '2026-09-23T00:00:00.000Z',
     };
 
-    const stats120 = calculateWorkbookStats(wb120);
-    expect(stats120.total).toBe(120);
-    expect(stats120.answered).toBe(100);
-    expect(stats120.unanswered).toBe(20);
+    // 個別問題集の統計検証
+    const statsA = calculateWorkbookStats(wbA);
+    expect(statsA.total).toBe(50);
+    expect(statsA.answered).toBe(20);
+    expect(statsA.correct).toBe(15);
+    expect(statsA.incorrect).toBe(5);
+    expect(statsA.unanswered).toBe(30);
+
+    const statsB = calculateWorkbookStats(wbB);
+    expect(statsB.total).toBe(100);
+    expect(statsB.answered).toBe(20);
+    expect(statsB.correct).toBe(12);
+    expect(statsB.incorrect).toBe(8);
+    expect(statsB.unanswered).toBe(80);
+
+    // 削除前の全体統計 (問題集A + 問題集B)
+    let currentWorkbooks: Workbook[] = [wbA, wbB];
+    let overall = calculateOverallStats(currentWorkbooks);
+
+    expect(overall.totalQuestions).toBe(150);      // 50 + 100
+    expect(overall.totalAnswered).toBe(40);        // 20 + 20
+    expect(overall.totalCorrect).toBe(27);         // 15 + 12
+    expect(overall.totalIncorrect).toBe(13);       // 5 + 8
+    expect(overall.totalUnanswered).toBe(110);     // 30 + 80 (全体のやり残し)
+    expect(overall.accuracyRate).toBe(68);         // 27 / 40 = 67.5% -> 68%
+    expect(overall.progressRate).toBe(27);         // 40 / 150 = 26.66% -> 27%
+    expect(overall.unansweredRate).toBe(73);       // 110 / 150 = 73.33% -> 73%
+
+    // 【アクション】問題集Bを削除
+    currentWorkbooks = currentWorkbooks.filter((wb) => wb.id !== 'wb-b');
+    saveStoredWorkbooks(currentWorkbooks);
+
+    // 【検証】残った問題集Aのみで全体統計が正確に再計算されること
+    overall = calculateOverallStats(currentWorkbooks);
+
+    expect(overall.totalQuestions).toBe(50);       // 総問題数: 50問
+    expect(overall.totalUnanswered).toBe(30);      // やり残し: 30問
+    expect(overall.totalAnswered).toBe(20);        // 解答済み: 20問
+    expect(overall.totalCorrect).toBe(15);         // 正解: 15問
+    expect(overall.totalIncorrect).toBe(5);        // 不正解: 5問
+    expect(overall.accuracyRate).toBe(75);         // 15 / 20 = 75%
+    expect(overall.progressRate).toBe(40);         // 20 / 50 = 40%
+    expect(overall.unansweredRate).toBe(60);       // 30 / 50 = 60%
   });
 
-  it('問題集を削除した際、全体のやり残し・未解答数が即座に減算され、0冊時は全項目が0になること', () => {
+  it('すべての問題集を削除した場合に、全体の総問題数、正解、不正解、やり残し（未解答）がすべて 0 になること', () => {
     const wb1: Workbook = {
-      id: 'wb-1',
+      id: 'wb-del-1',
       title: '問題集1',
       subjectId: 'sub-math',
-      totalQuestions: 10,
-      questions: createEmptyQuestions(10, 'wb-1'), // 未解答10問
-      createdAt: '',
-      updatedAt: '',
-    };
-    const wb2: Workbook = {
-      id: 'wb-2',
-      title: '問題集2',
-      subjectId: 'sub-eng',
       totalQuestions: 20,
-      questions: createEmptyQuestions(20, 'wb-2'), // 未解答20問
+      questions: [
+        ...Array.from({ length: 10 }, (_, i) => ({ id: `q1-${i + 1}`, number: i + 1, status: 'correct' as const, note: '' })),
+        ...Array.from({ length: 5 }, (_, i) => ({ id: `q1-${i + 11}`, number: i + 11, status: 'incorrect' as const, note: '' })),
+        ...Array.from({ length: 5 }, (_, i) => ({ id: `q1-${i + 16}`, number: i + 16, status: 'unanswered' as const, note: '' })),
+      ],
       createdAt: '',
       updatedAt: '',
     };
 
-    let currentWorkbooks = [wb1, wb2];
+    let workbooks: Workbook[] = [wb1];
+    expect(calculateOverallStats(workbooks).totalQuestions).toBe(20);
+    expect(calculateOverallStats(workbooks).totalUnanswered).toBe(5);
 
-    // 初期状態: 合計30問、やり残し30問
-    let overall = calculateOverallStats(currentWorkbooks);
-    expect(overall.totalQuestions).toBe(30);
-    expect(overall.totalUnanswered).toBe(30);
-    expect(overall.unansweredRate).toBe(100);
+    // すべての問題集を削除 (0冊)
+    workbooks = [];
+    saveStoredWorkbooks(workbooks);
 
-    // wb1 を削除 -> wb2 (20問) のみ残る
-    currentWorkbooks = currentWorkbooks.filter((w) => w.id !== 'wb-1');
-    overall = calculateOverallStats(currentWorkbooks);
-    expect(overall.totalQuestions).toBe(20);
-    expect(overall.totalUnanswered).toBe(20);
+    const emptyOverall: OverallStats = calculateOverallStats(workbooks);
 
-    // wb2 も削除 -> 0冊になる。トータルのやり残しが0になること
-    currentWorkbooks = currentWorkbooks.filter((w) => w.id !== 'wb-2');
-    overall = calculateOverallStats(currentWorkbooks);
-    expect(overall.totalQuestions).toBe(0);
-    expect(overall.totalUnanswered).toBe(0);
-    expect(overall.totalCorrect).toBe(0);
-    expect(overall.totalIncorrect).toBe(0);
-    expect(overall.unansweredRate).toBe(0);
+    expect(emptyOverall.totalQuestions).toBe(0);
+    expect(emptyOverall.totalAnswered).toBe(0);
+    expect(emptyOverall.totalCorrect).toBe(0);
+    expect(emptyOverall.totalIncorrect).toBe(0);
+    expect(emptyOverall.totalUnanswered).toBe(0);
+
+    // ゼロ除算ハンドリング (NaNにならず0%になること)
+    expect(emptyOverall.accuracyRate).toBe(0);
+    expect(Number.isNaN(emptyOverall.accuracyRate)).toBe(false);
+    expect(emptyOverall.progressRate).toBe(0);
+    expect(Number.isNaN(emptyOverall.progressRate)).toBe(false);
+    expect(emptyOverall.unansweredRate).toBe(0);
+    expect(Number.isNaN(emptyOverall.unansweredRate)).toBe(false);
   });
 
-  it('ストレージに空配列 [] が保存されているとき、初期シードデータが復活しないこと', () => {
-    // 空配列をストレージに保存
-    saveStoredWorkbooks([]);
-    const loaded = loadStoredWorkbooks();
-    expect(loaded).toEqual([]);
+  it('問題集削除操作とストレージ同期が連動し、再読み込み後も正確な統計が維持されること', () => {
+    const wbAlpha: Workbook = {
+      id: 'wb-alpha',
+      title: 'アルファ',
+      subjectId: 'sub-1',
+      totalQuestions: 30,
+      questions: createEmptyQuestions(30, 'wb-alpha'),
+      createdAt: '',
+      updatedAt: '',
+    };
+    const wbBeta: Workbook = {
+      id: 'wb-beta',
+      title: 'ベータ',
+      subjectId: 'sub-2',
+      totalQuestions: 25,
+      questions: createEmptyQuestions(25, 'wb-beta'),
+      createdAt: '',
+      updatedAt: '',
+    };
 
-    // AppContextの判定条件: stored !== null ? stored : INITIAL_SEED_WORKBOOKS
-    const finalWorkbooks = loaded !== null ? loaded : INITIAL_SEED_WORKBOOKS;
-    expect(finalWorkbooks).toEqual([]);
-    expect(finalWorkbooks.length).toBe(0); // シードデータが復活しない
+    // 初期2冊保存
+    saveStoredWorkbooks([wbAlpha, wbBeta]);
+    let stored = loadStoredWorkbooks();
+    expect(stored).toHaveLength(2);
+    expect(calculateOverallStats(stored!).totalQuestions).toBe(55);
+    expect(calculateOverallStats(stored!).totalUnanswered).toBe(55);
+
+    // wbBeta を削除して保存
+    const remaining = stored!.filter((w) => w.id !== 'wb-beta');
+    saveStoredWorkbooks(remaining);
+
+    stored = loadStoredWorkbooks();
+    expect(stored).toHaveLength(1);
+    expect(stored![0].id).toBe('wb-alpha');
+    expect(calculateOverallStats(stored!).totalQuestions).toBe(30);
+    expect(calculateOverallStats(stored!).totalUnanswered).toBe(30);
+
+    // wbAlpha も削除して保存 (空配列)
+    saveStoredWorkbooks([]);
+    stored = loadStoredWorkbooks();
+    expect(stored).toEqual([]);
+    expect(calculateOverallStats(stored!).totalQuestions).toBe(0);
+    expect(calculateOverallStats(stored!).totalUnanswered).toBe(0);
+  });
+});
+
+// =================================================================
+// 9. ストレージの空配列維持テスト
+// =================================================================
+describe('ストレージの空配列維持テスト', () => {
+  it('loadStoredWorkbooks() が空配列 [] を正しく読み込み、null や初期シードにならないこと', () => {
+    // 明示的に空配列 [] を保存
+    expect(saveStoredWorkbooks([])).toBe(true);
+
+    const loaded = loadStoredWorkbooks();
+
+    expect(loaded).not.toBeNull();
+    expect(Array.isArray(loaded)).toBe(true);
+    expect(loaded).toEqual([]);
+    expect(loaded).toHaveLength(0);
+  });
+
+  it('ユーザーが全問題集を削除した空配列 [] の状態のとき、AppContext初期化ロジック (stored !== null ? stored : INITIAL_SEED_WORKBOOKS) で INITIAL_SEED_WORKBOOKS が誤って復活しないこと', () => {
+    // 全問題集が削除されたストレージ状態をシミュレート
+    saveStoredWorkbooks([]);
+
+    const storedWorkbooks = loadStoredWorkbooks();
+
+    // AppContext の初期化評価式
+    const resolvedWorkbooks = storedWorkbooks !== null ? storedWorkbooks : INITIAL_SEED_WORKBOOKS;
+
+    // 空配列が正しく維持され、シードデータが誤って復活しないこと
+    expect(resolvedWorkbooks).toEqual([]);
+    expect(resolvedWorkbooks).toHaveLength(0);
+    expect(resolvedWorkbooks).not.toBe(INITIAL_SEED_WORKBOOKS);
+    expect(resolvedWorkbooks.length).not.toBe(INITIAL_SEED_WORKBOOKS.length);
+  });
+
+  it('初回起動時など未初期化状態 (safeStorage.getItem が null を返す場合) は正常に INITIAL_SEED_WORKBOOKS にフォールバックすること', () => {
+    // キーを削除して初回未設定状態にする
+    safeStorage.removeItem(STORAGE_KEYS.WORKBOOKS);
+
+    const storedWorkbooks = loadStoredWorkbooks();
+    expect(storedWorkbooks).toBeNull();
+
+    // AppContext の初期化評価式
+    const resolvedWorkbooks = storedWorkbooks !== null ? storedWorkbooks : INITIAL_SEED_WORKBOOKS;
+
+    // 初回起動時はシードデータがロードされること
+    expect(resolvedWorkbooks).toEqual(INITIAL_SEED_WORKBOOKS);
+    expect(resolvedWorkbooks.length).toBeGreaterThan(0);
+  });
+
+  it('ストレージに破損したJSONや配列以外のオブジェクトが格納されている場合は安全に null を返すこと', () => {
+    // オブジェクト形式 (非配列)
+    safeStorage.setItem(STORAGE_KEYS.WORKBOOKS, JSON.stringify({ error: 'not an array' }));
+    expect(loadStoredWorkbooks()).toBeNull();
+
+    // 数値プリミティブ
+    safeStorage.setItem(STORAGE_KEYS.WORKBOOKS, '12345');
+    expect(loadStoredWorkbooks()).toBeNull();
+
+    // 構文不正JSON
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    safeStorage.setItem(STORAGE_KEYS.WORKBOOKS, '{ broken json');
+    expect(loadStoredWorkbooks()).toBeNull();
+    expect(consoleSpy).toHaveBeenCalled();
+    consoleSpy.mockRestore();
+  });
+
+  it('全問題集削除 (saveStoredWorkbooks([])) と完全初期化 (clearAllDataFromStorage()) の挙動の違いが明確に識別されること', () => {
+    // パターン1: ユーザーが手動で全問題集を削除 -> ストレージには "[]" が残り、空状態を維持
+    saveStoredWorkbooks([]);
+    expect(safeStorage.getItem(STORAGE_KEYS.WORKBOOKS)).toBe('[]');
+    expect(loadStoredWorkbooks()).toEqual([]);
+
+    // パターン2: 完全初期化・工場出荷リセット -> キー自体が削除され null になる
+    clearAllDataFromStorage();
+    expect(safeStorage.getItem(STORAGE_KEYS.WORKBOOKS)).toBeNull();
+    expect(loadStoredWorkbooks()).toBeNull();
+  });
+});
+
+// =================================================================
+// 10. 任意問題数（100問固定ではない）の柔軟性テスト
+// =================================================================
+describe('任意問題数（100問固定ではない）の柔軟性テスト', () => {
+  it('10問、50問、120問などの任意の問題数で createEmptyQuestions が過不足なく正確に生成されること', () => {
+    // 10問の生成
+    const q10 = createEmptyQuestions(10, 'quiz-10');
+    expect(q10).toHaveLength(10);
+    expect(q10[0].number).toBe(1);
+    expect(q10[0].id).toBe('quiz-10-1');
+    expect(q10[9].number).toBe(10);
+    expect(q10[9].id).toBe('quiz-10-10');
+    expect(q10.every((q) => q.status === 'unanswered' && q.note === '')).toBe(true);
+
+    // 50問の生成
+    const q50 = createEmptyQuestions(50, 'exam-50');
+    expect(q50).toHaveLength(50);
+    expect(q50[0].number).toBe(1);
+    expect(q50[49].number).toBe(50);
+    expect(q50[49].id).toBe('exam-50-50');
+
+    // 120問の生成 (100問超の模試)
+    const q120 = createEmptyQuestions(120, 'mock-120');
+    expect(q120).toHaveLength(120);
+    expect(q120[0].number).toBe(1);
+    expect(q120[119].number).toBe(120);
+    expect(q120[119].id).toBe('mock-120-120');
+
+    // 1問 (境界値)
+    const q1 = createEmptyQuestions(1, 'single-1');
+    expect(q1).toHaveLength(1);
+    expect(q1[0].number).toBe(1);
+  });
+
+  it('10問の小テスト問題集で解答追跡と統計計算（正答率・進捗率・未解答数）が正常に算出されること', () => {
+    // 10問: ◯6問, ✕2問, 未解答2問
+    const questions: Question[] = [
+      ...Array.from({ length: 6 }, (_, i) => ({ id: `q10-${i + 1}`, number: i + 1, status: 'correct' as const, note: '' })),
+      ...Array.from({ length: 2 }, (_, i) => ({ id: `q10-${i + 7}`, number: i + 7, status: 'incorrect' as const, note: 'ケアレスミス' })),
+      ...Array.from({ length: 2 }, (_, i) => ({ id: `q10-${i + 9}`, number: i + 9, status: 'unanswered' as const, note: '' })),
+    ];
+
+    const wb: Workbook = {
+      id: 'wb-quiz-10',
+      title: '英単語確認10問テスト',
+      subjectId: 'sub-eng',
+      totalQuestions: 10,
+      questions,
+      createdAt: '2026-09-23',
+      updatedAt: '2026-09-23',
+    };
+
+    const stats = calculateWorkbookStats(wb);
+    expect(stats.total).toBe(10);
+    expect(stats.answered).toBe(8);
+    expect(stats.correct).toBe(6);
+    expect(stats.incorrect).toBe(2);
+    expect(stats.unanswered).toBe(2);
+    expect(stats.accuracyRate).toBe(75.0); // 6 / 8 = 75.0%
+    expect(stats.progressRate).toBe(80.0); // 8 / 10 = 80.0%
+  });
+
+  it('50問の中規模問題集で解答追跡と統計計算が正常に算出されること', () => {
+    // 50問: ◯35問, ✕5問, 未解答10問
+    const questions: Question[] = [
+      ...Array.from({ length: 35 }, (_, i) => ({ id: `q50-${i + 1}`, number: i + 1, status: 'correct' as const, note: '' })),
+      ...Array.from({ length: 5 }, (_, i) => ({ id: `q50-${i + 36}`, number: i + 36, status: 'incorrect' as const, note: '公式復習' })),
+      ...Array.from({ length: 10 }, (_, i) => ({ id: `q50-${i + 41}`, number: i + 41, status: 'unanswered' as const, note: '' })),
+    ];
+
+    const wb: Workbook = {
+      id: 'wb-mid-50',
+      title: '定期テスト直前50問ドリル',
+      subjectId: 'sub-math',
+      totalQuestions: 50,
+      questions,
+      createdAt: '2026-09-23',
+      updatedAt: '2026-09-23',
+    };
+
+    const stats = calculateWorkbookStats(wb);
+    expect(stats.total).toBe(50);
+    expect(stats.answered).toBe(40);
+    expect(stats.correct).toBe(35);
+    expect(stats.incorrect).toBe(5);
+    expect(stats.unanswered).toBe(10);
+    expect(stats.accuracyRate).toBe(87.5); // 35 / 40 = 87.5%
+    expect(stats.progressRate).toBe(80.0); // 40 / 50 = 80.0%
+  });
+
+  it('120問の大規模問題集（100問超の模試）で全問解答時の統計計算が正常に算出されること', () => {
+    // 120問: ◯100問, ✕20問, 未解答0問 (全問完走)
+    const questions: Question[] = [
+      ...Array.from({ length: 100 }, (_, i) => ({ id: `q120-${i + 1}`, number: i + 1, status: 'correct' as const, note: '' })),
+      ...Array.from({ length: 20 }, (_, i) => ({ id: `q120-${i + 101}`, number: i + 101, status: 'incorrect' as const, note: '要見直し' })),
+    ];
+
+    const wb: Workbook = {
+      id: 'wb-mock-120',
+      title: '共通テスト総合模試120問ノック',
+      subjectId: 'sub-info',
+      totalQuestions: 120,
+      questions,
+      createdAt: '2026-09-23',
+      updatedAt: '2026-09-23',
+    };
+
+    const stats = calculateWorkbookStats(wb);
+    expect(stats.total).toBe(120);
+    expect(stats.answered).toBe(120);
+    expect(stats.correct).toBe(100);
+    expect(stats.incorrect).toBe(20);
+    expect(stats.unanswered).toBe(0);
+    expect(stats.accuracyRate).toBe(83.3); // 100 / 120 = 83.333% -> 83.3%
+    expect(stats.progressRate).toBe(100.0); // 120 / 120 = 100.0%
+  });
+
+  it('100問を超える問題集（120問）でも「✕（不正解）のみ抽出」および3桁の問題番号検索（例: "115", "q120"）が正確に動作すること', () => {
+    const questions: Question[] = [
+      ...Array.from({ length: 100 }, (_, i) => ({
+        id: `q120-${i + 1}`,
+        number: i + 1,
+        status: 'correct' as const,
+        note: i === 41 ? '42番のメモ' : '',
+      })),
+      ...Array.from({ length: 20 }, (_, i) => ({
+        id: `q120-${i + 101}`,
+        number: i + 101,
+        status: 'incorrect' as const,
+        note: i + 101 === 115 ? '115番の三角関数極限の難問' : '',
+      })),
+    ];
+
+    // 不正解のみ抽出
+    const incorrectOnly = filterQuestions(questions, 'incorrect_only');
+    expect(incorrectOnly).toHaveLength(20);
+    expect(incorrectOnly.every((q) => q.status === 'incorrect')).toBe(true);
+
+    // 100超の番号検索: "115"
+    const search115 = filterQuestions(questions, 'all', '115');
+    expect(search115).toHaveLength(1);
+    expect(search115[0].number).toBe(115);
+    expect(search115[0].status).toBe('incorrect');
+
+    // "q120" / "Q120" 検索
+    const searchQ120 = filterQuestions(questions, 'all', 'q120');
+    expect(searchQ120).toHaveLength(1);
+    expect(searchQ120[0].number).toBe(120);
+
+    // "問105" 検索
+    const searchToi105 = filterQuestions(questions, 'all', '問105');
+    expect(searchToi105).toHaveLength(1);
+    expect(searchToi105[0].number).toBe(105);
+
+    // メモ部分一致検索
+    const searchMemo = filterQuestions(questions, 'all', '極限');
+    expect(searchMemo).toHaveLength(1);
+    expect(searchMemo[0].number).toBe(115);
+  });
+
+  it('任意問題数での動的伸縮（拡張: 10問→50問、縮小: 120問→50問）において既存の解答・メモが保持されること', () => {
+    const now = new Date().toISOString();
+
+    // 1. 10問の初期問題集を作成し、1番を◯、2番を✕(メモ付き)に設定
+    const questions10 = createEmptyQuestions(10, 'wb-dynamic');
+    questions10[0].status = 'correct';
+    questions10[0].note = '第1問の解答メモ';
+    questions10[1].status = 'incorrect';
+    questions10[1].note = '第2問の要復習メモ';
+
+    // 10問 -> 50問への拡張処理
+    const newTotalExpanded = 50;
+    const extraCount = newTotalExpanded - questions10.length;
+    const extraQuestions: Question[] = [];
+    for (let i = 0; i < extraCount; i++) {
+      extraQuestions.push({
+        id: `wb-dynamic-${questions10.length + 1 + i}`,
+        number: questions10.length + 1 + i,
+        status: 'unanswered',
+        note: '',
+        updatedAt: now,
+      });
+    }
+    const questions50Expanded = [...questions10, ...extraQuestions];
+
+    expect(questions50Expanded).toHaveLength(50);
+    // 既存の問題のステータスとメモが維持されていること
+    expect(questions50Expanded[0].status).toBe('correct');
+    expect(questions50Expanded[0].note).toBe('第1問の解答メモ');
+    expect(questions50Expanded[1].status).toBe('incorrect');
+    expect(questions50Expanded[1].note).toBe('第2問の要復習メモ');
+    // 追加された設問が未解答であること
+    expect(questions50Expanded[10].number).toBe(11);
+    expect(questions50Expanded[10].status).toBe('unanswered');
+    expect(questions50Expanded[49].number).toBe(50);
+    expect(questions50Expanded[49].status).toBe('unanswered');
+
+    // 2. 120問 -> 50問への縮小処理
+    const questions120 = createEmptyQuestions(120, 'wb-shrink');
+    questions120[0].status = 'correct';
+    questions120[49].status = 'incorrect';
+    questions120[49].note = '50問目のメモ';
+    questions120[119].status = 'incorrect'; // 120問目
+
+    const newTotalShrunk = 50;
+    const questions50Shrunk = questions120.slice(0, newTotalShrunk);
+
+    expect(questions50Shrunk).toHaveLength(50);
+    expect(questions50Shrunk[0].status).toBe('correct');
+    expect(questions50Shrunk[49].number).toBe(50);
+    expect(questions50Shrunk[49].status).toBe('incorrect');
+    expect(questions50Shrunk[49].note).toBe('50問目のメモ');
+  });
+
+  it('任意問題数（10問、50問、120問）の問題集が JSON エクスポート / インポート / バリデーションで忠実に維持されること', () => {
+    const multiSizeWorkbooks: Workbook[] = [
+      {
+        id: 'wb-export-10',
+        title: '10問テスト',
+        subjectId: 'sub-math',
+        totalQuestions: 10,
+        questions: createEmptyQuestions(10, 'wb-export-10'),
+        createdAt: '2026-09-23',
+        updatedAt: '2026-09-23',
+      },
+      {
+        id: 'wb-export-50',
+        title: '50問ドリル',
+        subjectId: 'sub-eng',
+        totalQuestions: 50,
+        questions: createEmptyQuestions(50, 'wb-export-50'),
+        createdAt: '2026-09-23',
+        updatedAt: '2026-09-23',
+      },
+      {
+        id: 'wb-export-120',
+        title: '120問模試',
+        subjectId: 'sub-science',
+        totalQuestions: 120,
+        questions: createEmptyQuestions(120, 'wb-export-120'),
+        createdAt: '2026-09-23',
+        updatedAt: '2026-09-23',
+      },
+    ];
+
+    const jsonStr = exportDataToJsonString(multiSizeWorkbooks, DEFAULT_SUBJECTS);
+    const result = validateAndParseImportData(jsonStr);
+
+    expect(result.success).toBe(true);
+    expect(result.data).toBeDefined();
+    expect(result.data?.workbooks).toHaveLength(3);
+
+    const wb10 = result.data?.workbooks.find((w) => w.id === 'wb-export-10');
+    expect(wb10?.totalQuestions).toBe(10);
+    expect(wb10?.questions).toHaveLength(10);
+
+    const wb50 = result.data?.workbooks.find((w) => w.id === 'wb-export-50');
+    expect(wb50?.totalQuestions).toBe(50);
+    expect(wb50?.questions).toHaveLength(50);
+
+    const wb120 = result.data?.workbooks.find((w) => w.id === 'wb-export-120');
+    expect(wb120?.totalQuestions).toBe(120);
+    expect(wb120?.questions).toHaveLength(120);
   });
 });
 
