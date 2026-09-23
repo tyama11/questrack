@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Navbar, ActiveTab } from './components/Navbar';
+import { Navbar } from './components/Navbar';
+import type { ActiveTab } from './types';
 import { TrackerView } from './components/tracker/TrackerView';
 import { ManagementView } from './components/management/ManagementView';
 import { DataView } from './components/data/DataView';

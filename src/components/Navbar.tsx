@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useApp, useTheme, useI18n } from '../context';
 import { ActiveTab } from '../types';
+export type { ActiveTab };
 
 interface NavbarProps {
   activeTab: ActiveTab;
