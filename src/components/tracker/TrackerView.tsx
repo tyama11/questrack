@@ -4,6 +4,8 @@ import {
   Calendar,
   Layers,
   ArrowRight,
+  Trash2,
+  Copy,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { Question } from '../../types';
@@ -12,6 +14,7 @@ import { FilterBar } from './FilterBar';
 import { QuestionGrid } from './QuestionGrid';
 import { NoteModal } from './NoteModal';
 import { ReviewModal } from './ReviewModal';
+import { ConfirmModal } from '../common/ConfirmModal';
 
 interface TrackerViewProps {
   onNavigateToManagement: () => void;
@@ -33,11 +36,14 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
     setQuestionNote,
     batchSetQuestions,
     getWorkbookStats,
+    deleteWorkbook,
+    duplicateWorkbook,
   } = useApp();
 
   // モーダル管理ステート
   const [selectedQuestionForNote, setSelectedQuestionForNote] = useState<Question | null>(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // 選択中問題集の紐づく教科情報
   const activeSubject = subjects.find((s) => s.id === activeWorkbook?.subjectId);
@@ -192,9 +198,30 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
               </div>
             </div>
 
-            <div className="flex items-center gap-2 text-[11px] text-slate-400 shrink-0">
-              <Calendar className="w-3.5 h-3.5" />
-              <span>更新: {new Date(activeWorkbook.updatedAt).toLocaleDateString()}</span>
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
+                <Calendar className="w-3.5 h-3.5" />
+                <span>更新: {new Date(activeWorkbook.updatedAt).toLocaleDateString()}</span>
+              </div>
+
+              <div className="h-4 w-px bg-slate-200 dark:bg-slate-700" />
+
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => duplicateWorkbook(activeWorkbook.id)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  title="この問題集を複製 (2周目学習用)"
+                >
+                  <Copy className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setIsDeleteModalOpen(true)}
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                  title="この問題集を削除"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
 
@@ -257,6 +284,24 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
           workbook={activeWorkbook}
           onUpdateStatus={(num, st) => setQuestionStatus(activeWorkbook.id, num, st)}
           onUpdateNote={(num, note) => setQuestionNote(activeWorkbook.id, num, note)}
+        />
+      )}
+
+      {/* 問題集削除の確認モーダル */}
+      {activeWorkbook && (
+        <ConfirmModal
+          isOpen={isDeleteModalOpen}
+          title="この問題集を削除しますか？"
+          message={`「${activeWorkbook.title}」を完全に削除します。`}
+          detail="記録されたすべての解答（◯/✕）、メモ、学習履歴が削除されます。この操作は取り消せません。"
+          confirmText="問題集を完全に削除する"
+          cancelText="キャンセル"
+          variant="danger"
+          onConfirm={() => {
+            deleteWorkbook(activeWorkbook.id);
+            setIsDeleteModalOpen(false);
+          }}
+          onCancel={() => setIsDeleteModalOpen(false)}
         />
       )}
     </div>

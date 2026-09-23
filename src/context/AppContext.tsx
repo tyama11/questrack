@@ -200,18 +200,25 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     []
   );
 
-  const deleteWorkbook = useCallback(
-    (id: string) => {
-      setWorkbooks((prev) => {
-        const remaining = prev.filter((wb) => wb.id !== id);
-        if (activeWorkbookId === id) {
-          setActiveWorkbookIdState(remaining.length > 0 ? remaining[0].id : null);
-        }
-        return remaining;
-      });
-    },
-    [activeWorkbookId]
-  );
+  const deleteWorkbook = useCallback((id: string) => {
+    setWorkbooks((prev) => {
+      const remaining = prev.filter((wb) => wb.id !== id);
+      saveStoredWorkbooks(remaining);
+      return remaining;
+    });
+
+    setActiveWorkbookIdState((prevId) => {
+      if (prevId === id) {
+        // 次の選択先を決定
+        const currentWorkbooks = loadStoredWorkbooks() || [];
+        const remaining = currentWorkbooks.filter((wb) => wb.id !== id);
+        const nextId = remaining.length > 0 ? remaining[0].id : null;
+        saveStoredActiveWorkbookId(nextId);
+        return nextId;
+      }
+      return prevId;
+    });
+  }, []);
 
   const duplicateWorkbook = useCallback(
     (id: string): Workbook | null => {

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { Subject, Workbook } from '../../types';
+import { ConfirmModal } from '../common/ConfirmModal';
 
 interface ManagementViewProps {
   onOpenWorkbook: (workbookId: string) => void;
@@ -52,6 +53,10 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
   // ----------------------------------------------------
   // モーダル管理ステート
   // ----------------------------------------------------
+  // 削除確認モーダル用ステート
+  const [wbToDelete, setWbToDelete] = useState<Workbook | null>(null);
+  const [subjectToDelete, setSubjectToDelete] = useState<Subject | null>(null);
+
   // 問題集作成モーダル
   const [isCreateWbOpen, setIsCreateWbOpen] = useState(false);
   const [wbTitle, setWbTitle] = useState('');
@@ -322,11 +327,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
                       <button
-                        onClick={() => {
-                          if (window.confirm(`「${wb.title}」を削除してもよろしいですか？`)) {
-                            deleteWorkbook(wb.id);
-                          }
-                        }}
+                        onClick={() => setWbToDelete(wb)}
                         className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
                         title="問題集を削除"
                       >
@@ -456,19 +457,17 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   <button
                     onClick={() => {
                       if (subjects.length <= 1) {
-                        alert('教科は最低1つ必要です。');
                         return;
                       }
-                      if (
-                        window.confirm(
-                          `「${sub.name}」を削除しますか？\n所属している問題集は別の教科に移動します。`
-                        )
-                      ) {
-                        deleteSubject(sub.id);
-                      }
+                      setSubjectToDelete(sub);
                     }}
-                    className="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40"
-                    title="教科を削除"
+                    disabled={subjects.length <= 1}
+                    className={`p-1 rounded-lg transition-colors ${
+                      subjects.length <= 1
+                        ? 'text-slate-300 dark:text-slate-700 cursor-not-allowed'
+                        : 'text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40'
+                    }`}
+                    title={subjects.length <= 1 ? '教科は最低1つ必要です' : '教科を削除'}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -813,6 +812,42 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
           </div>
         </div>
       )}
+
+      {/* 問題集削除の確認モーダル */}
+      <ConfirmModal
+        isOpen={wbToDelete !== null}
+        title="問題集を削除しますか？"
+        message={`「${wbToDelete?.title}」を完全に削除します。`}
+        detail="記録されたすべての正否（◯/✕）、メモ、進捗データが削除されます。この操作は取り消せません。"
+        confirmText="問題集を完全に削除する"
+        cancelText="キャンセル"
+        variant="danger"
+        onConfirm={() => {
+          if (wbToDelete) {
+            deleteWorkbook(wbToDelete.id);
+            setWbToDelete(null);
+          }
+        }}
+        onCancel={() => setWbToDelete(null)}
+      />
+
+      {/* 教科削除の確認モーダル */}
+      <ConfirmModal
+        isOpen={subjectToDelete !== null}
+        title="教科を削除しますか？"
+        message={`「${subjectToDelete?.name}」を削除します。`}
+        detail="この教科に所属している問題集は自動的に別の教科（または先頭の教科）に移動します。"
+        confirmText="教科を削除する"
+        cancelText="キャンセル"
+        variant="danger"
+        onConfirm={() => {
+          if (subjectToDelete) {
+            deleteSubject(subjectToDelete.id);
+            setSubjectToDelete(null);
+          }
+        }}
+        onCancel={() => setSubjectToDelete(null)}
+      />
     </div>
   );
 };
