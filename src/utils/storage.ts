@@ -427,17 +427,21 @@ export const calculateStorageUsage = (
   const questionCount = workbooks.reduce((acc, wb) => acc + (wb.questions ? wb.questions.length : 0), 0);
   const subjectCount = subjects.length;
 
-  // LocalStorage使用容量の計算（文字列長 * 2バイト (UTF-16概算)）
-  let totalChars = 0;
-  try {
-    const wbStr = safeStorage.getItem(STORAGE_KEYS.WORKBOOKS) || JSON.stringify(workbooks);
-    const subStr = safeStorage.getItem(STORAGE_KEYS.SUBJECTS) || JSON.stringify(subjects);
-    const activeStr = safeStorage.getItem(STORAGE_KEYS.ACTIVE_WORKBOOK_ID) || '';
-    totalChars = wbStr.length + subStr.length + activeStr.length;
-  } catch {
-    totalChars = (JSON.stringify(workbooks) + JSON.stringify(subjects)).length;
+  // 問題集が0件の場合はストレージ容量も0とする
+  let storageSizeBytes = 0;
+  if (workbooks.length > 0) {
+    // LocalStorage使用容量の計算（文字列長 * 2バイト (UTF-16概算)）
+    let totalChars = 0;
+    try {
+      const wbStr = safeStorage.getItem(STORAGE_KEYS.WORKBOOKS) || JSON.stringify(workbooks);
+      const subStr = safeStorage.getItem(STORAGE_KEYS.SUBJECTS) || JSON.stringify(subjects);
+      const activeStr = safeStorage.getItem(STORAGE_KEYS.ACTIVE_WORKBOOK_ID) || '';
+      totalChars = wbStr.length + subStr.length + activeStr.length;
+    } catch {
+      totalChars = (JSON.stringify(workbooks) + JSON.stringify(subjects)).length;
+    }
+    storageSizeBytes = totalChars * 2;
   }
-  const storageSizeBytes = totalChars * 2;
 
   // 最終更新日時の探索
   let latestUpdate = '';

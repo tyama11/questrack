@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import {
   Download,
   Upload,
-  Copy,
-  Check,
   RefreshCw,
   Trash2,
   HardDrive,
@@ -23,9 +21,6 @@ export const DataView: React.FC = () => {
     clearAllData,
     getStorageUsageSummary,
   } = useApp();
-
-  // コピー完了インジケーター
-  const [copied, setCopied] = useState(false);
 
   // インポート設定
   const [importMode, setImportMode] = useState<ImportMode>('merge');
@@ -68,19 +63,6 @@ export const DataView: React.FC = () => {
     }
   };
 
-  // ----------------------------------------------------
-  // エクスポート: クリップボードコピー
-  // ----------------------------------------------------
-  const handleCopyJson = async () => {
-    try {
-      const jsonString = exportData();
-      await navigator.clipboard.writeText(jsonString);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    } catch (err) {
-      alert('クリップボードへのコピーに失敗しました。');
-    }
-  };
 
   // ----------------------------------------------------
   // インポート: テキスト貼り付けから実行
@@ -272,25 +254,6 @@ export const DataView: React.FC = () => {
             >
               <FileJson className="w-4 h-4" />
               <span>JSONファイルをダウンロード</span>
-            </button>
-
-            <button
-              onClick={handleCopyJson}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors"
-            >
-              {copied ? (
-                <>
-                  <Check className="w-4 h-4 text-emerald-500 stroke-[3]" />
-                  <span className="text-emerald-600 dark:text-emerald-400 font-bold">
-                    クリップボードにコピーしました！
-                  </span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-4 h-4" />
-                  <span>JSONをクリップボードにコピー</span>
-                </>
-              )}
             </button>
           </div>
         </div>
