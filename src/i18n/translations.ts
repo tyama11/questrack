@@ -1,4 +1,5 @@
 export type Language = 'ja' | 'en';
+export type TranslationsType = typeof translations.ja;
 
 export const translations = {
   ja: {

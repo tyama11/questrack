@@ -47,6 +47,8 @@ export interface Workbook {
   description?: string;     // 概要・説明
 }
 
+export type ActiveTab = 'tracker' | 'management' | 'data';
+
 /**
  * フィルター用のステータス絞り込み条件
  * - 'all': すべて表示
@@ -176,3 +178,24 @@ export interface AppContextType {
   clearAllData: () => void;
   getStorageUsageSummary: () => StorageUsageSummary;
 }
+
+export type ThemeMode = 'system' | 'light' | 'dark';
+
+export interface ThemeContextType {
+  themeMode: ThemeMode;
+  isDark: boolean;
+  setThemeMode: (mode: ThemeMode) => void;
+  toggleTheme: () => void;
+}
+
+export type LanguageMode = 'system' | 'ja' | 'en';
+
+export interface I18nContextType {
+  languageMode: LanguageMode;
+  currentLanguage: 'ja' | 'en';
+  setLanguageMode: (mode: LanguageMode) => void;
+  t: (path: string, params?: Record<string, string | number>) => string;
+  dict: import('../i18n/translations').TranslationsType;
+}
+
+

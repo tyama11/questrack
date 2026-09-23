@@ -1,17 +1,11 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import { ThemeMode, ThemeContextType } from '../types';
 
-export type ThemeMode = 'system' | 'light' | 'dark';
-
-interface ThemeContextType {
-  themeMode: ThemeMode;
-  isDark: boolean;
-  setThemeMode: (mode: ThemeMode) => void;
-  toggleTheme: () => void;
-}
+export type { ThemeMode };
 
 const THEME_STORAGE_KEY = 'questrack_theme_mode_v1';
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
@@ -96,10 +90,5 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 };
 
-export const useTheme = (): ThemeContextType => {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
-};
+export { useTheme } from './useTheme';
+

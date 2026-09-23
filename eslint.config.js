@@ -1,8 +1,9 @@
 import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 
-export default [
+export default tseslint.config(
   {
     ignores: [
       'dist/**',
@@ -15,6 +16,8 @@ export default [
     ],
   },
   js.configs.recommended,
+  ...tseslint.configs.strict,
+  ...tseslint.configs.stylistic,
   {
     files: ['src/**/*.{ts,tsx}'],
     plugins: {
@@ -25,12 +28,10 @@ export default [
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'error',
-        {
-          allowConstantExport: true,
-          extraHMRIgnorePatterns: ['^use[A-Z]'],
-        },
+        { allowConstantExport: true },
       ],
-      'no-unused-vars': [
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unused-vars': [
         'error',
         {
           argsIgnorePattern: '^_',
@@ -39,11 +40,12 @@ export default [
         },
       ],
       'no-console': ['error', { allow: ['warn', 'error'] }],
-      'no-debugger': 'error',
-      'no-duplicate-imports': 'error',
-      'prefer-const': 'error',
-      'no-var': 'error',
-      'eqeqeq': ['error', 'always'],
     },
   },
-];
+  {
+    files: ['src/__tests__/**/*.{ts,tsx}'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
+  }
+);

@@ -74,7 +74,7 @@ jobs:
           cache-on-failure: true
 
       - name: Install frontend dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install
 
       - name: Build Tauri Application & Release
         uses: tauri-apps/tauri-action@v1

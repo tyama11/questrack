@@ -1,15 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { Language, translations } from '../i18n/translations';
+import { LanguageMode, I18nContextType } from '../types';
 
-export type LanguageMode = 'system' | 'ja' | 'en';
-
-interface I18nContextType {
-  languageMode: LanguageMode;
-  currentLanguage: Language;
-  setLanguageMode: (mode: LanguageMode) => void;
-  t: (path: string, params?: Record<string, string | number>) => string;
-  dict: typeof translations.ja;
-}
+export type { LanguageMode, Language };
 
 const I18N_STORAGE_KEY = 'questrack_language_mode_v1';
 
@@ -28,7 +21,7 @@ export function detectSystemLanguage(): Language {
   return 'en';
 }
 
-const I18nContext = createContext<I18nContextType | undefined>(undefined);
+export const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [languageMode, setLanguageModeState] = useState<LanguageMode>(() => {
@@ -132,10 +125,5 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-export const useI18n = (): I18nContextType => {
-  const context = useContext(I18nContext);
-  if (!context) {
-    throw new Error('useI18n must be used within an I18nProvider');
-  }
-  return context;
-};
+export { useI18n } from './useI18n';
+

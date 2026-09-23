@@ -51,7 +51,7 @@ jobs:
         run: cargo check --manifest-path src-tauri/Cargo.toml
 
       - name: Install dependencies
-        run: npm install --legacy-peer-deps
+        run: npm install
 
       - name: Run Strict Linter (Zero Warnings Allowed)
         run: npm run lint

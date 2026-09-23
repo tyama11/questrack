@@ -44,7 +44,7 @@ import {
   validateAndParseImportData,
 } from '../utils/storage';
 
-const AppContext = createContext<AppContextType | undefined>(undefined);
+export const AppContext = createContext<AppContextType | undefined>(undefined);
 
 // ランダムID生成用ヘルパー
 const generateId = (prefix: string = 'id'): string => {
@@ -582,13 +582,5 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-// ==========================================
-// useApp カスタムフック
-// ==========================================
-export const useApp = (): AppContextType => {
-  const context = useContext(AppContext);
-  if (!context) {
-    throw new Error('useApp must be used within an AppProvider');
-  }
-  return context;
-};
+export { useApp } from './useApp';
+

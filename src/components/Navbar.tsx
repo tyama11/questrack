@@ -13,8 +13,7 @@ import {
 import { useApp } from '../context/AppContext';
 import { useTheme } from '../context/ThemeContext';
 import { useI18n } from '../context/I18nContext';
-
-export type ActiveTab = 'tracker' | 'management' | 'data';
+import { ActiveTab } from '../types';
 
 interface NavbarProps {
   activeTab: ActiveTab;
