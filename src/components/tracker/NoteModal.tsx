@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { X, FileText, CheckCircle2, XCircle, HelpCircle, Save, Tag } from 'lucide-react';
 import { Question, QuestionStatus } from '../../types';
 import { useI18n } from '../../context';
