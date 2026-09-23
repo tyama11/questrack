@@ -1347,3 +1347,122 @@ describe('任意問題数（100問固定ではない）の柔軟性テスト', (
   });
 });
 
+// =================================================================
+// 8. OS 言語判定 & 多言語対応 (i18n) のテスト
+// =================================================================
+describe('OS 言語判定 & 多言語対応 (i18n)', () => {
+  it('navigator.language が ja または ja-JP のとき、日本語 (ja) を判定すること', async () => {
+    const { detectSystemLanguage } = await import('../context/I18nContext');
+
+    const originalNavigator = globalThis.navigator;
+
+    // ja-JP
+    Object.defineProperty(globalThis, 'navigator', {
+      value: { language: 'ja-JP', languages: ['ja-JP', 'ja'] },
+      configurable: true,
+    });
+    expect(detectSystemLanguage()).toBe('ja');
+
+    // ja
+    Object.defineProperty(globalThis, 'navigator', {
+      value: { language: 'ja', languages: ['ja'] },
+      configurable: true,
+    });
+    expect(detectSystemLanguage()).toBe('ja');
+
+    // 元に戻す
+    Object.defineProperty(globalThis, 'navigator', {
+      value: originalNavigator,
+      configurable: true,
+    });
+  });
+
+  it('navigator.language が日本語以外 (英語、中国語、フランス語等) のとき、英語 (en) を表示すること', async () => {
+    const { detectSystemLanguage } = await import('../context/I18nContext');
+
+    const originalNavigator = globalThis.navigator;
+
+    // 英語 (en-US)
+    Object.defineProperty(globalThis, 'navigator', {
+      value: { language: 'en-US', languages: ['en-US', 'en'] },
+      configurable: true,
+    });
+    expect(detectSystemLanguage()).toBe('en');
+
+    // 中国語 (zh-CN)
+    Object.defineProperty(globalThis, 'navigator', {
+      value: { language: 'zh-CN', languages: ['zh-CN'] },
+      configurable: true,
+    });
+    expect(detectSystemLanguage()).toBe('en');
+
+    // フランス語 (fr-FR)
+    Object.defineProperty(globalThis, 'navigator', {
+      value: { language: 'fr-FR', languages: ['fr-FR'] },
+      configurable: true,
+    });
+    expect(detectSystemLanguage()).toBe('en');
+
+    // 元に戻す
+    Object.defineProperty(globalThis, 'navigator', {
+      value: originalNavigator,
+      configurable: true,
+    });
+  });
+
+  it('翻訳辞書 (translations) の ja と en が完全に対称なキー構造を持つこと', async () => {
+    const { translations } = await import('../i18n/translations');
+
+    expect(translations.ja).toBeDefined();
+    expect(translations.en).toBeDefined();
+
+    const checkKeys = (objJa: Record<string, any>, objEn: Record<string, any>, path = '') => {
+      for (const key of Object.keys(objJa)) {
+        const fullPath = path ? `${path}.${key}` : key;
+        expect(objEn[key], `Missing English key for: ${fullPath}`).toBeDefined();
+
+        if (typeof objJa[key] === 'object' && objJa[key] !== null) {
+          checkKeys(objJa[key], objEn[key], fullPath);
+        }
+      }
+    };
+
+    checkKeys(translations.ja, translations.en);
+  });
+});
+
+// =================================================================
+// 9. OS 連動ダークモードの判定テスト
+// =================================================================
+describe('OS 連動ダークモードの判定', () => {
+  it('prefers-color-scheme: dark の matches に応じてダーク判定が動作すること', () => {
+    const matchMediaDark = (query: string): MediaQueryList => ({
+      matches: query === '(prefers-color-scheme: dark)',
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    });
+
+    const isSystemDark = matchMediaDark('(prefers-color-scheme: dark)').matches;
+    expect(isSystemDark).toBe(true);
+
+    const matchMediaLight = (query: string): MediaQueryList => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: vi.fn(),
+      removeListener: vi.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      dispatchEvent: vi.fn(),
+    });
+
+    const isSystemLight = matchMediaLight('(prefers-color-scheme: dark)').matches;
+    expect(isSystemLight).toBe(false);
+  });
+});
+

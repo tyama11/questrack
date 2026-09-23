@@ -4,10 +4,12 @@ import { TrackerView } from './components/tracker/TrackerView';
 import { ManagementView } from './components/management/ManagementView';
 import { DataView } from './components/data/DataView';
 import { useApp } from './context/AppContext';
+import { useI18n } from './context/I18nContext';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('tracker');
   const { setActiveWorkbookId } = useApp();
+  const { dict } = useI18n();
 
   // マネジメント画面から問題集を指定してトラッカーへジャンプ
   const handleOpenWorkbookInTracker = (workbookId: string) => {
@@ -37,12 +39,12 @@ export const App: React.FC = () => {
       <footer className="border-t border-slate-200/80 dark:border-slate-800/80 py-4 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xs text-center text-xs text-slate-400">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-semibold text-slate-600 dark:text-slate-300">Questrack</span>
+            <span className="font-semibold text-slate-600 dark:text-slate-300">{dict.app.title}</span>
             <span>—</span>
-            <span>問題追跡 & ✕克服特化デスクトップアプリ</span>
+            <span>{dict.app.footerDesc}</span>
           </div>
           <div className="flex items-center gap-4 text-[11px]">
-            <span>Tauri v2 + React 18 + TailwindCSS</span>
+            <span>{dict.app.frameworkInfo}</span>
           </div>
         </div>
       </footer>

@@ -2,12 +2,31 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { AppProvider } from './context/AppContext';
+import { ThemeProvider } from './context/ThemeContext';
+import { I18nProvider } from './context/I18nContext';
 import './index.css';
+
+// 初期ロード時のFOUC（スタイルちらつき）防止
+try {
+  const savedTheme = localStorage.getItem('questrack_theme_mode_v1');
+  const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark) || (savedTheme === 'system' && systemPrefersDark)) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+} catch {
+  // ignore
+}
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <AppProvider>
-      <App />
-    </AppProvider>
+    <ThemeProvider>
+      <I18nProvider>
+        <AppProvider>
+          <App />
+        </AppProvider>
+      </I18nProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );

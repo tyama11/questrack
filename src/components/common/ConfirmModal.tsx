@@ -1,5 +1,6 @@
 import React from 'react';
 import { AlertTriangle, Trash2, CheckCircle2, X } from 'lucide-react';
+import { useI18n } from '../../context/I18nContext';
 
 export interface ConfirmModalProps {
   isOpen: boolean;
@@ -18,13 +19,18 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   title,
   message,
   detail,
-  confirmText = '実行する',
-  cancelText = 'キャンセル',
+  confirmText,
+  cancelText,
   variant = 'danger',
   onConfirm,
   onCancel,
 }) => {
+  const { dict } = useI18n();
+
   if (!isOpen) return null;
+
+  const actualConfirmText = confirmText || dict.common.confirm;
+  const actualCancelText = cancelText || dict.common.cancel;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
@@ -75,7 +81,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
             onClick={onCancel}
             className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 transition-colors"
           >
-            {cancelText}
+            {actualCancelText}
           </button>
           <button
             type="button"
@@ -90,7 +96,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
                 : 'bg-brand-600 hover:bg-brand-700 shadow-brand-600/30'
             }`}
           >
-            {confirmText}
+            {actualConfirmText}
           </button>
         </div>
       </div>

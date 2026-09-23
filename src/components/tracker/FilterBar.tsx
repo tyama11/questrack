@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { FilterStatus, WorkbookStats } from '../../types';
 import { ConfirmModal } from '../common/ConfirmModal';
+import { useI18n } from '../../context/I18nContext';
 
 interface FilterBarProps {
   currentStatus: FilterStatus;
@@ -33,6 +34,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onOpenReviewModal,
   onBatchSetStatus,
 }) => {
+  const { dict, t } = useI18n();
   const [showBatchMenu, setShowBatchMenu] = useState(false);
   const [confirmBatchType, setConfirmBatchType] = useState<'correct' | 'unanswered' | null>(null);
 
@@ -52,10 +54,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 ? 'bg-rose-600 text-white shadow-rose-600/30 ring-2 ring-rose-400 dark:ring-rose-500'
                 : 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-rose-200 dark:border-rose-800/60'
             }`}
-            title="不正解(✕)の問題のみを抽出して表示します"
+            title={dict.tracker.filterIncorrectTooltip}
           >
             <XCircle className="w-4 h-4 stroke-[2.5]" />
-            <span>✕ のみ抽出</span>
+            <span>{dict.tracker.filterIncorrectOnly}</span>
             <span
               className={`px-1.5 py-0.5 rounded-full text-[11px] font-extrabold ${
                 currentStatus === 'incorrect_only'
@@ -77,7 +79,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             }`}
           >
             <ListFilter className="w-3.5 h-3.5" />
-            <span>すべて</span>
+            <span>{dict.tracker.filterAll}</span>
             <span className="text-[11px] text-slate-400 font-normal">({stats.total})</span>
           </button>
 
@@ -91,7 +93,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             }`}
           >
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
-            <span>◯ のみ</span>
+            <span>{dict.tracker.filterCorrectOnly}</span>
             <span className="text-[11px] opacity-80">({stats.correct})</span>
           </button>
 
@@ -105,7 +107,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             }`}
           >
             <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
-            <span>未解答のみ</span>
+            <span>{dict.tracker.filterUnansweredOnly}</span>
             <span className="text-[11px] opacity-80">({stats.unanswered})</span>
           </button>
         </div>
@@ -121,17 +123,13 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 ? 'bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white shadow-rose-500/25 active:scale-95'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed border border-slate-200 dark:border-slate-800'
             }`}
-            title={
-              stats.incorrect > 0
-                ? '不正解の問題を1問ずつカードで集中して克服するモードを起動します'
-                : '不正解の問題がないため復習モードは利用できません'
-            }
+            title={dict.tracker.reviewModeTooltip}
           >
             <Target className="w-4 h-4 stroke-[2.5]" />
-            <span>集中復習モード</span>
+            <span>{dict.tracker.startReview}</span>
             {stats.incorrect > 0 && (
               <span className="bg-white/20 text-white text-[10px] px-1.5 py-0.5 rounded-full font-extrabold">
-                {stats.incorrect}問
+                {stats.incorrect}{dict.stats.questionsUnit}
               </span>
             )}
           </button>
@@ -141,7 +139,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             <button
               onClick={() => setShowBatchMenu(!showBatchMenu)}
               className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors"
-              title="一括操作メニュー"
+              title={dict.tracker.batchMenu}
             >
               <MoreHorizontal className="w-4 h-4" />
             </button>
@@ -152,9 +150,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   className="fixed inset-0 z-20"
                   onClick={() => setShowBatchMenu(false)}
                 />
-                <div className="absolute right-0 mt-2 w-48 rounded-xl bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 z-30 py-1.5 text-xs animate-in fade-in zoom-in-95 duration-100">
+                <div className="absolute right-0 mt-2 w-52 rounded-xl bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 z-30 py-1.5 text-xs animate-in fade-in zoom-in-95 duration-100">
                   <div className="px-3 py-1 font-semibold text-[11px] text-slate-400 uppercase tracking-wider">
-                    問題集の一括操作
+                    {dict.tracker.batchMenu}
                   </div>
                   <button
                     onClick={() => {
@@ -164,7 +162,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                     className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 text-slate-700 dark:text-slate-300"
                   >
                     <CheckCheck className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>全問を ◯ にする</span>
+                    <span>{dict.tracker.markAllCorrect}</span>
                   </button>
                   <button
                     onClick={() => {
@@ -174,7 +172,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                     className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 text-rose-600 dark:text-rose-400"
                   >
                     <RotateCcw className="w-3.5 h-3.5 text-rose-500" />
-                    <span>全問をクリア (未解答へ)</span>
+                    <span>{dict.tracker.markAllUnanswered}</span>
                   </button>
                 </div>
               </>
@@ -183,7 +181,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         </div>
       </div>
 
-      {/* 下段: 検索バー & フィルター案内 */}
+      {/* 下段: 検索バー & 案内 */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/80">
         {/* 検索入力フィールド */}
         <div className="relative w-full sm:w-80">
@@ -192,7 +190,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="問題番号(例: 15) または メモ検索..."
+            placeholder={dict.tracker.searchPlaceholder}
             className="w-full pl-9 pr-8 py-1.5 text-xs bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-all"
           />
           {searchQuery && (
@@ -207,23 +205,19 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
         {/* キーボード操作ヒント */}
         <div className="hidden lg:flex items-center gap-2 text-[11px] text-slate-400">
-          <span>操作キー:</span>
+          <span>Shortcuts:</span>
           <kbd className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono text-[10px] border border-slate-200 dark:border-slate-700">
             O
           </kbd>
-          <span>◯正解</span>
+          <span>{dict.stats.correctLegend}</span>
           <kbd className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono text-[10px] border border-slate-200 dark:border-slate-700">
             X
           </kbd>
-          <span>✕不正解</span>
+          <span>{dict.stats.incorrectLegend}</span>
           <kbd className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono text-[10px] border border-slate-200 dark:border-slate-700">
             U
           </kbd>
-          <span>未解答</span>
-          <kbd className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-mono text-[10px] border border-slate-200 dark:border-slate-700">
-            Click
-          </kbd>
-          <span>トグル</span>
+          <span>{dict.stats.unansweredLegend}</span>
         </div>
       </div>
 
@@ -232,21 +226,20 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         isOpen={confirmBatchType !== null}
         title={
           confirmBatchType === 'correct'
-            ? '全問を ◯ (正解) に設定しますか？'
-            : '全問を未解答にクリアしますか？'
+            ? dict.tracker.batchConfirmCorrectTitle
+            : dict.tracker.batchConfirmResetTitle
         }
         message={
           confirmBatchType === 'correct'
-            ? 'この問題集のすべての問題のステータスを「◯ (正解)」に一括変更します。'
-            : 'この問題集のすべての問題のステータスを「未解答」にリセットします。'
+            ? dict.tracker.batchConfirmCorrectMsg
+            : dict.tracker.batchConfirmResetMsg
         }
-        detail={
+        confirmText={
           confirmBatchType === 'correct'
-            ? '※個別に入力したメモはそのまま保持されます。'
-            : '※未解答に戻しても、各問題に残したメモは消去されません。'
+            ? dict.tracker.markAllCorrect
+            : dict.tracker.markAllUnanswered
         }
-        confirmText={confirmBatchType === 'correct' ? '全問を ◯ にする' : '全問をクリアする'}
-        cancelText="キャンセル"
+        cancelText={dict.common.cancel}
         variant={confirmBatchType === 'correct' ? 'primary' : 'warning'}
         onConfirm={() => {
           if (confirmBatchType) {

@@ -8,6 +8,7 @@ import {
   Copy,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { useI18n } from '../../context/I18nContext';
 import { Question } from '../../types';
 import { StatsBar } from './StatsBar';
 import { FilterBar } from './FilterBar';
@@ -40,6 +41,8 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
     duplicateWorkbook,
   } = useApp();
 
+  const { dict, t, currentLanguage } = useI18n();
+
   // モーダル管理ステート
   const [selectedQuestionForNote, setSelectedQuestionForNote] = useState<Question | null>(null);
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -59,17 +62,17 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
           <div className="flex items-center gap-2">
             <Layers className="w-4 h-4 text-brand-600 dark:text-brand-400" />
             <span className="text-xs font-bold text-slate-800 dark:text-slate-200">
-              問題集を選択
+              {dict.tracker.selectWorkbook}
             </span>
             <span className="text-[11px] text-slate-400 font-normal">
-              ({workbooks.length}冊登録済み)
+              {t('tracker.registeredCount', { count: workbooks.length })}
             </span>
           </div>
           <button
             onClick={onNavigateToManagement}
             className="flex items-center gap-1 text-xs font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 hover:underline"
           >
-            <span>+ 新規問題集を作成</span>
+            <span>{dict.tracker.createWorkbook}</span>
           </button>
         </div>
 
@@ -106,7 +109,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
                       isSelected ? 'text-slate-300 dark:text-slate-600' : 'text-slate-400'
                     }`}
                   >
-                    {wbSubject?.name} • {wbStats.progressRate}%
+                    {wbSubject?.name || dict.tracker.unclassified} • {wbStats.progressRate}%
                   </span>
                 </div>
 
@@ -118,7 +121,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
                         ? 'bg-rose-500 text-white'
                         : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'
                     }`}
-                    title={`要復習の✕が ${wbStats.incorrect}問 あります`}
+                    title={`✕ ${wbStats.incorrect}`}
                   >
                     ✕ {wbStats.incorrect}
                   </span>
@@ -139,17 +142,17 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
           </div>
           <div className="space-y-1">
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
-              問題集が選択されていません
+              {dict.tracker.noWorkbookSelected}
             </h3>
             <p className="text-xs text-slate-500 max-w-md mx-auto">
-              上部のリストから問題集を選択するか、新しい問題集を作成して問題の正否記録（10問、50問、100問〜）を始めましょう。
+              {dict.tracker.noWorkbookDesc}
             </p>
           </div>
           <button
             onClick={onNavigateToManagement}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/30 transition-all active:scale-95"
           >
-            <span>問題集を作成・管理する</span>
+            <span>{dict.tracker.manageWorkbooks}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -184,10 +187,10 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
                       color: activeSubject?.color || '#3B82F6',
                     }}
                   >
-                    {activeSubject?.name || '未分類'}
+                    {activeSubject?.name || dict.tracker.unclassified}
                   </span>
                   <span className="text-xs font-mono font-medium text-slate-400">
-                    全{activeWorkbook.totalQuestions}問
+                    {t('tracker.allQuestions', { count: activeWorkbook.totalQuestions })}
                   </span>
                 </div>
                 {activeWorkbook.description && (
@@ -201,7 +204,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
             <div className="flex items-center gap-3 shrink-0">
               <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
                 <Calendar className="w-3.5 h-3.5" />
-                <span>更新: {new Date(activeWorkbook.updatedAt).toLocaleDateString()}</span>
+                <span>{t('tracker.lastUpdated', { date: new Date(activeWorkbook.updatedAt).toLocaleDateString() })}</span>
               </div>
 
               <div className="h-4 w-px bg-slate-200 dark:bg-slate-700" />
@@ -210,14 +213,14 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
                 <button
                   onClick={() => duplicateWorkbook(activeWorkbook.id)}
                   className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                  title="この問題集を複製 (2周目学習用)"
+                  title={dict.tracker.duplicateTooltip}
                 >
                   <Copy className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => setIsDeleteModalOpen(true)}
                   className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
-                  title="この問題集を削除"
+                  title={dict.tracker.deleteTooltip}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -291,11 +294,11 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
       {activeWorkbook && (
         <ConfirmModal
           isOpen={isDeleteModalOpen}
-          title="この問題集を削除しますか？"
-          message={`「${activeWorkbook.title}」を完全に削除します。`}
-          detail="記録されたすべての解答（◯/✕）、メモ、学習履歴が削除されます。この操作は取り消せません。"
-          confirmText="問題集を完全に削除する"
-          cancelText="キャンセル"
+          title={dict.tracker.deleteConfirmTitle}
+          message={t('tracker.deleteConfirmMsg', { title: activeWorkbook.title })}
+          detail={dict.tracker.deleteConfirmDetail}
+          confirmText={dict.tracker.deleteConfirmAction}
+          cancelText={dict.common.cancel}
           variant="danger"
           onConfirm={() => {
             deleteWorkbook(activeWorkbook.id);

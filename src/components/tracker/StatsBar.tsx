@@ -1,12 +1,15 @@
 import React from 'react';
 import { CheckCircle2, XCircle, HelpCircle, TrendingUp, Award } from 'lucide-react';
 import { WorkbookStats } from '../../types';
+import { useI18n } from '../../context/I18nContext';
 
 interface StatsBarProps {
   stats: WorkbookStats;
 }
 
 export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
+  const { dict, t } = useI18n();
+
   // 正解・不正解・未解答のパーセンテージ計算 (プログレスバー用)
   const correctPercent = stats.total > 0 ? (stats.correct / stats.total) * 100 : 0;
   const incorrectPercent = stats.total > 0 ? (stats.incorrect / stats.total) * 100 : 0;
@@ -23,14 +26,14 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              正答率
+              {dict.stats.accuracyRate}
             </p>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
                 {stats.accuracyRate}%
               </span>
               <span className="text-[11px] text-slate-400">
-                ({stats.correct}/{stats.answered}問)
+                {t('stats.correctUnit', { correct: stats.correct, answered: stats.answered })}
               </span>
             </div>
           </div>
@@ -43,14 +46,14 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
           </div>
           <div>
             <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">
-              正解 (◯)
+              {dict.stats.correctLabel}
             </p>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-extrabold text-emerald-700 dark:text-emerald-300">
                 {stats.correct}
               </span>
               <span className="text-[11px] text-emerald-600/70 dark:text-emerald-400/70">
-                / {stats.total}問
+                {t('stats.totalUnit', { total: stats.total })}
               </span>
             </div>
           </div>
@@ -64,10 +67,10 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
           <div>
             <div className="flex items-center gap-1.5">
               <p className="text-xs font-bold text-rose-700 dark:text-rose-300 uppercase tracking-wider">
-                不正解 (✕)
+                {dict.stats.incorrectLabel}
               </p>
               <span className="text-[10px] bg-rose-200 dark:bg-rose-800 text-rose-800 dark:text-rose-200 px-1 py-0.2 rounded font-bold">
-                要復習
+                {dict.stats.reviewBadge}
               </span>
             </div>
             <div className="flex items-baseline gap-1">
@@ -75,7 +78,7 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
                 {stats.incorrect}
               </span>
               <span className="text-[11px] text-rose-500/80 dark:text-rose-400/80">
-                問
+                {dict.stats.questionsUnit}
               </span>
             </div>
           </div>
@@ -88,14 +91,14 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-              未解答
+              {dict.stats.unansweredLabel}
             </p>
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-extrabold text-slate-700 dark:text-slate-300">
                 {stats.unanswered}
               </span>
               <span className="text-[11px] text-slate-400">
-                問 ({100 - stats.progressRate}%残)
+                {t('stats.unansweredRemain', { percent: 100 - stats.progressRate })}
               </span>
             </div>
           </div>
@@ -107,7 +110,11 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
         <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-2">
           <div className="flex items-center gap-1.5 font-medium">
             <TrendingUp className="w-3.5 h-3.5 text-brand-500" />
-            <span>解答進捗率: <strong className="text-slate-800 dark:text-slate-200">{stats.progressRate}%</strong> ({stats.answered}/{stats.total}問完了)</span>
+            <span>
+              {dict.stats.progressRate}{' '}
+              <strong className="text-slate-800 dark:text-slate-200">{stats.progressRate}%</strong>{' '}
+              {t('stats.progressCompleted', { answered: stats.answered, total: stats.total })}
+            </span>
           </div>
           <div className="flex items-center gap-3 text-[11px]">
             <span className="flex items-center gap-1">
@@ -117,7 +124,7 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
               <span className="w-2.5 h-2.5 rounded-full bg-rose-500"></span> ✕ {incorrectPercent.toFixed(1)}%
             </span>
             <span className="flex items-center gap-1">
-              <span className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-700"></span> 未 {unansweredPercent.toFixed(1)}%
+              <span className="w-2.5 h-2.5 rounded-full bg-slate-300 dark:bg-slate-700"></span> {dict.stats.unansweredLegend} {unansweredPercent.toFixed(1)}%
             </span>
           </div>
         </div>
@@ -127,17 +134,17 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
           <div
             style={{ width: `${correctPercent}%` }}
             className="bg-emerald-500 transition-all duration-300 ease-out"
-            title={`正解: ${stats.correct}問 (${correctPercent.toFixed(1)}%)`}
+            title={`${dict.stats.correctLegend}: ${stats.correct} (${correctPercent.toFixed(1)}%)`}
           />
           <div
             style={{ width: `${incorrectPercent}%` }}
             className="bg-rose-500 transition-all duration-300 ease-out"
-            title={`不正解: ${stats.incorrect}問 (${incorrectPercent.toFixed(1)}%)`}
+            title={`${dict.stats.incorrectLegend}: ${stats.incorrect} (${incorrectPercent.toFixed(1)}%)`}
           />
           <div
             style={{ width: `${unansweredPercent}%` }}
             className="bg-slate-200 dark:bg-slate-700 transition-all duration-300 ease-out"
-            title={`未解答: ${stats.unanswered}問 (${unansweredPercent.toFixed(1)}%)`}
+            title={`${dict.stats.unansweredLegend}: ${stats.unanswered} (${unansweredPercent.toFixed(1)}%)`}
           />
         </div>
       </div>

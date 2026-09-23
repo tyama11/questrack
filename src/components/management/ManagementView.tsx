@@ -17,6 +17,7 @@ import {
   Database,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { useI18n } from '../../context/I18nContext';
 import { Subject, Workbook } from '../../types';
 import { calculateOverallStats } from '../../utils/storage';
 import { ConfirmModal } from '../common/ConfirmModal';
@@ -53,6 +54,8 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
     deleteSubject,
     getWorkbookStats,
   } = useApp();
+
+  const { dict, t, currentLanguage } = useI18n();
 
   // 実行環境が Tauri か Webブラウザかを判定
   const isTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
@@ -162,21 +165,25 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
     if (!subjectName.trim()) return;
 
     if (editingSubject) {
-      updateSubject(
-        editingSubject.id,
-        subjectName.trim(),
-        subjectColor,
-        subjectDescription.trim(),
-        subjectIcon
-      );
+      updateSubject(editingSubject.id, {
+        name: subjectName.trim(),
+        color: subjectColor,
+        icon: subjectIcon,
+        description: subjectDescription.trim(),
+      });
     } else {
-      createSubject(subjectName.trim(), subjectColor, subjectDescription.trim(), subjectIcon);
+      createSubject({
+        name: subjectName.trim(),
+        color: subjectColor,
+        icon: subjectIcon,
+        description: subjectDescription.trim(),
+      });
     }
     setIsSubjectModalOpen(false);
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-6xl mx-auto">
       {/* ======================================================== */}
       {/* 1. 全体進捗統計カード (全教科横断ダッシュボード) */}
       {/* ======================================================== */}
@@ -184,33 +191,33 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
         <div className="flex items-center gap-2 mb-4">
           <TrendingUp className="w-5 h-5 text-brand-600 dark:text-brand-400" />
           <h2 className="text-base font-bold text-slate-900 dark:text-white">
-            学習全体のサマリーダッシュボード
+            {dict.management.title}
           </h2>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
-              登録問題集 / 教科
+              {dict.management.totalWorkbooksCard}
             </span>
             <div className="mt-1 flex items-baseline gap-1.5">
               <span className="text-2xl font-black text-slate-900 dark:text-white">
                 {workbooks.length}
               </span>
-              <span className="text-xs text-slate-400">冊 / {subjects.length}教科</span>
+              <span className="text-xs text-slate-400">{dict.management.booksUnit} / {subjects.length} sub</span>
             </div>
           </div>
 
           <div className="p-4 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40">
             <span className="text-xs font-semibold text-blue-700 dark:text-blue-400 uppercase tracking-wider">
-              総登録問題数
+              {dict.management.totalQuestionsCard}
             </span>
             <div className="mt-1 flex items-baseline gap-1.5">
               <span className="text-2xl font-black text-blue-700 dark:text-blue-300">
                 {overallStats.totalQuestions}
               </span>
               <span className="text-xs text-blue-600/70 dark:text-blue-400/70">
-                問 ({overallStats.totalAnswered}問着手)
+                {dict.management.questionsUnit} {t('management.answeredRatio', { answered: overallStats.totalAnswered })}
               </span>
             </div>
           </div>
@@ -218,10 +225,10 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
           <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
-                やり残し (未解答)
+                {dict.management.totalUnansweredCard}
               </span>
               <span className="text-[10px] bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-1 py-0.2 rounded font-extrabold">
-                未着手 {overallStats.unansweredRate}%
+                {overallStats.unansweredRate}%
               </span>
             </div>
             <div className="mt-1 flex items-baseline gap-1.5">
@@ -229,21 +236,21 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                 {overallStats.totalUnanswered}
               </span>
               <span className="text-xs text-amber-600/70 dark:text-amber-400/70">
-                問 残り
+                {dict.management.questionsUnit}
               </span>
             </div>
           </div>
 
           <div className="p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40">
             <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">
-              全体正答率
+              {dict.management.overallAccuracyCard}
             </span>
             <div className="mt-1 flex items-baseline gap-1.5">
               <span className="text-2xl font-black text-emerald-700 dark:text-emerald-300">
                 {overallStats.accuracyRate}%
               </span>
               <span className="text-xs text-emerald-600/70 dark:text-emerald-400/70">
-                (◯ {overallStats.totalCorrect}問)
+                (◯ {overallStats.totalCorrect})
               </span>
             </div>
           </div>
@@ -251,17 +258,17 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
           <div className="p-4 rounded-2xl bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider">
-                総 ✕ (要復習)
+                {dict.management.totalIncorrectCard}
               </span>
               <span className="text-[10px] bg-rose-200 dark:bg-rose-800 text-rose-800 dark:text-rose-100 px-1 py-0.2 rounded font-extrabold">
-                弱点
+                {dict.management.needReviewBadge}
               </span>
             </div>
             <div className="mt-1 flex items-baseline gap-1.5">
               <span className="text-2xl font-black text-rose-600 dark:text-rose-400">
                 {overallStats.totalIncorrect}
               </span>
-              <span className="text-xs text-rose-500/80">問の不正解を記録</span>
+              <span className="text-xs text-rose-500/80">{dict.management.questionsUnit}</span>
             </div>
           </div>
         </div>
@@ -286,38 +293,30 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                   <Globe className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-                  ウェブ（ブラウザ）版をご利用の際の注意：データ消失リスクについて
+                  {dict.management.webWarningTitle}
                 </h3>
                 <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
                   !isTauri
                     ? 'bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100'
                     : 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300'
                 }`}>
-                  {!isTauri ? '現在の環境: Webブラウザ版' : '現在の環境: デスクトップアプリ版 (データ永続化)'}
+                  {!isTauri ? 'Web Browser' : 'Desktop App'}
                 </span>
               </div>
             </div>
             <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
-              Webブラウザ版（GitHub Pages等）は、学習データをブラウザのローカルストレージに保存しています。そのため、<strong>「ブラウザのキャッシュ消去」「Cookieやサイトデータの削除」「シークレット（プライベート）モードの終了」</strong>などにより、<strong>保存した問題集や◯✕の記録がすべて消えてしまう可能性があります。</strong>
+              {dict.management.webWarningDesc}
             </p>
-            <div className="pt-1 flex flex-wrap items-center gap-3">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900 dark:text-amber-200">
-                <Database className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                <span>対策: 大切な学習データは「データ移行・初期化」タブから定期的にJSONエクスポート（バックアップ）を行ってください。</span>
-              </div>
-            </div>
             <div className="pt-1 text-xs text-slate-600 dark:text-slate-400 flex flex-wrap items-center gap-2">
-              <span>💡 データを消さずに恒久的にオフライン学習したい場合は、</span>
               <a
                 href="https://github.com/tyama11/questrack/releases/latest"
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-1 font-bold text-brand-600 dark:text-brand-400 hover:underline"
               >
-                <span>デスクトップアプリ版（Mac / Windows）</span>
+                <span>{dict.management.downloadAppAction}</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
               </a>
-              <span>の利用をおすすめします。</span>
             </div>
           </div>
         </div>
@@ -331,9 +330,9 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
           <div className="flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-brand-600 dark:text-brand-400" />
             <h2 className="text-base font-bold text-slate-900 dark:text-white">
-              問題集一覧 & 管理
+              {dict.management.workbooksSection}
             </h2>
-            <span className="text-xs text-slate-400">({workbooks.length}冊)</span>
+            <span className="text-xs text-slate-400">({workbooks.length})</span>
           </div>
 
           <button
@@ -341,7 +340,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/25 transition-all active:scale-95"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
-            <span>新規問題集を作成</span>
+            <span>{dict.management.createNewWorkbook}</span>
           </button>
         </div>
 
@@ -367,28 +366,28 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                       }}
                     >
                       <span>{subject?.icon || '📚'}</span>
-                      <span>{subject?.name || '未分類'}</span>
+                      <span>{subject?.name || dict.tracker.unclassified}</span>
                     </span>
 
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => duplicateWorkbook(wb.id)}
                         className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                        title="2周目学習用に複製"
+                        title={dict.common.duplicate}
                       >
                         <Copy className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => handleStartEditWb(wb)}
                         className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                        title="問題集を編集"
+                        title={dict.common.edit}
                       >
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => setWbToDelete(wb)}
                         className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
-                        title="問題集を削除"
+                        title={dict.common.delete}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -404,17 +403,19 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                       {wb.description}
                     </p>
                   ) : (
-                    <p className="text-xs text-slate-400 italic mb-3">説明なし</p>
+                    <p className="text-xs text-slate-400 italic mb-3">
+                      {currentLanguage === 'ja' ? '説明なし' : 'No description'}
+                    </p>
                   )}
 
                   {/* 進捗と統計 */}
                   <div className="space-y-2 py-3 border-y border-slate-100 dark:border-slate-800">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-slate-500">
-                        全{wb.totalQuestions}問 ({stats.progressRate}% 解答済み)
+                        {t('tracker.allQuestions', { count: wb.totalQuestions })} ({stats.progressRate}%)
                       </span>
                       <span className="font-bold text-slate-800 dark:text-slate-200">
-                        正答率 {stats.accuracyRate}%
+                        {dict.stats.accuracyRate} {stats.accuracyRate}%
                       </span>
                     </div>
 
@@ -432,12 +433,12 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
 
                     <div className="flex items-center gap-3 text-[11px] pt-1">
                       <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
-                        <CheckCircle2 className="w-3 h-3" /> {stats.correct}問
+                        <CheckCircle2 className="w-3 h-3" /> {stats.correct}
                       </span>
                       <span className="flex items-center gap-1 text-rose-600 dark:text-rose-400 font-bold">
-                        <XCircle className="w-3 h-3" /> {stats.incorrect}問
+                        <XCircle className="w-3 h-3" /> {stats.incorrect}
                       </span>
-                      <span className="text-slate-400">未解答: {stats.unanswered}問</span>
+                      <span className="text-slate-400">{dict.stats.unansweredLegend}: {stats.unanswered}</span>
                     </div>
                   </div>
                 </div>
@@ -447,7 +448,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   onClick={() => onOpenWorkbook(wb.id)}
                   className="mt-4 w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 text-slate-700 dark:text-slate-300 font-semibold text-xs transition-colors"
                 >
-                  <span>トラッカーで回答・復習する</span>
+                  <span>{dict.management.openInTracker}</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -464,9 +465,9 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
           <div className="flex items-center gap-2">
             <Palette className="w-5 h-5 text-brand-600 dark:text-brand-400" />
             <h2 className="text-base font-bold text-slate-900 dark:text-white">
-              教科 (科目) 管理
+              {dict.management.subjectsSection}
             </h2>
-            <span className="text-xs text-slate-400">({subjects.length}教科)</span>
+            <span className="text-xs text-slate-400">({subjects.length})</span>
           </div>
 
           <button
@@ -474,7 +475,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors shadow-2xs"
           >
             <Plus className="w-3.5 h-3.5" />
-            <span>教科を追加</span>
+            <span>{dict.management.createNewSubject}</span>
           </button>
         </div>
 
@@ -500,7 +501,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                       {sub.name}
                     </h4>
                     <p className="text-[11px] text-slate-400 truncate">
-                      {relatedWorkbooks.length}冊の問題集
+                      {t('tracker.registeredCount', { count: relatedWorkbooks.length })}
                     </p>
                   </div>
                 </div>
@@ -509,7 +510,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   <button
                     onClick={() => handleStartEditSubject(sub)}
                     className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
-                    title="教科を編集"
+                    title={dict.common.edit}
                   >
                     <Edit2 className="w-3.5 h-3.5" />
                   </button>
@@ -526,7 +527,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                         ? 'text-slate-300 dark:text-slate-700 cursor-not-allowed'
                         : 'text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40'
                     }`}
-                    title={subjects.length <= 1 ? '教科は最低1つ必要です' : '教科を削除'}
+                    title={dict.common.delete}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -548,7 +549,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                新規問題集の作成
+                {dict.management.createWbModalTitle}
               </h3>
               <button
                 onClick={() => setIsCreateWbOpen(false)}
@@ -561,14 +562,14 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             <form onSubmit={handleCreateWorkbook} className="p-6 space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  問題集タイトル <span className="text-rose-500">*</span>
+                  {dict.management.wbTitleLabel}
                 </label>
                 <input
                   type="text"
                   required
                   value={wbTitle}
                   onChange={(e) => setWbTitle(e.target.value)}
-                  placeholder="例: 高校数学I+A 基本100選"
+                  placeholder={dict.management.wbTitlePlaceholder}
                   className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
                   autoFocus
                 />
@@ -576,7 +577,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  所属する教科 <span className="text-rose-500">*</span>
+                  {dict.management.wbSubjectLabel}
                 </label>
                 <select
                   value={wbSubjectId}
@@ -593,7 +594,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  問題数 (デフォルト100問)
+                  {dict.management.wbTotalQuestionsLabel}
                 </label>
                 <div className="flex items-center gap-2">
                   <input
@@ -616,7 +617,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                             : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600'
                         }`}
                       >
-                        {count}問
+                        {count}
                       </button>
                     ))}
                   </div>
@@ -625,13 +626,13 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  概要・説明 (任意)
+                  {dict.management.wbDescLabel}
                 </label>
                 <textarea
                   rows={3}
                   value={wbDescription}
                   onChange={(e) => setWbDescription(e.target.value)}
-                  placeholder="例: 教科書の章末問題。まずは全問1周解いて✕を洗い出す。"
+                  placeholder={dict.management.wbDescPlaceholder}
                   className="w-full p-3 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
@@ -642,13 +643,13 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   onClick={() => setIsCreateWbOpen(false)}
                   className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
                 >
-                  キャンセル
+                  {dict.management.cancel}
                 </button>
                 <button
                   type="submit"
                   className="px-5 py-2 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/30"
                 >
-                  問題集を作成する
+                  {dict.management.createButton}
                 </button>
               </div>
             </form>
@@ -667,7 +668,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                問題集の編集
+                {dict.management.editWbModalTitle}
               </h3>
               <button
                 onClick={() => setEditingWb(null)}
@@ -680,7 +681,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             <form onSubmit={handleSaveEditWb} className="p-6 space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  問題集タイトル <span className="text-rose-500">*</span>
+                  {dict.management.wbTitleLabel}
                 </label>
                 <input
                   type="text"
@@ -693,7 +694,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  所属する教科
+                  {dict.management.wbSubjectLabel}
                 </label>
                 <select
                   value={editWbSubjectId}
@@ -710,7 +711,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  収録問題数
+                  {dict.management.wbTotalQuestionsLabel}
                 </label>
                 <input
                   type="number"
@@ -721,13 +722,13 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
                 <p className="text-[11px] text-slate-400 mt-1">
-                  ※問題数を増やすと未解答の問題が追加され、減らすと末尾の問題が削除されます。
+                  {dict.management.wbTotalQuestionsHelp}
                 </p>
               </div>
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  概要・説明
+                  {dict.management.wbDescLabel}
                 </label>
                 <textarea
                   rows={3}
@@ -743,13 +744,13 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   onClick={() => setEditingWb(null)}
                   className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
                 >
-                  キャンセル
+                  {dict.management.cancel}
                 </button>
                 <button
                   type="submit"
                   className="px-5 py-2 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/30"
                 >
-                  変更を保存
+                  {dict.management.saveChanges}
                 </button>
               </div>
             </form>
@@ -768,7 +769,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                {editingSubject ? '教科の編集' : '新しい教科の追加'}
+                {editingSubject ? dict.management.editSubjectModalTitle : dict.management.createSubjectModalTitle}
               </h3>
               <button
                 onClick={() => setIsSubjectModalOpen(false)}
@@ -781,14 +782,14 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             <form onSubmit={handleSaveSubject} className="p-6 space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  教科名 <span className="text-rose-500">*</span>
+                  {dict.management.subjectNameLabel}
                 </label>
                 <input
                   type="text"
                   required
                   value={subjectName}
                   onChange={(e) => setSubjectName(e.target.value)}
-                  placeholder="例: 数学, 物理, TOEIC"
+                  placeholder={dict.management.subjectNamePlaceholder}
                   className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
                   autoFocus
                 />
@@ -797,7 +798,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
               {/* カラー選択 */}
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  テーマカラー
+                  {dict.management.subjectColorLabel}
                 </label>
                 <div className="flex items-center gap-2">
                   {COLOR_PRESETS.map((color) => (
@@ -819,7 +820,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
               {/* アイコン絵文字選択 */}
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  アイコン
+                  {dict.management.subjectIconLabel}
                 </label>
                 <div className="flex flex-wrap gap-2">
                   {ICON_PRESETS.map((icon) => (
@@ -841,13 +842,13 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
 
               <div>
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
-                  説明 (任意)
+                  {dict.management.subjectDescLabel}
                 </label>
                 <input
                   type="text"
                   value={subjectDescription}
                   onChange={(e) => setSubjectDescription(e.target.value)}
-                  placeholder="例: 高校数学・大学受験数学"
+                  placeholder={dict.management.subjectDescPlaceholder}
                   className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
@@ -858,13 +859,13 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   onClick={() => setIsSubjectModalOpen(false)}
                   className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
                 >
-                  キャンセル
+                  {dict.management.cancel}
                 </button>
                 <button
                   type="submit"
                   className="px-5 py-2 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/30"
                 >
-                  保存する
+                  {dict.common.save}
                 </button>
               </div>
             </form>
@@ -875,11 +876,11 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       {/* 問題集削除の確認モーダル */}
       <ConfirmModal
         isOpen={wbToDelete !== null}
-        title="問題集を削除しますか？"
-        message={`「${wbToDelete?.title}」を完全に削除します。`}
-        detail="記録されたすべての正否（◯/✕）、メモ、進捗データが削除されます。この操作は取り消せません。"
-        confirmText="問題集を完全に削除する"
-        cancelText="キャンセル"
+        title={dict.management.deleteWbTitle}
+        message={t('management.deleteWbMsg', { title: wbToDelete?.title || '' })}
+        detail={dict.management.deleteWbDetail}
+        confirmText={dict.common.delete}
+        cancelText={dict.common.cancel}
         variant="danger"
         onConfirm={() => {
           if (wbToDelete) {
@@ -893,11 +894,11 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       {/* 教科削除の確認モーダル */}
       <ConfirmModal
         isOpen={subjectToDelete !== null}
-        title="教科を削除しますか？"
-        message={`「${subjectToDelete?.name}」を削除します。`}
-        detail="この教科に所属している問題集は自動的に別の教科（または先頭の教科）に移動します。"
-        confirmText="教科を削除する"
-        cancelText="キャンセル"
+        title={dict.management.deleteSubjectTitle}
+        message={t('management.deleteSubjectMsg', { name: subjectToDelete?.name || '' })}
+        detail={dict.management.deleteSubjectDetail}
+        confirmText={dict.common.delete}
+        cancelText={dict.common.cancel}
         variant="danger"
         onConfirm={() => {
           if (subjectToDelete) {

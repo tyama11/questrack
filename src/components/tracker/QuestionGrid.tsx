@@ -7,6 +7,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { Question, QuestionStatus } from '../../types';
+import { useI18n } from '../../context/I18nContext';
 
 interface QuestionGridProps {
   questions: Question[];
@@ -25,6 +26,8 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
   onSetStatus,
   onOpenNoteModal,
 }) => {
+  const { dict, t } = useI18n();
+
   // キーボードフォーカス用の選択中問題番号
   const [focusedNumber, setFocusedNumber] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -110,12 +113,12 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
         </div>
         <div className="space-y-1">
           <h4 className="text-base font-bold text-slate-900 dark:text-white">
-            該当する問題がありません
+            {dict.tracker.noMatchingQuestions}
           </h4>
           <p className="text-xs text-slate-500 max-w-sm mx-auto">
             {isFiltered
-              ? '現在の絞り込み条件（✕のみ、検索キーワード等）に一致する問題がありません。'
-              : 'この問題集にはまだ問題が登録されていません。'}
+              ? dict.tracker.noMatchingDesc
+              : dict.tracker.noWorkbookDesc}
           </p>
         </div>
       </div>
@@ -130,13 +133,10 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
       {/* グリッドヘッダー・件数 */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800 text-xs">
         <span className="font-semibold text-slate-600 dark:text-slate-300">
-          問題一覧{' '}
-          <span className="text-slate-400 font-normal">
-            ({questions.length} / {allQuestionsCount}問 表示中)
-          </span>
+          {t('tracker.gridShowing', { showing: questions.length, total: allQuestionsCount })}
         </span>
-        <span className="text-[11px] text-slate-400">
-          セルクリックで状態切替 / 💬でメモ / キーボード操作対応
+        <span className="text-[11px] text-slate-400 hidden sm:inline">
+          {dict.tracker.clickToCycle}
         </span>
       </div>
 
@@ -180,7 +180,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                       ? 'bg-amber-100 text-amber-600 dark:bg-amber-950 dark:text-amber-300 shadow-xs'
                       : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 opacity-60 group-hover:opacity-100'
                   }`}
-                  title={hasNote ? `メモ: ${q.note}` : 'メモを追加'}
+                  title={hasNote ? t('tracker.noteTooltip', { note: q.note }) : dict.tracker.addNote}
                 >
                   <MessageSquare className={`w-3 h-3 ${hasNote ? 'fill-amber-400' : ''}`} />
                 </button>
@@ -191,7 +191,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                 type="button"
                 onClick={() => onToggleStatus(q.number)}
                 className="flex-1 py-1.5 flex flex-col items-center justify-center rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                title="クリックで 未解答 → ◯ → ✕ を切り替え"
+                title={dict.tracker.clickToCycle}
               >
                 {q.status === 'correct' && (
                   <div className="flex flex-col items-center">
@@ -199,7 +199,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                       <Check className="w-4 h-4 stroke-[3]" />
                     </div>
                     <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 mt-1">
-                      ◯ 正解
+                      {dict.stats.correctLegend}
                     </span>
                   </div>
                 )}
@@ -210,7 +210,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                       <X className="w-4 h-4 stroke-[3]" />
                     </div>
                     <span className="text-[10px] font-bold text-rose-700 dark:text-rose-300 mt-1">
-                      ✕ 不正解
+                      {dict.stats.incorrectLegend}
                     </span>
                   </div>
                 )}
@@ -220,12 +220,12 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                     <div className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-700 text-slate-400 flex items-center justify-center">
                       <span className="text-xs font-bold leading-none">-</span>
                     </div>
-                    <span className="text-[10px] text-slate-400 mt-1">未解答</span>
+                    <span className="text-[10px] text-slate-400 mt-1">{dict.stats.unansweredLegend}</span>
                   </div>
                 )}
               </button>
 
-              {/* セル下部: ◯ / ✕ クイックダイレクトボタン (確実な個別入力用) */}
+              {/* セル下部: ◯ / ✕ クイックダイレクトボタン */}
               <div className="flex items-center gap-1 mt-1 pt-1.5 border-t border-black/5 dark:border-white/5 opacity-70 group-hover:opacity-100 transition-opacity">
                 <button
                   type="button"
@@ -238,7 +238,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                       ? 'bg-emerald-600 text-white'
                       : 'bg-emerald-100/70 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200'
                   }`}
-                  title="◯ 正解に設定"
+                  title={dict.stats.correctLegend}
                 >
                   ◯
                 </button>
@@ -253,7 +253,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                       ? 'bg-rose-600 text-white'
                       : 'bg-rose-100/70 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 hover:bg-rose-200'
                   }`}
-                  title="✕ 不正解に設定"
+                  title={dict.stats.incorrectLegend}
                 >
                   ✕
                 </button>
@@ -264,7 +264,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                 <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-[11px] leading-snug shadow-xl z-30 pointer-events-none border border-slate-700 font-sans">
                   <div className="font-bold text-amber-300 mb-0.5 flex items-center gap-1">
                     <FileText className="w-3 h-3" />
-                    <span>メモ</span>
+                    <span>{dict.tracker.addNote}</span>
                   </div>
                   <p className="line-clamp-3">{q.note}</p>
                 </div>
