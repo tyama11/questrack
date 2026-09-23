@@ -121,3 +121,14 @@
   - 4つのステップ（登録 → ◯✕高速入力 → 「✕のみ抽出」で弱点ロックオン → 集中復習モードで完全克服）
 - [x] **直感的なダウンロードリンク**:
   - Intel Mac用、Apple Silicon Mac用、Windows用のリンクを目立つ位置に配置
+
+---
+
+## CL-8: CIインフラ最適化 (Rust Cache根本修正 & Node.js 22 LTS化)
+- [x] Node.js を非推奨となった 20 から最新推奨LTS `22` へ更新 (`ci.yml`, `build-and-release.yml`)
+- [x] Rust Cache のホストOS・CPUキー衝突の解消:
+  - `prefix-key: "rust-${{ matrix.arch_name }}"` および `shared-key: "questrack-${{ matrix.arch_name }}"` を導入
+  - macOS Intel と Apple Silicon のキャッシュ上書き・消滅を防止
+- [x] GitHub Actions Cache Scoping 対応 (タグ間キャッシュ不可の解消):
+  - `ci.yml` (`main` ブランチ) に `cargo check` による Rust Cache Warmup を導入
+  - `main` スコープに依存クレートキャッシュを蓄積し、任意のタグ実行時に 100% リストア可能に改善
