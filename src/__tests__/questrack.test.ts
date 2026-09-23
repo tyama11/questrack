@@ -27,7 +27,6 @@ import {
   loadStoredActiveWorkbookId,
   saveStoredActiveWorkbookId,
   clearAllDataFromStorage,
-  STORAGE_KEYS,
   DEFAULT_SUBJECTS,
   INITIAL_SEED_WORKBOOKS,
 } from '../utils/storage';
@@ -55,22 +54,20 @@ describe('LocalStorage 操作 (safeStorage)', () => {
     }),
   };
 
-  const originalWindow = globalThis.window;
+  const originalWindow = typeof window !== 'undefined' ? window : undefined;
 
   beforeEach(() => {
     mockStore = {};
     vi.clearAllMocks();
 
     // グローバル window.localStorage をモック
-    // @ts-expect-error Mocking global window
-    globalThis.window = {
-      localStorage: mockLocalStorage,
+    (globalThis as unknown as { window: { localStorage: Storage } }).window = {
+      localStorage: mockLocalStorage as unknown as Storage,
     };
   });
 
   afterEach(() => {
-    // @ts-expect-error Restore original window
-    globalThis.window = originalWindow;
+    (globalThis as unknown as { window: unknown }).window = originalWindow;
     vi.restoreAllMocks();
   });
 
@@ -137,8 +134,7 @@ describe('LocalStorage 操作 (safeStorage)', () => {
   });
 
   it('window または window.localStorage が未定義の場合、安全にフォールバックすること', () => {
-    // @ts-expect-error Simulate no localStorage environment
-    delete globalThis.window;
+    delete (globalThis as unknown as { window?: unknown }).window;
 
     expect(safeStorage.getItem('any_key')).toBeNull();
     expect(safeStorage.setItem('any_key', 'val')).toBe(false);
@@ -196,7 +192,7 @@ describe('問題生成と伸縮 (createEmptyQuestions)', () => {
       expect(q.status).toBe('unanswered');
       expect(q.note).toBe('');
       expect(typeof q.updatedAt).toBe('string');
-      expect(q.updatedAt.length).toBeGreaterThan(0);
+      expect(q.updatedAt!.length).toBeGreaterThan(0);
     }
   });
 
@@ -726,7 +722,6 @@ describe('データ移行と永続化 (Export / Import / Merge)', () => {
 
     it('上書きモード (replace / overwrite): インポートデータで既存データが完全に置換されること', () => {
       const existingWorkbooks = [...sampleWorkbooks];
-      const existingSubjects = [...sampleSubjects];
 
       const newWorkbooks: Workbook[] = [
         {
