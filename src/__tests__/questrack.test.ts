@@ -89,8 +89,11 @@ describe('LocalStorage 操作 (safeStorage)', () => {
   });
 
   it('setItem 実行時にストレージ例外 (QuotaExceeded等) が発生しても例外を投げず false を返すこと', () => {
-    mockLocalStorage.setItem.mockImplementationOnce(() => {
-      throw new Error('QuotaExceededError: DOM Exception 22');
+    mockLocalStorage.setItem.mockImplementation((key: string, value: string) => {
+      if (key === 'overflow_key') {
+        throw new Error('QuotaExceededError: DOM Exception 22');
+      }
+      mockStore[key] = value;
     });
 
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -102,8 +105,11 @@ describe('LocalStorage 操作 (safeStorage)', () => {
   });
 
   it('getItem 実行時に例外が発生しても例外を投げず null を返すこと', () => {
-    mockLocalStorage.getItem.mockImplementationOnce(() => {
-      throw new Error('SecurityError: Access is denied');
+    mockLocalStorage.getItem.mockImplementation((key: string) => {
+      if (key === 'restricted_key') {
+        throw new Error('SecurityError: Access is denied');
+      }
+      return mockStore[key] ?? null;
     });
 
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -115,8 +121,11 @@ describe('LocalStorage 操作 (safeStorage)', () => {
   });
 
   it('removeItem 実行時に例外が発生しても例外を投げず false を返すこと', () => {
-    mockLocalStorage.removeItem.mockImplementationOnce(() => {
-      throw new Error('Storage write failed');
+    mockLocalStorage.removeItem.mockImplementation((key: string) => {
+      if (key === 'error_key') {
+        throw new Error('Storage write failed');
+      }
+      delete mockStore[key];
     });
 
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
