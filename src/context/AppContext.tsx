@@ -72,13 +72,17 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   const [workbooks, setWorkbooks] = useState<Workbook[]>(() => {
     const stored = loadStoredWorkbooks();
-    return stored && stored.length > 0 ? stored : INITIAL_SEED_WORKBOOKS;
+    return stored !== null ? stored : INITIAL_SEED_WORKBOOKS;
   });
 
   const [activeWorkbookId, setActiveWorkbookIdState] = useState<string | null>(() => {
+    const storedWorkbooks = loadStoredWorkbooks();
+    const initialWorkbooks = storedWorkbooks !== null ? storedWorkbooks : INITIAL_SEED_WORKBOOKS;
     const storedId = loadStoredActiveWorkbookId();
-    if (storedId) return storedId;
-    return INITIAL_SEED_WORKBOOKS.length > 0 ? INITIAL_SEED_WORKBOOKS[0].id : null;
+    if (storedId && initialWorkbooks.some((wb) => wb.id === storedId)) {
+      return storedId;
+    }
+    return initialWorkbooks.length > 0 ? initialWorkbooks[0].id : null;
   });
 
   const [filterOptions, setFilterOptions] = useState<FilterOptions>(initialFilterOptions);
@@ -205,19 +209,17 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setWorkbooks((prev) => {
       const remaining = prev.filter((wb) => wb.id !== id);
       saveStoredWorkbooks(remaining);
-      return remaining;
-    });
 
-    setActiveWorkbookIdState((prevId) => {
-      if (prevId === id) {
-        // 次の選択先を決定
-        const currentWorkbooks = loadStoredWorkbooks() || [];
-        const remaining = currentWorkbooks.filter((wb) => wb.id !== id);
-        const nextId = remaining.length > 0 ? remaining[0].id : null;
-        saveStoredActiveWorkbookId(nextId);
-        return nextId;
-      }
-      return prevId;
+      setActiveWorkbookIdState((prevId) => {
+        if (prevId === id) {
+          const nextId = remaining.length > 0 ? remaining[0].id : null;
+          saveStoredActiveWorkbookId(nextId);
+          return nextId;
+        }
+        return prevId;
+      });
+
+      return remaining;
     });
   }, []);
 

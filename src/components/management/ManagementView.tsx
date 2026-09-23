@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { Subject, Workbook } from '../../types';
+import { calculateOverallStats } from '../../utils/storage';
 import { ConfirmModal } from '../common/ConfirmModal';
 
 interface ManagementViewProps {
@@ -83,31 +84,8 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
   // 全体横断の統計計算
   // ----------------------------------------------------
   const overallStats = React.useMemo(() => {
-    let totalQuestions = 0;
-    let totalAnswered = 0;
-    let totalCorrect = 0;
-    let totalIncorrect = 0;
-
-    workbooks.forEach((wb) => {
-      const stats = getWorkbookStats(wb);
-      totalQuestions += stats.total;
-      totalAnswered += stats.answered;
-      totalCorrect += stats.correct;
-      totalIncorrect += stats.incorrect;
-    });
-
-    const accuracyRate = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
-    const progressRate = totalQuestions > 0 ? Math.round((totalAnswered / totalQuestions) * 100) : 0;
-
-    return {
-      totalQuestions,
-      totalAnswered,
-      totalCorrect,
-      totalIncorrect,
-      accuracyRate,
-      progressRate,
-    };
-  }, [workbooks, getWorkbookStats]);
+    return calculateOverallStats(workbooks);
+  }, [workbooks]);
 
   // ----------------------------------------------------
   // 問題集作成ハンドラー
@@ -204,7 +182,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
             <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
               登録問題集 / 教科
@@ -227,6 +205,25 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
               </span>
               <span className="text-xs text-blue-600/70 dark:text-blue-400/70">
                 問 ({overallStats.totalAnswered}問着手)
+              </span>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40">
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+                やり残し (未解答)
+              </span>
+              <span className="text-[10px] bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-1 py-0.2 rounded font-extrabold">
+                未着手 {overallStats.unansweredRate}%
+              </span>
+            </div>
+            <div className="mt-1 flex items-baseline gap-1.5">
+              <span className="text-2xl font-black text-amber-700 dark:text-amber-300">
+                {overallStats.totalUnanswered}
+              </span>
+              <span className="text-xs text-amber-600/70 dark:text-amber-400/70">
+                問 残り
               </span>
             </div>
           </div>

@@ -142,7 +142,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
               問題集が選択されていません
             </h3>
             <p className="text-xs text-slate-500 max-w-md mx-auto">
-              上部のリストから問題集を選択するか、新しい問題集を作成して100問の正否記録を始めましょう。
+              上部のリストから問題集を選択するか、新しい問題集を作成して問題の正否記録（10問、50問、100問〜）を始めましょう。
             </p>
           </div>
           <button
@@ -239,7 +239,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
             onBatchSetStatus={(st) => batchSetQuestions(activeWorkbook.id, st)}
           />
 
-          {/* 100問グリッドビュー (QuestionGrid) */}
+          {/* 問題グリッドビュー (QuestionGrid) */}
           <QuestionGrid
             questions={filteredQuestions}
             allQuestionsCount={activeWorkbook.questions.length}

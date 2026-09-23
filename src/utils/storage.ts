@@ -10,6 +10,7 @@ import {
   Subject,
   Workbook,
   WorkbookStats,
+  OverallStats,
   StorageUsageSummary,
 } from '../types';
 
@@ -233,6 +234,41 @@ export const calculateWorkbookStats = (workbook: Workbook): WorkbookStats => {
     unanswered,
     accuracyRate,
     progressRate,
+  };
+};
+
+/**
+ * 複数問題集にまたがる全体統計（総問題数、正解、不正解、やり残し等）を計算する
+ */
+export const calculateOverallStats = (workbooks: Workbook[]): OverallStats => {
+  let totalQuestions = 0;
+  let totalAnswered = 0;
+  let totalCorrect = 0;
+  let totalIncorrect = 0;
+  let totalUnanswered = 0;
+
+  for (const wb of workbooks) {
+    const stats = calculateWorkbookStats(wb);
+    totalQuestions += stats.total;
+    totalAnswered += stats.answered;
+    totalCorrect += stats.correct;
+    totalIncorrect += stats.incorrect;
+    totalUnanswered += stats.unanswered;
+  }
+
+  const accuracyRate = totalAnswered > 0 ? Math.round((totalCorrect / totalAnswered) * 100) : 0;
+  const progressRate = totalQuestions > 0 ? Math.round((totalAnswered / totalQuestions) * 100) : 0;
+  const unansweredRate = totalQuestions > 0 ? Math.round((totalUnanswered / totalQuestions) * 100) : 0;
+
+  return {
+    totalQuestions,
+    totalAnswered,
+    totalCorrect,
+    totalIncorrect,
+    totalUnanswered,
+    accuracyRate,
+    progressRate,
+    unansweredRate,
   };
 };
 

@@ -2,8 +2,8 @@
 
 > ### **「◯（正解）は安心を生むが、実力を伸ばすのは常に【✕（不正解）】だ。」**
 > 
-> 100問演習で浮き彫りになった弱点（✕）を徹底的に炙り出し、**✕だけを撃破すれば、点数は確実に跳ね上がる。**  
-> 試験本番までにすべての✕をゼロにする―― **Questrack** は、合格を掴み取るための最速・最強の学習トラッカーです。
+> 任意の問題演習（10問、50問、100問、200問〜）で浮き彫りになった弱点（✕）を徹底的に炙り出し、**✕だけを撃破すれば、点数は確実に跳ね上がる。**  
+> 試験本番までにすべての✕をゼロにする―― **Questrack** は、合格を掴み取るための最速・最強の問題追跡・学習トラッカーです。
 
 <div align="center">
   <img src="app-icon.png" alt="Questrack App Icon" width="128" />
@@ -18,10 +18,10 @@
 
 | OS / CPU | ダウンロードリンク | 形式 |
 | :--- | :--- | :--- |
-| 🍏 **Mac (Apple Silicon)** | **[Questrack v0.3.0 (M1/M2/M3/M4 Mac用)](https://github.com/tyama11/questrack/releases/download/v0.3.0/Questrack_0.3.0_aarch64.dmg)** | `.dmg` |
-| 💻 **Mac (Intel CPU)** | **[Questrack v0.3.0 (Intel Mac用)](https://github.com/tyama11/questrack/releases/download/v0.3.0/Questrack_0.3.0_x64.dmg)** | `.dmg` |
-| 🪟 **Windows (10/11 64bit)** | **[Questrack v0.3.0 (Windows インストーラー)](https://github.com/tyama11/questrack/releases/download/v0.3.0/Questrack_0.3.0_x64-setup.exe)** | `.exe` |
-| 🪟 **Windows (MSIパッケージ)** | **[Questrack v0.3.0 (Windows MSI)](https://github.com/tyama11/questrack/releases/download/v0.3.0/Questrack_0.3.0_x64_en-US.msi)** | `.msi` |
+| 🍏 **Mac (Apple Silicon)** | **[Questrack v1.0.0 (M1/M2/M3/M4 Mac用)](https://github.com/tyama11/questrack/releases/download/v1.0.0/Questrack_1.0.0_aarch64.dmg)** | `.dmg` |
+| 💻 **Mac (Intel CPU)** | **[Questrack v1.0.0 (Intel Mac用)](https://github.com/tyama11/questrack/releases/download/v1.0.0/Questrack_1.0.0_x64.dmg)** | `.dmg` |
+| 🪟 **Windows (10/11 64bit)** | **[Questrack v1.0.0 (Windows インストーラー)](https://github.com/tyama11/questrack/releases/download/v1.0.0/Questrack_1.0.0_x64-setup.exe)** | `.exe` |
+| 🪟 **Windows (MSIパッケージ)** | **[Questrack v1.0.0 (Windows MSI)](https://github.com/tyama11/questrack/releases/download/v1.0.0/Questrack_1.0.0_x64_en-US.msi)** | `.msi` |
 
 > 📦 すべてのバージョン・過去のリリースは **[GitHub Releases 一覧](https://github.com/tyama11/questrack/releases)** から確認できます。  
 > 💡 *Macで「開発元が未確認」と表示された場合は、ファイルを「右クリック（二本指タップ） ➔ 開く」を選択して起動してください。*
@@ -70,7 +70,7 @@ Questrack は、100問解いたあとに**「間違えた問題だけ」を1秒�
 
 ### Step 1: 【1秒で問題集作成】
 - 科目（数学、英語、過去問など）を選び、問題集の名前を入力。
-- 「100問」ボタンを押せば、一瞬で1〜100番までの問題マスが自動生成されます。
+- 10問、50問、100問、200問など**任意の問題数**を自由に指定可能。一瞬で問題マスが自動生成されます。
 
 ### Step 2: 【テンポよく◯✕入力】
 - 画面のマスをクリックするか、キーボードのショートカットでサクサク判定：

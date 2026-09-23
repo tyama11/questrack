@@ -39,7 +39,7 @@ export const App: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="font-semibold text-slate-600 dark:text-slate-300">Questrack</span>
             <span>—</span>
-            <span>100問追跡 & ✕克服特化デスクトップアプリ</span>
+            <span>問題追跡 & ✕克服特化デスクトップアプリ</span>
           </div>
           <div className="flex items-center gap-4 text-[11px]">
             <span>Tauri v2 + React 18 + TailwindCSS</span>

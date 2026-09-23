@@ -15,6 +15,7 @@ import {
   safeStorage,
   createEmptyQuestions,
   calculateWorkbookStats,
+  calculateOverallStats,
   filterQuestions,
   exportDataToJsonString,
   validateAndParseImportData,
@@ -29,8 +30,9 @@ import {
   clearAllDataFromStorage,
   DEFAULT_SUBJECTS,
   INITIAL_SEED_WORKBOOKS,
+  STORAGE_KEYS,
 } from '../utils/storage';
-import { Question, Subject, Workbook } from '../types';
+import { Question, Subject, Workbook, OverallStats } from '../types';
 
 // =================================================================
 // 1. LocalStorage 操作 (safeStorage) のテスト
@@ -798,3 +800,109 @@ describe('初期シードデータの整合性', () => {
     expect(subjectNames).toContain('英語');
   });
 });
+
+// =================================================================
+// 8. 任意問題数および問題集削除時のやり残し再計算テスト
+// =================================================================
+describe('任意問題数追跡 & 問題集削除時のやり残し再計算', () => {
+  it('10問・50問・120問など任意の問題数でやり残し（未解答数）が正確に算出されること', () => {
+    // 10問の小テスト (◯7, ✕2, 未解答1)
+    const wb10: Workbook = {
+      id: 'wb-10',
+      title: '単元確認10問テスト',
+      subjectId: 'sub-math',
+      totalQuestions: 10,
+      questions: [
+        ...Array.from({ length: 7 }, (_, i) => ({ id: `q10-${i + 1}`, number: i + 1, status: 'correct' as const, note: '' })),
+        ...Array.from({ length: 2 }, (_, i) => ({ id: `q10-${i + 8}`, number: i + 8, status: 'incorrect' as const, note: '' })),
+        { id: 'q10-10', number: 10, status: 'unanswered', note: '' },
+      ],
+      createdAt: '2026-09-23',
+      updatedAt: '2026-09-23',
+    };
+
+    const stats10 = calculateWorkbookStats(wb10);
+    expect(stats10.total).toBe(10);
+    expect(stats10.answered).toBe(9);
+    expect(stats10.unanswered).toBe(1);
+    expect(stats10.accuracyRate).toBe(77.8); // 7/9 = 77.77% -> 77.8%
+    expect(stats10.progressRate).toBe(90);
+
+    // 120問の模試 (◯80, ✕20, 未解答20)
+    const wb120: Workbook = {
+      id: 'wb-120',
+      title: '共通テスト総合模試120問',
+      subjectId: 'sub-math',
+      totalQuestions: 120,
+      questions: [
+        ...Array.from({ length: 80 }, (_, i) => ({ id: `q120-${i + 1}`, number: i + 1, status: 'correct' as const, note: '' })),
+        ...Array.from({ length: 20 }, (_, i) => ({ id: `q120-${i + 81}`, number: i + 81, status: 'incorrect' as const, note: '' })),
+        ...Array.from({ length: 20 }, (_, i) => ({ id: `q120-${i + 101}`, number: i + 101, status: 'unanswered' as const, note: '' })),
+      ],
+      createdAt: '2026-09-23',
+      updatedAt: '2026-09-23',
+    };
+
+    const stats120 = calculateWorkbookStats(wb120);
+    expect(stats120.total).toBe(120);
+    expect(stats120.answered).toBe(100);
+    expect(stats120.unanswered).toBe(20);
+  });
+
+  it('問題集を削除した際、全体のやり残し・未解答数が即座に減算され、0冊時は全項目が0になること', () => {
+    const wb1: Workbook = {
+      id: 'wb-1',
+      title: '問題集1',
+      subjectId: 'sub-math',
+      totalQuestions: 10,
+      questions: createEmptyQuestions(10, 'wb-1'), // 未解答10問
+      createdAt: '',
+      updatedAt: '',
+    };
+    const wb2: Workbook = {
+      id: 'wb-2',
+      title: '問題集2',
+      subjectId: 'sub-eng',
+      totalQuestions: 20,
+      questions: createEmptyQuestions(20, 'wb-2'), // 未解答20問
+      createdAt: '',
+      updatedAt: '',
+    };
+
+    let currentWorkbooks = [wb1, wb2];
+
+    // 初期状態: 合計30問、やり残し30問
+    let overall = calculateOverallStats(currentWorkbooks);
+    expect(overall.totalQuestions).toBe(30);
+    expect(overall.totalUnanswered).toBe(30);
+    expect(overall.unansweredRate).toBe(100);
+
+    // wb1 を削除 -> wb2 (20問) のみ残る
+    currentWorkbooks = currentWorkbooks.filter((w) => w.id !== 'wb-1');
+    overall = calculateOverallStats(currentWorkbooks);
+    expect(overall.totalQuestions).toBe(20);
+    expect(overall.totalUnanswered).toBe(20);
+
+    // wb2 も削除 -> 0冊になる。トータルのやり残しが0になること
+    currentWorkbooks = currentWorkbooks.filter((w) => w.id !== 'wb-2');
+    overall = calculateOverallStats(currentWorkbooks);
+    expect(overall.totalQuestions).toBe(0);
+    expect(overall.totalUnanswered).toBe(0);
+    expect(overall.totalCorrect).toBe(0);
+    expect(overall.totalIncorrect).toBe(0);
+    expect(overall.unansweredRate).toBe(0);
+  });
+
+  it('ストレージに空配列 [] が保存されているとき、初期シードデータが復活しないこと', () => {
+    // 空配列をストレージに保存
+    saveStoredWorkbooks([]);
+    const loaded = loadStoredWorkbooks();
+    expect(loaded).toEqual([]);
+
+    // AppContextの判定条件: stored !== null ? stored : INITIAL_SEED_WORKBOOKS
+    const finalWorkbooks = loaded !== null ? loaded : INITIAL_SEED_WORKBOOKS;
+    expect(finalWorkbooks).toEqual([]);
+    expect(finalWorkbooks.length).toBe(0); // シードデータが復活しない
+  });
+});
+

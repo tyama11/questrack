@@ -132,3 +132,21 @@
 - [x] GitHub Actions Cache Scoping 対応 (タグ間キャッシュ不可の解消):
   - `ci.yml` (`main` ブランチ) に `cargo check` による Rust Cache Warmup を導入
   - `main` スコープに依存クレートキャッシュを蓄積し、任意のタグ実行時に 100% リストア可能に改善
+
+---
+
+## CL-9: v1.0.0 正式リリース (任意問題数対応・問題集削除バグ修正・問題追跡統一)
+- [x] **「100問追跡」から「問題追跡」への表現統一**:
+  - 10問、50問、100問、200問など任意の問題数に対応することを明確化
+  - `src/App.tsx`, `src/components/Navbar.tsx`, `src/components/tracker/TrackerView.tsx`, `README.md` の文言を修正
+- [x] **問題集削除時のやり残し残りバグ解消**:
+  - `src/context/AppContext.tsx`: `workbooks` 初期化判定を `stored !== null` に修正し、全削除で空配列となった際に初期シードデータが復活するバグを根絶
+  - `deleteWorkbook` 処理で残存配列の即時保存とアクティブIDの安全なリセットを徹底
+  - `src/components/management/ManagementView.tsx`: 全体進捗統計に「やり残し (未解答)」カードを新設。問題集削除時に即座に再計算・ゼロ化
+- [x] **単体テストスイート強化**:
+  - `src/__tests__/questrack.test.ts`: 任意問題数（10問、120問）の統計テスト、問題集削除時のやり残しゼロ化検証、空ストレージ維持テストを追加
+- [x] **正式リリース v1.0.0 の発行**:
+  - `package.json`, `src-tauri/tauri.conf.json`, `src-tauri/Cargo.toml`, `Navbar.tsx`, `README.md` を `v1.0.0` にバンプ
+  - Git コミット・プッシュ・タグ `v1.0.0` 発行
+  - GitHub Actions による全プラットフォーム自動ビルド & Release 完了検証
+

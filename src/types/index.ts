@@ -79,6 +79,20 @@ export interface WorkbookStats {
 }
 
 /**
+ * 全問題集横断の全体統計情報
+ */
+export interface OverallStats {
+  totalQuestions: number;   // 全登録問題数
+  totalAnswered: number;    // 全解答済み数 (totalCorrect + totalIncorrect)
+  totalCorrect: number;     // 全正解数 (◯)
+  totalIncorrect: number;   // 全不正解数 (✕)
+  totalUnanswered: number;  // 全未解答・やり残し数
+  accuracyRate: number;     // 全体正答率 (%)
+  progressRate: number;     // 全体進捗率 (%)
+  unansweredRate: number;   // 全体未着手率 (%)
+}
+
+/**
  * バックアップ・エクスポート用のJSONデータ構造
  */
 export interface AppExportData {
