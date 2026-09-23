@@ -34,7 +34,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onOpenReviewModal,
   onBatchSetStatus,
 }) => {
-  const { dict, t } = useI18n();
+  const { dict } = useI18n();
   const [showBatchMenu, setShowBatchMenu] = useState(false);
   const [confirmBatchType, setConfirmBatchType] = useState<'correct' | 'unanswered' | null>(null);
 

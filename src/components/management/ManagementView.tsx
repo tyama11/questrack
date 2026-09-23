@@ -14,7 +14,6 @@ import {
   Check,
   AlertTriangle,
   Globe,
-  Database,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { useI18n } from '../../context/I18nContext';
@@ -165,19 +164,20 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
     if (!subjectName.trim()) return;
 
     if (editingSubject) {
-      updateSubject(editingSubject.id, {
-        name: subjectName.trim(),
-        color: subjectColor,
-        icon: subjectIcon,
-        description: subjectDescription.trim(),
-      });
+      updateSubject(
+        editingSubject.id,
+        subjectName.trim(),
+        subjectColor,
+        subjectDescription.trim(),
+        subjectIcon
+      );
     } else {
-      createSubject({
-        name: subjectName.trim(),
-        color: subjectColor,
-        icon: subjectIcon,
-        description: subjectDescription.trim(),
-      });
+      createSubject(
+        subjectName.trim(),
+        subjectColor,
+        subjectDescription.trim(),
+        subjectIcon
+      );
     }
     setIsSubjectModalOpen(false);
   };

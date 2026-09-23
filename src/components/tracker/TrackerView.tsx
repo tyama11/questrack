@@ -41,7 +41,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
     duplicateWorkbook,
   } = useApp();
 
-  const { dict, t, currentLanguage } = useI18n();
+  const { dict, t } = useI18n();
 
   // モーダル管理ステート
   const [selectedQuestionForNote, setSelectedQuestionForNote] = useState<Question | null>(null);

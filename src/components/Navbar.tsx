@@ -24,7 +24,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   const { workbooks, activeWorkbook, getWorkbookStats } = useApp();
   const { themeMode, setThemeMode } = useTheme();
-  const { languageMode, currentLanguage, setLanguageMode, t, dict } = useI18n();
+  const { languageMode, currentLanguage, setLanguageMode, dict } = useI18n();
 
   // 現在選択中の問題集の統計
   const activeStats = activeWorkbook ? getWorkbookStats(activeWorkbook) : null;
