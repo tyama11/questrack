@@ -1,6 +1,6 @@
 [package]
 name = "questrack"
-version = "0.2.0"
+version = "0.3.0"
 description = "Questrack - 問題追跡・復習デスクトップアプリ"
 authors = ["Questrack Team"]
 edition = "2021"
