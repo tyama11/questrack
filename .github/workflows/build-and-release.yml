@@ -36,9 +36,13 @@ jobs:
       matrix:
         include:
           - platform: 'macos-latest'
-            targets: 'aarch64-apple-darwin,x86_64-apple-darwin'
-            tauri_args: '--target universal-apple-darwin'
-            arch_name: 'macOS-Universal-Intel-and-AppleSilicon'
+            targets: 'x86_64-apple-darwin'
+            tauri_args: '--target x86_64-apple-darwin'
+            arch_name: 'macOS-Intel-x86_64'
+          - platform: 'macos-latest'
+            targets: 'aarch64-apple-darwin'
+            tauri_args: '--target aarch64-apple-darwin'
+            arch_name: 'macOS-AppleSilicon-arm64'
           - platform: 'windows-latest'
             targets: 'x86_64-pc-windows-msvc'
             tauri_args: '--target x86_64-pc-windows-msvc'
@@ -79,8 +83,9 @@ jobs:
           releaseBody: |
             ## Questrack Desktop Release
             - Cross-platform release built automatically via GitHub Actions CI/CD.
-            - macOS: Universal Binary (.dmg) supports both Intel Macs & Apple Silicon (M1-M4).
-            - Windows: 64-bit installer (.exe / .msi).
+            - macOS Intel: Questrack_x64.dmg (for Intel Mac)
+            - macOS Apple Silicon: Questrack_aarch64.dmg (for M1/M2/M3/M4)
+            - Windows: Questrack_x64-setup.exe (.exe / .msi)
           releaseDraft: ${{ github.event.inputs.draft || false }}
           prerelease: ${{ github.event.inputs.prerelease || false }}
           args: ${{ matrix.tauri_args }}
