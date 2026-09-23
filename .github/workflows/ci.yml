@@ -57,7 +57,15 @@ jobs:
         run: npm test
 
       - name: Type check & Build
-        run: npm run build
+        run: |
+          echo "## Build Diagnostics" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          npm run build 2>&1 | tee build_log.txt || BUILD_EXIT=$?
+          cat build_log.txt >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          if [ "${BUILD_EXIT:-0}" -ne 0 ]; then
+            exit $BUILD_EXIT
+          fi
 
       - name: Upload GitHub Pages artifact
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
