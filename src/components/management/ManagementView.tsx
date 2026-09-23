@@ -12,6 +12,9 @@ import {
   X,
   Palette,
   Check,
+  AlertTriangle,
+  Globe,
+  Database,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { Subject, Workbook } from '../../types';
@@ -50,6 +53,9 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
     deleteSubject,
     getWorkbookStats,
   } = useApp();
+
+  // 実行環境が Tauri か Webブラウザかを判定
+  const isTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
 
   // ----------------------------------------------------
   // モーダル管理ステート
@@ -256,6 +262,62 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                 {overallStats.totalIncorrect}
               </span>
               <span className="text-xs text-rose-500/80">問の不正解を記録</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ======================================================== */}
+      {/* ⚠️ ウェブ版データ消失リスク注意喚起 & バックアップ案内 */}
+      {/* ======================================================== */}
+      <div className={`p-4 sm:p-5 rounded-2xl border transition-all shadow-sm ${
+        !isTauri
+          ? 'bg-amber-500/10 dark:bg-amber-500/15 border-amber-300 dark:border-amber-700/60'
+          : 'bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800'
+      }`}>
+        <div className="flex items-start gap-3.5">
+          <div className={`p-2 rounded-xl text-white shrink-0 mt-0.5 shadow-sm ${
+            !isTauri ? 'bg-amber-500' : 'bg-slate-600 dark:bg-slate-700'
+          }`}>
+            <AlertTriangle className="w-5 h-5 stroke-[2.5]" />
+          </div>
+          <div className="flex-1 space-y-2">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <Globe className="w-4 h-4 text-brand-600 dark:text-brand-400" />
+                  ウェブ（ブラウザ）版をご利用の際の注意：データ消失リスクについて
+                </h3>
+                <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
+                  !isTauri
+                    ? 'bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100'
+                    : 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300'
+                }`}>
+                  {!isTauri ? '現在の環境: Webブラウザ版' : '現在の環境: デスクトップアプリ版 (データ永続化)'}
+                </span>
+              </div>
+            </div>
+            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+              Webブラウザ版（GitHub Pages等）は、学習データをブラウザのローカルストレージに保存しています。そのため、<strong>「ブラウザのキャッシュ消去」「Cookieやサイトデータの削除」「シークレット（プライベート）モードの終了」</strong>などにより、<strong>保存した問題集や◯✕の記録がすべて消えてしまう可能性があります。</strong>
+            </p>
+            <div className="pt-1 flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-amber-900 dark:text-amber-200">
+                <Database className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                <span>対策: 大切な学習データは「データ移行・初期化」タブから定期的にJSONエクスポート（バックアップ）を行ってください。</span>
+              </div>
+            </div>
+            <div className="pt-1 text-xs text-slate-600 dark:text-slate-400 flex flex-wrap items-center gap-2">
+              <span>💡 データを消さずに恒久的にオフライン学習したい場合は、</span>
+              <a
+                href="https://github.com/tyama11/questrack/releases/latest"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 font-bold text-brand-600 dark:text-brand-400 hover:underline"
+              >
+                <span>デスクトップアプリ版（Mac / Windows）</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
+              <span>の利用をおすすめします。</span>
             </div>
           </div>
         </div>

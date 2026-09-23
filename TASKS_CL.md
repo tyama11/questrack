@@ -150,3 +150,18 @@
   - Git コミット・プッシュ・タグ `v1.0.0` 発行
   - GitHub Actions による全プラットフォーム自動ビルド & Release 完了検証
 
+---
+
+## CL-10: Node.js 24化・GitHub Pages自動公開・Web版データ消失注意喚起
+- [x] **Node.js 24 移行**:
+  - `.github/workflows/ci.yml` および `.github/workflows/build-and-release.yml` を `node-version: 24` に更新
+- [x] **GitHub Pages バージョン対応 & 自動公開パイプライン構築**:
+  - `vite.config.ts`: `base: "./"` を追加し、GitHub Pages サブディレクトリでもアセットパスが完全解決するよう設定
+  - `.github/workflows/ci.yml`: `main` への push でテスト（CL）全件合格時に `actions/deploy-pages` で GitHub Pages（`https://tyama11.github.io/questrack/`）へ自動デプロイ
+- [x] **マネジメント画面への Web 版データ消失注意喚起 UI 実装**:
+  - `ManagementView.tsx`: ブラウザのキャッシュクリア・シークレットモード終了時などのデータ消失リスク警告バナーを新設
+  - 定期的な JSON バックアップ（エクスポート）の推奨、およびデータが消えないデスクトップ版（Mac/Windows）の案内リンクを追加
+- [x] **README.md への Web 版リンク追加**:
+  - インストール不要ですぐ試せる GitHub Pages リンクを掲載
+
+
