@@ -1,11 +1,8 @@
-import React, { createContext, useEffect, useState } from 'react';
-import { ThemeMode, ThemeContextType } from '../types';
-
-export type { ThemeMode };
+import React, { useEffect, useState } from 'react';
+import { ThemeMode } from '../types';
+import { ThemeContext } from './ThemeContextInstance';
 
 const THEME_STORAGE_KEY = 'questrack_theme_mode_v1';
-
-export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
@@ -90,5 +87,4 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   );
 };
 
-export { useTheme } from './useTheme';
 

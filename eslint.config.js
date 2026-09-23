@@ -46,6 +46,9 @@ export default tseslint.config(
     files: ['src/__tests__/**/*.{ts,tsx}'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/no-non-null-assertion': 'off',
+      '@typescript-eslint/no-empty-function': 'off',
+      '@typescript-eslint/no-dynamic-delete': 'off',
     },
   }
 );

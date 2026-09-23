@@ -1,27 +1,10 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Language, translations } from '../i18n/translations';
-import { LanguageMode, I18nContextType } from '../types';
-
-export type { LanguageMode, Language };
+import { LanguageMode } from '../types';
+import { I18nContext } from './I18nContextInstance';
+import { detectSystemLanguage } from '../utils/language';
 
 const I18N_STORAGE_KEY = 'questrack_language_mode_v1';
-
-export function detectSystemLanguage(): Language {
-  if (typeof navigator === 'undefined') return 'en';
-  const langs = navigator.languages && navigator.languages.length > 0
-    ? navigator.languages
-    : [navigator.language];
-
-  for (const lang of langs) {
-    if (!lang) continue;
-    if (lang.toLowerCase().startsWith('ja')) {
-      return 'ja';
-    }
-  }
-  return 'en';
-}
-
-export const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [languageMode, setLanguageModeState] = useState<LanguageMode>(() => {
@@ -125,5 +108,4 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
   );
 };
 
-export { useI18n } from './useI18n';
 

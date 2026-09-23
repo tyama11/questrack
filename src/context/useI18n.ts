@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { I18nContext } from './I18nContext';
+import { I18nContext } from './I18nContextInstance';
 import { I18nContextType } from '../types';
 
 export const useI18n = (): I18nContextType => {

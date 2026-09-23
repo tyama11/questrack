@@ -3,8 +3,7 @@ import { Navbar, ActiveTab } from './components/Navbar';
 import { TrackerView } from './components/tracker/TrackerView';
 import { ManagementView } from './components/management/ManagementView';
 import { DataView } from './components/data/DataView';
-import { useApp } from './context/AppContext';
-import { useI18n } from './context/I18nContext';
+import { useApp, useI18n } from './context';
 
 export const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<ActiveTab>('tracker');

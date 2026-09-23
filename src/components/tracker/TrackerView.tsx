@@ -7,8 +7,7 @@ import {
   Trash2,
   Copy,
 } from 'lucide-react';
-import { useApp } from '../../context/AppContext';
-import { useI18n } from '../../context/I18nContext';
+import { useApp, useI18n } from '../../context';
 import { Question } from '../../types';
 import { StatsBar } from './StatsBar';
 import { FilterBar } from './FilterBar';

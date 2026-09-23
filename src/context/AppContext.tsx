@@ -4,9 +4,7 @@
  */
 
 import React, {
-  createContext,
   useCallback,
-  useContext,
   useEffect,
   useMemo,
   useState,
@@ -43,11 +41,10 @@ import {
   saveStoredWorkbooks,
   validateAndParseImportData,
 } from '../utils/storage';
-
-export const AppContext = createContext<AppContextType | undefined>(undefined);
+import { AppContext } from './AppContextInstance';
 
 // ランダムID生成用ヘルパー
-const generateId = (prefix: string = 'id'): string => {
+const generateId = (prefix = 'id'): string => {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 7)}`;
 };
 
@@ -105,7 +102,12 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   // activeWorkbookIdが不正（削除された等）になった場合の自己修復
   useEffect(() => {
     if (activeWorkbookId && !workbooks.some((wb) => wb.id === activeWorkbookId)) {
-      setActiveWorkbookIdState(workbooks.length > 0 ? workbooks[0].id : null);
+      const nextId = workbooks.length > 0 ? workbooks[0].id : null;
+      saveStoredActiveWorkbookId(nextId);
+      // 非同期イベントキューで安全に同期
+      queueMicrotask(() => {
+        setActiveWorkbookIdState(nextId);
+      });
     }
   }, [workbooks, activeWorkbookId]);
 
@@ -133,7 +135,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     (
       title: string,
       subjectId: string,
-      totalQuestions: number = 100,
+      totalQuestions = 100,
       description?: string
     ): Workbook => {
       const now = new Date().toISOString();
@@ -348,7 +350,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
             questions: wb.questions.map((q) => {
               if (q.number !== questionNumber) return q;
               // サイクル: unanswered -> correct -> incorrect -> unanswered
-              let nextStatus: QuestionStatus = 'correct';
+              let nextStatus: QuestionStatus;
               if (q.status === 'correct') {
                 nextStatus = 'incorrect';
               } else if (q.status === 'incorrect') {
@@ -582,5 +584,4 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export { useApp } from './useApp';
 

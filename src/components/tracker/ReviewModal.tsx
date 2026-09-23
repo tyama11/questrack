@@ -13,7 +13,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { Workbook } from '../../types';
-import { useI18n } from '../../context/I18nContext';
+import { useI18n } from '../../context';
 
 interface ReviewModalProps {
   isOpen: boolean;

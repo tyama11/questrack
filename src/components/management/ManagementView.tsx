@@ -15,8 +15,7 @@ import {
   AlertTriangle,
   Globe,
 } from 'lucide-react';
-import { useApp } from '../../context/AppContext';
-import { useI18n } from '../../context/I18nContext';
+import { useApp, useI18n } from '../../context';
 import { Subject, Workbook } from '../../types';
 import { calculateOverallStats } from '../../utils/storage';
 import { ConfirmModal } from '../common/ConfirmModal';

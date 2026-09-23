@@ -11,8 +11,7 @@ import {
   X,
   FileUp,
 } from 'lucide-react';
-import { useApp } from '../../context/AppContext';
-import { useI18n } from '../../context/I18nContext';
+import { useApp, useI18n } from '../../context';
 import { ImportMode } from '../../types';
 
 export const DataView: React.FC = () => {

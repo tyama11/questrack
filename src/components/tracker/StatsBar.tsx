@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckCircle2, XCircle, HelpCircle, TrendingUp, Award } from 'lucide-react';
 import { WorkbookStats } from '../../types';
-import { useI18n } from '../../context/I18nContext';
+import { useI18n } from '../../context';
 
 interface StatsBarProps {
   stats: WorkbookStats;

@@ -7,7 +7,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { Question, QuestionStatus } from '../../types';
-import { useI18n } from '../../context/I18nContext';
+import { useI18n } from '../../context';
 
 interface QuestionGridProps {
   questions: Question[];
@@ -29,15 +29,20 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
   const { dict, t } = useI18n();
 
   // キーボードフォーカス用の選択中問題番号
-  const [focusedNumber, setFocusedNumber] = useState<number | null>(null);
+  const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // 初回マウント時、または問題変更時に先頭にフォーカスを設定
-  useEffect(() => {
-    if (questions.length > 0 && focusedNumber === null) {
-      setFocusedNumber(questions[0].number);
-    }
-  }, [questions, focusedNumber]);
+  // 選択番号が存在するか確認し、未選択なら先頭番号を有効フォーカスとする
+  const focusedNumber =
+    selectedNumber !== null && questions.some((q) => q.number === selectedNumber)
+      ? selectedNumber
+      : questions.length > 0
+      ? questions[0].number
+      : null;
+
+  const setFocusedNumber = (num: number) => {
+    setSelectedNumber(num);
+  };
 
   // キーボード操作ハンドラー
   useEffect(() => {

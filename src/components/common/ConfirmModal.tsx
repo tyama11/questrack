@@ -1,6 +1,6 @@
 import React from 'react';
 import { AlertTriangle, Trash2, CheckCircle2, X } from 'lucide-react';
-import { useI18n } from '../../context/I18nContext';
+import { useI18n } from '../../context';
 
 export interface ConfirmModalProps {
   isOpen: boolean;

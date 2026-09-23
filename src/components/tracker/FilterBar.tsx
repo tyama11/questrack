@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { FilterStatus, WorkbookStats } from '../../types';
 import { ConfirmModal } from '../common/ConfirmModal';
-import { useI18n } from '../../context/I18nContext';
+import { useI18n } from '../../context';
 
 interface FilterBarProps {
   currentStatus: FilterStatus;

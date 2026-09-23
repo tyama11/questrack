@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { AppProvider } from './context/AppContext';
-import { ThemeProvider } from './context/ThemeContext';
-import { I18nProvider } from './context/I18nContext';
+import { AppProvider, ThemeProvider, I18nProvider } from './context';
 import './index.css';
 
 // 初期ロード時のFOUC（スタイルちらつき）防止

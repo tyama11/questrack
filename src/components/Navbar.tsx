@@ -10,9 +10,7 @@ import {
   Laptop,
   Languages,
 } from 'lucide-react';
-import { useApp } from '../context/AppContext';
-import { useTheme } from '../context/ThemeContext';
-import { useI18n } from '../context/I18nContext';
+import { useApp, useTheme, useI18n } from '../context';
 import { ActiveTab } from '../types';
 
 interface NavbarProps {

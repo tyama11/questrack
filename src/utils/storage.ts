@@ -84,7 +84,7 @@ export const DEFAULT_SUBJECTS: Subject[] = [
 /**
  * 指定された問題数の未解答問題リストを生成する
  */
-export const createEmptyQuestions = (count: number, prefix: string = 'q'): Question[] => {
+export const createEmptyQuestions = (count: number, prefix = 'q'): Question[] => {
   const questions: Question[] = [];
   const now = new Date().toISOString();
   for (let i = 1; i <= count; i++) {
@@ -431,7 +431,7 @@ export const calculateStorageUsage = (
   let storageSizeBytes = 0;
   if (workbooks.length > 0) {
     // LocalStorage使用容量の計算（文字列長 * 2バイト (UTF-16概算)）
-    let totalChars = 0;
+    let totalChars: number;
     try {
       const wbStr = safeStorage.getItem(STORAGE_KEYS.WORKBOOKS) || JSON.stringify(workbooks);
       const subStr = safeStorage.getItem(STORAGE_KEYS.SUBJECTS) || JSON.stringify(subjects);
@@ -645,7 +645,7 @@ export const mergeImportedData = (
 export const filterQuestions = (
   questions: Question[],
   status: FilterStatus = 'all',
-  searchQuery: string = ''
+  searchQuery = ''
 ): Question[] => {
   return questions.filter((q) => {
     // 1. ステータスフィルター

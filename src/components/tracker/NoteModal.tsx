@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, FileText, CheckCircle2, XCircle, HelpCircle, Save, Tag } from 'lucide-react';
 import { Question, QuestionStatus } from '../../types';
-import { useI18n } from '../../context/I18nContext';
+import { useI18n } from '../../context';
 
 interface NoteModalProps {
   question: Question | null;
@@ -43,11 +43,12 @@ export const NoteModal: React.FC<NoteModalProps> = ({
 
   const commonTags = currentLanguage === 'ja' ? COMMON_NOTE_TAGS_JA : COMMON_NOTE_TAGS_EN;
 
-  useEffect(() => {
-    if (question) {
-      setNoteText(question.note || '');
-    }
-  }, [question]);
+  const [prevQuestionId, setPrevQuestionId] = useState<string | null>(null);
+
+  if (question && question.id !== prevQuestionId) {
+    setPrevQuestionId(question.id);
+    setNoteText(question.note || '');
+  }
 
   if (!isOpen || !question) return null;
 
