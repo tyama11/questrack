@@ -65,6 +65,11 @@ jobs:
         with:
           targets: ${{ matrix.targets }}
 
+      - name: Rust Cache (ビルド時間を最大70%高速化)
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
       - name: Install Linux dependencies (Ubuntu only)
         if: matrix.platform == 'ubuntu-22.04'
         run: |
