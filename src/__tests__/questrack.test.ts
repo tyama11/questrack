@@ -1352,7 +1352,7 @@ describe('任意問題数（100問固定ではない）の柔軟性テスト', (
 // =================================================================
 describe('OS 言語判定 & 多言語対応 (i18n)', () => {
   it('navigator.language が ja または ja-JP のとき、日本語 (ja) を判定すること', async () => {
-    const { detectSystemLanguage } = await import('../context/I18nContext');
+    const { detectSystemLanguage } = await import('../utils/language');
 
     const originalNavigator = globalThis.navigator;
 
@@ -1378,7 +1378,7 @@ describe('OS 言語判定 & 多言語対応 (i18n)', () => {
   });
 
   it('navigator.language が日本語以外 (英語、中国語、フランス語等) のとき、英語 (en) を表示すること', async () => {
-    const { detectSystemLanguage } = await import('../context/I18nContext');
+    const { detectSystemLanguage } = await import('../utils/language');
 
     const originalNavigator = globalThis.navigator;
 
