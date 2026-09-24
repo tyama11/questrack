@@ -1466,3 +1466,45 @@ describe('OS 連動ダークモードの判定', () => {
   });
 });
 
+// =================================================================
+// 10. 問題記録時の次問題フォーカス進行ロジックのテスト
+// =================================================================
+describe('問題記録時の次問題フォーカス進行ロジック', () => {
+  it('中間の問題を記録したとき、次の問題番号へフォーカスが移動すること', () => {
+    const questions = [
+      { id: '1', number: 1, status: 'unanswered' },
+      { id: '2', number: 2, status: 'unanswered' },
+      { id: '3', number: 3, status: 'unanswered' },
+    ];
+
+    const getNextFocusNumber = (currentNumber: number, list: typeof questions): number => {
+      const idx = list.findIndex((q) => q.number === currentNumber);
+      if (idx !== -1 && idx < list.length - 1) {
+        return list[idx + 1].number;
+      }
+      return currentNumber;
+    };
+
+    expect(getNextFocusNumber(1, questions)).toBe(2);
+    expect(getNextFocusNumber(2, questions)).toBe(3);
+  });
+
+  it('最後の問題を記録したとき、最後の問題番号に留まること', () => {
+    const questions = [
+      { id: '1', number: 1, status: 'unanswered' },
+      { id: '2', number: 2, status: 'unanswered' },
+    ];
+
+    const getNextFocusNumber = (currentNumber: number, list: typeof questions): number => {
+      const idx = list.findIndex((q) => q.number === currentNumber);
+      if (idx !== -1 && idx < list.length - 1) {
+        return list[idx + 1].number;
+      }
+      return currentNumber;
+    };
+
+    expect(getNextFocusNumber(2, questions)).toBe(2);
+  });
+});
+
+

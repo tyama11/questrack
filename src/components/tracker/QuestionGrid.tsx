@@ -44,6 +44,37 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
     setSelectedNumber(num);
   };
 
+  // 次の問題へフォーカスを進めるヘルパー
+  const moveToNextQuestion = (currentNumber: number) => {
+    const currentIdx = questions.findIndex((q) => q.number === currentNumber);
+    if (currentIdx !== -1 && currentIdx < questions.length - 1) {
+      setSelectedNumber(questions[currentIdx + 1].number);
+    }
+  };
+
+  // ステータスを記録して次の問題へ移動
+  const handleRecordStatusAndAdvance = (questionNumber: number, status: QuestionStatus) => {
+    onSetStatus(questionNumber, status);
+    moveToNextQuestion(questionNumber);
+  };
+
+  // トグル記録して次の問題へ移動
+  const handleToggleStatusAndAdvance = (questionNumber: number) => {
+    onToggleStatus(questionNumber);
+    moveToNextQuestion(questionNumber);
+  };
+
+  // フォーカスされた問題セルが見えるようにスクロール調整
+  useEffect(() => {
+    if (focusedNumber === null || !containerRef.current) return;
+    const targetElement = containerRef.current.querySelector<HTMLElement>(
+      `[data-question-number="${focusedNumber}"]`
+    );
+    if (targetElement) {
+      targetElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }, [focusedNumber]);
+
   // キーボード操作ハンドラー
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -81,19 +112,31 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
         setFocusedNumber(questions[prevRowIdx].number);
       }
 
-      // 2. ステータス変更ショートカット (O: 正解, X: 不正解, U: 未解答, Space: トグル)
+      // 2. ステータス変更ショートカット (O: 正解, X: 不正解, U: 未解答, Space: トグル) -> 記録後次の問題へフォーカス
       else if (key === 'o') {
         e.preventDefault();
         onSetStatus(focusedNumber, 'correct');
+        if (currentIdx < questions.length - 1) {
+          setSelectedNumber(questions[currentIdx + 1].number);
+        }
       } else if (key === 'x') {
         e.preventDefault();
         onSetStatus(focusedNumber, 'incorrect');
+        if (currentIdx < questions.length - 1) {
+          setSelectedNumber(questions[currentIdx + 1].number);
+        }
       } else if (key === 'u') {
         e.preventDefault();
         onSetStatus(focusedNumber, 'unanswered');
+        if (currentIdx < questions.length - 1) {
+          setSelectedNumber(questions[currentIdx + 1].number);
+        }
       } else if (e.key === ' ') {
         e.preventDefault();
         onToggleStatus(focusedNumber);
+        if (currentIdx < questions.length - 1) {
+          setSelectedNumber(questions[currentIdx + 1].number);
+        }
       }
 
       // 3. メモモーダルショートカット (M または Enter)
@@ -154,6 +197,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
           return (
             <div
               key={q.id}
+              data-question-number={q.number}
               onClick={() => setFocusedNumber(q.number)}
               className={`group relative flex flex-col rounded-2xl p-2.5 transition-all duration-150 select-none ${
                 isFocused
@@ -191,10 +235,13 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                 </button>
               </div>
 
-              {/* セル中央: メインステータス表示 (クリックでトグル) */}
+              {/* セル中央: メインステータス表示 (クリックでトグル & 次の問題へフォーカス移動) */}
               <button
                 type="button"
-                onClick={() => onToggleStatus(q.number)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleToggleStatusAndAdvance(q.number);
+                }}
                 className="flex-1 py-1.5 flex flex-col items-center justify-center rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
                 title={dict.tracker.clickToCycle}
               >
@@ -236,7 +283,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onSetStatus(q.number, 'correct');
+                    handleRecordStatusAndAdvance(q.number, 'correct');
                   }}
                   className={`flex-1 py-0.5 text-[10px] font-bold rounded flex items-center justify-center transition-colors ${
                     q.status === 'correct'
@@ -251,7 +298,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
-                    onSetStatus(q.number, 'incorrect');
+                    handleRecordStatusAndAdvance(q.number, 'incorrect');
                   }}
                   className={`flex-1 py-0.5 text-[10px] font-bold rounded flex items-center justify-center transition-colors ${
                     q.status === 'incorrect'
