@@ -73,8 +73,13 @@ jobs:
           shared-key: "questrack-${{ matrix.arch_name }}"
           cache-on-failure: true
 
-      - name: Install frontend dependencies
-        run: npm install
+      - name: Update Cargo dependencies to latest
+        run: cargo update --manifest-path src-tauri/Cargo.toml
+
+      - name: Install and update frontend dependencies
+        run: |
+          npm install
+          npm update
 
       - name: Build Tauri Application & Release
         uses: tauri-apps/tauri-action@v1

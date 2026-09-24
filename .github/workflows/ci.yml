@@ -47,11 +47,16 @@ jobs:
           prefix-key: "rust-main"
           cache-on-failure: true
 
+      - name: Update Cargo dependencies to latest
+        run: cargo update --manifest-path src-tauri/Cargo.toml
+
       - name: Cargo Check (Cache Warmup)
         run: cargo check --manifest-path src-tauri/Cargo.toml
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install dependencies and update to latest
+        run: |
+          npm install
+          npm update
 
       - name: Run Strict Linter (Zero Warnings Allowed)
         run: npm run lint
