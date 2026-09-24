@@ -207,6 +207,21 @@
   - `main` への push（または Dependabot 自動マージ時）に、GitHub Pages へのデプロイと並列で macOS (Intel / Apple Silicon) および Windows のアプリ版バイナリ（.dmg, .exe 等）を自動ビルド・アーティファクト保存
   - Web 版とアプリ版の「置き去り」を解消し、常に最新のコードで足並みを揃えて自動リリースされるパイプラインを確立
 
+---
+
+## CL-15: 全モジュールの "latest" 指定 & Tailwind CSS v4 への正統移行
+- [x] **`package.json` の全依存モジュールを文字通り `"latest"` 指定化**:
+  - `dependencies` および `devDependencies` のすべてのパッケージバージョンを `"latest"` に設定
+  - `npm install` 実行時に常に最新のタグを参照
+- [x] **Tailwind CSS v4 への正統アーキテクチャ移行**:
+  - 公式推奨の `@tailwindcss/vite` プラグインを導入
+  - 不要となったレガシーな `postcss` および `autoprefixer`、`postcss.config.js`、`tailwind.config.js` を完全撤去
+  - `src/index.css` を `@import "tailwindcss";`、`@custom-variant dark`、および `@theme` ディレクティブによるモダン CSS-first 設計へ更新
+- [x] **最厳格 CI（ゼロ警告）での完全動作検証**:
+  - TypeScript 7, Vite 8, Tailwind CSS 4, ESLint 10, Vitest 5 の最新環境下で、最厳格 Lint（`--max-warnings 0`）、全65件のテスト、TypeCheck & Build が警告・エラー 0 件で完全パス
+  - GitHub Pages デプロイおよび macOS (Apple Silicon / Intel) / Windows の全デスクトップ版ビルドが同時に完全成功することを確認
+
+
 
 
 

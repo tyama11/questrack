@@ -34,7 +34,7 @@
 | 🪟 **Windows (10/11 64bit)** | **[Questrack v3.0.0 (Windows インストーラー)](https://github.com/tyama11/questrack/releases/download/v3.0.0/Questrack_3.0.0_x64-setup.exe)** | `.exe` |
 | 🪟 **Windows (MSIパッケージ)** | **[Questrack v3.0.0 (Windows MSI)](https://github.com/tyama11/questrack/releases/download/v3.0.0/Questrack_3.0.0_x64_en-US.msi)** | `.msi` |
 
-> 📦 すべてのバージョン・過去のリリースは **[GitHub Releases 一覧](https://github.com/tyama11/questrack/releases)** から確認できます。  
+> 📦 最新版バイナリ（各OS）は **[GitHub Releases (Latest)](https://github.com/tyama11/questrack/releases/tag/latest)**、全バージョン履歴は **[Releases 一覧](https://github.com/tyama11/questrack/releases)** から入手できます。  
 > 💡 *Macで「開発元が未確認」と表示された場合は、ファイルを「右クリック（二本指タップ） ➔ 開く」を選択して起動してください。*  
 > 🌟 **v3.0 新機能**: OSのダークモード自動追従、OS言語設定に応じた日英自動ローカライズ（英語環境では完全英語UI）に対応！
 
