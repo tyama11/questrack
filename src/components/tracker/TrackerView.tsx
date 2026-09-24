@@ -279,7 +279,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
       {/* ======================================================== */}
       {/* 5. ✕集中復習モードモーダル */}
       {/* ======================================================== */}
-      {activeWorkbook && (
+      {activeWorkbook && isReviewModalOpen && (
         <ReviewModal
           isOpen={isReviewModalOpen}
           onClose={() => setIsReviewModalOpen(false)}

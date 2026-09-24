@@ -32,8 +32,10 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
 }) => {
   const { dict, currentLanguage, t } = useI18n();
 
-  // 初期時点で✕となっている問題のリスト
-  const incorrectQuestions = workbook.questions.filter((q) => q.status === 'incorrect');
+  // 初期時点で✕となっている問題番号のリストをセッション対象として保持
+  const [reviewQuestionNumbers, setReviewQuestionNumbers] = useState<number[]>(() =>
+    workbook.questions.filter((q) => q.status === 'incorrect').map((q) => q.number)
+  );
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [conqueredCount, setConqueredCount] = useState(0);
@@ -41,13 +43,17 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   const [currentNote, setCurrentNote] = useState('');
   const [isCompleted, setIsCompleted] = useState(false);
 
-  // モーダルが閉じられているか、✕問題がなければ何も表示しない
+  // モーダルが閉じられている場合は何も表示しない
   if (!isOpen) return null;
 
-  const currentQuestion = incorrectQuestions[currentIndex];
+  const currentNumber = reviewQuestionNumbers[currentIndex];
+  const currentQuestion =
+    currentNumber !== undefined
+      ? workbook.questions.find((q) => q.number === currentNumber)
+      : undefined;
 
   const handleNext = () => {
-    if (currentIndex < incorrectQuestions.length - 1) {
+    if (currentIndex < reviewQuestionNumbers.length - 1) {
       setCurrentIndex((prev) => prev + 1);
       setIsEditingNote(false);
     } else {
@@ -88,6 +94,8 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
   };
 
   const handleRestart = () => {
+    const remaining = workbook.questions.filter((q) => q.status === 'incorrect').map((q) => q.number);
+    setReviewQuestionNumbers(remaining);
     setCurrentIndex(0);
     setConqueredCount(0);
     setIsCompleted(false);
@@ -124,7 +132,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
         </div>
 
         {/* モーダル本体 */}
-        {incorrectQuestions.length === 0 || isCompleted ? (
+        {reviewQuestionNumbers.length === 0 || isCompleted || !currentQuestion ? (
           /* 完了画面 */
           <div className="p-8 text-center space-y-6 my-auto">
             <div className="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-amber-400 to-amber-500 flex items-center justify-center text-white shadow-xl shadow-amber-500/25 ring-4 ring-amber-100 dark:ring-amber-950/50 animate-bounce">
@@ -178,7 +186,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs font-semibold">
                 <span className="text-rose-600 dark:text-rose-400">
-                  {t('review.currentProgress', { current: currentIndex + 1, total: incorrectQuestions.length })}
+                  {t('review.currentProgress', { current: currentIndex + 1, total: reviewQuestionNumbers.length })}
                 </span>
                 <span className="text-emerald-600 dark:text-emerald-400">
                   {currentLanguage === 'ja' ? `克服済み: ${conqueredCount} 問` : `Overcome: ${conqueredCount}`}
@@ -188,7 +196,7 @@ export const ReviewModal: React.FC<ReviewModalProps> = ({
                 <div
                   className="h-full bg-gradient-to-r from-rose-500 to-amber-500 transition-all duration-300"
                   style={{
-                    width: `${((currentIndex + 1) / incorrectQuestions.length) * 100}%`,
+                    width: `${((currentIndex + 1) / reviewQuestionNumbers.length) * 100}%`,
                   }}
                 />
               </div>

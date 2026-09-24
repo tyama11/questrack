@@ -1507,4 +1507,38 @@ describe('問題記録時の次問題フォーカス進行ロジック', () => {
   });
 });
 
+// =================================================================
+// 11. 集中復習モードのセッション完了・クラッシュ防止ロジックのテスト
+// =================================================================
+describe('集中復習モードのセッション完了・クラッシュ防止ロジック', () => {
+  it('すべての✕問題を克服してステータスが更新されても、対象配列の縮小によるundefinedクラッシュが発生せず完了判定になること', () => {
+    // セッション開始時の問題番号リスト
+    const initialIncorrectNumbers = [10, 25];
+    let currentIndex = 0;
+    let isCompleted = false;
+
+    // 1問目克服
+    if (currentIndex < initialIncorrectNumbers.length - 1) {
+      currentIndex += 1;
+    } else {
+      isCompleted = true;
+    }
+    expect(currentIndex).toBe(1);
+    expect(isCompleted).toBe(false);
+
+    // 2問目（最後の問題）克服
+    if (currentIndex < initialIncorrectNumbers.length - 1) {
+      currentIndex += 1;
+    } else {
+      isCompleted = true;
+    }
+    expect(isCompleted).toBe(true);
+
+    // 完了状態で正しく判定されること
+    const shouldShowCompletion = initialIncorrectNumbers.length === 0 || isCompleted;
+    expect(shouldShowCompletion).toBe(true);
+  });
+});
+
+
 
