@@ -1532,6 +1532,7 @@ describe('集中復習モードのセッション完了・クラッシュ防止�
     } else {
       isCompleted = true;
     }
+    expect(currentIndex).toBe(1);
     expect(isCompleted).toBe(true);
 
     // 完了状態で正しく判定されること

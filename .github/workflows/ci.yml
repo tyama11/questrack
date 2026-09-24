@@ -5,10 +5,13 @@ on:
     branches:
       - main
       - master
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - main
       - master
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -17,7 +20,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   test-and-typecheck:
@@ -85,3 +88,82 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  build-desktop-apps:
+    name: Build Desktop App (${{ matrix.arch_name }})
+    needs: test-and-typecheck
+    if: (github.ref == 'refs/heads/main' && github.event_name == 'push') || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: 'macos-latest'
+            targets: 'x86_64-apple-darwin'
+            tauri_args: '--target x86_64-apple-darwin'
+            arch_name: 'macOS-Intel-x86_64'
+          - platform: 'macos-latest'
+            targets: 'aarch64-apple-darwin'
+            tauri_args: '--target aarch64-apple-darwin'
+            arch_name: 'macOS-AppleSilicon-arm64'
+          - platform: 'windows-latest'
+            targets: 'x86_64-pc-windows-msvc'
+            tauri_args: '--target x86_64-pc-windows-msvc'
+            arch_name: 'Windows-x64'
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.targets }}
+
+      - name: Rust Cache (ビルド高速化)
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: "./src-tauri -> target"
+          prefix-key: "rust-${{ matrix.arch_name }}"
+          shared-key: "questrack-${{ matrix.arch_name }}"
+          cache-on-failure: true
+
+      - name: Update Cargo dependencies to latest
+        run: cargo update --manifest-path src-tauri/Cargo.toml
+
+      - name: Install and update frontend dependencies
+        run: |
+          npm install
+          npm update
+
+      - name: Build Tauri Desktop Application & Release
+        uses: tauri-apps/tauri-action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'latest' }}
+          releaseName: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'Questrack Desktop App (Latest)' }}
+          releaseBody: |
+            ## Questrack Desktop Release
+            - Cross-platform release built automatically via GitHub Actions CI/CD.
+            - macOS Intel: Questrack_x64.dmg (for Intel Mac)
+            - macOS Apple Silicon: Questrack_aarch64.dmg (for M1/M2/M3/M4)
+            - Windows: Questrack_x64-setup.exe (.exe / .msi)
+          releaseDraft: false
+          prerelease: false
+          args: ${{ matrix.tauri_args }}
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: questrack-${{ matrix.arch_name }}
+          path: |
+            src-tauri/target/**/release/bundle/dmg/*.dmg
+            src-tauri/target/**/release/bundle/macos/*.app
+            src-tauri/target/**/release/bundle/nsis/*.exe
+            src-tauri/target/**/release/bundle/msi/*.msi
+          if-no-files-found: warn
