@@ -213,6 +213,8 @@
 - [x] **`package.json` の全依存モジュールを文字通り `"latest"` 指定化**:
   - `dependencies` および `devDependencies` のすべてのパッケージバージョンを `"latest"` に設定
   - `npm install` 実行時に常に最新のタグを参照
+- [x] **`src-tauri/Cargo.toml` の全 Rust/Tauri 依存クレートを `"*"`（latest）指定化**:
+  - `tauri-build`, `tauri`, `tauri-plugin-shell`, `serde`, `serde_json` をすべて `version = "*"` に設定し、Tauri / Rust 側も最新（latest）安定版を自動解決
 - [x] **Tailwind CSS v4 への正統アーキテクチャ移行**:
   - 公式推奨の `@tailwindcss/vite` プラグインを導入
   - 不要となったレガシーな `postcss` および `autoprefixer`、`postcss.config.js`、`tailwind.config.js` を完全撤去
