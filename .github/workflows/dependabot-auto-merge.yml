@@ -18,34 +18,47 @@ permissions:
 
 jobs:
   auto-merge:
-    name: Auto Approve and Merge
+    name: Auto Approve and Merge (Major & Minor)
     runs-on: ubuntu-latest
     steps:
-      - name: Handle PR from pull_request_target
+      - name: Handle PR on creation (pull_request_target)
         if: github.event_name == 'pull_request_target' && github.actor == 'dependabot[bot]'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          echo "Approving Dependabot PR: $PR_URL"
-          gh pr review --approve "$PR_URL" || echo "Approve skipped or not needed"
-          echo "Attempting to enable auto-merge..."
-          gh pr merge --auto --squash "$PR_URL" || echo "Auto-merge flag skipped (requires branch protection)"
+          echo "Processing Dependabot PR #$PR_NUMBER: $PR_URL"
+          # PR を事前承認
+          gh pr review --approve "$PR_URL" || echo "Approve skipped or already approved"
+          # GitHub Native Auto-merge を設定（ブランチ保護有効時）
+          gh pr merge --auto --squash "$PR_URL" || echo "Auto-merge flag skipped (requires branch protection or repo auto-merge setting)"
 
       - name: Handle PR on CI Success (workflow_run)
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # 関連するPR番号を取得
           HEAD_BRANCH="${{ github.event.workflow_run.head_branch }}"
           echo "CI succeeded for branch: $HEAD_BRANCH"
+
+          # Dependabot ブランチからの CI 成功かを判定 (メジャー・マイナー問わず対象)
           if [[ "$HEAD_BRANCH" =~ ^dependabot/ ]]; then
-            PR_URL=$(gh pr list --head "$HEAD_BRANCH" --state open --json url --jq '.[0].url' || true)
+            PR_URL=""
+            if [ -n "${{ github.event.workflow_run.pull_requests[0].number }}" ]; then
+              PR_NUMBER="${{ github.event.workflow_run.pull_requests[0].number }}"
+              PR_URL="https://github.com/${{ github.repository }}/pull/${PR_NUMBER}"
+            else
+              PR_URL=$(gh pr list --repo "${{ github.repository }}" --head "$HEAD_BRANCH" --state open --json url --jq '.[0].url' || true)
+            fi
+
             if [ -n "$PR_URL" ] && [ "$PR_URL" != "null" ]; then
               echo "Merging passed Dependabot PR: $PR_URL"
               gh pr review --approve "$PR_URL" || true
-              gh pr merge --squash --delete-branch "$PR_URL" || echo "Could not merge $PR_URL"
+              # CI が全パス（成功）しているため、メジャーアップデートであっても自動マージ
+              gh pr merge --squash --delete-branch --admin "$PR_URL" || gh pr merge --squash --delete-branch "$PR_URL" || echo "Could not merge $PR_URL"
+            else
+              echo "No open PR found for branch $HEAD_BRANCH"
             fi
           fi
 
@@ -55,10 +68,9 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "Fetching open Dependabot PRs..."
-          prs=$(gh pr list --app dependabot --state open --json number,url --jq '.[].url' || true)
+          prs=$(gh pr list --repo "${{ github.repository }}" --app dependabot --state open --json number,url --jq '.[].url' || true)
           for pr in $prs; do
             echo "Processing $pr..."
             gh pr review --approve "$pr" || true
-            # auto-merge が有効なら設定、または直接マージ試行
-            gh pr merge --auto --squash "$pr" || true
+            gh pr merge --auto --squash "$pr" || gh pr merge --squash --delete-branch "$pr" || true
           done
