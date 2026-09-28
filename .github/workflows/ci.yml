@@ -50,16 +50,11 @@ jobs:
           prefix-key: "rust-main"
           cache-on-failure: true
 
-      - name: Update Cargo dependencies to latest
-        run: cargo update --manifest-path src-tauri/Cargo.toml
-
       - name: Cargo Check (Cache Warmup)
         run: cargo check --manifest-path src-tauri/Cargo.toml
 
-      - name: Install dependencies and update to latest
-        run: |
-          npm install
-          npm update
+      - name: Install dependencies
+        run: npm install
 
       - name: Run Strict Linter (Zero Warnings Allowed)
         run: npm run lint
@@ -71,7 +66,7 @@ jobs:
         run: npm run build
 
       - name: Upload GitHub Pages artifact
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
         uses: actions/upload-pages-artifact@v5
         with:
           path: dist
@@ -79,7 +74,7 @@ jobs:
   deploy-pages:
     name: Deploy to GitHub Pages
     needs: test-and-typecheck
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -92,7 +87,7 @@ jobs:
   build-desktop-apps:
     name: Build Desktop App (${{ matrix.arch_name }})
     needs: test-and-typecheck
-    if: (github.ref == 'refs/heads/main' && github.event_name == 'push') || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    if: (github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')) || startsWith(github.ref, 'refs/tags/v')
     strategy:
       fail-fast: false
       matrix:
@@ -132,13 +127,14 @@ jobs:
           shared-key: "questrack-${{ matrix.arch_name }}"
           cache-on-failure: true
 
-      - name: Update Cargo dependencies to latest
-        run: cargo update --manifest-path src-tauri/Cargo.toml
+      - name: Install frontend dependencies
+        run: npm install
 
-      - name: Install and update frontend dependencies
+      - name: Update latest tag to current commit
+        if: "!startsWith(github.ref, 'refs/tags/v')"
         run: |
-          npm install
-          npm update
+          git tag -f latest "${{ github.sha }}"
+          git push -f origin latest || true
 
       - name: Build Tauri Desktop Application & Release
         uses: tauri-apps/tauri-action@v1

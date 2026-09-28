@@ -223,7 +223,15 @@
   - TypeScript 7, Vite 8, Tailwind CSS 4, ESLint 10, Vitest 5 の最新環境下で、最厳格 Lint（`--max-warnings 0`）、全65件のテスト、TypeCheck & Build が警告・エラー 0 件で完全パス
   - GitHub Pages デプロイおよび macOS (Apple Silicon / Intel) / Windows の全デスクトップ版ビルドが同時に完全成功することを確認
 
+---
 
-
-
-
+## CL-16: Dependabot 完全連動 & 自動マージ後の Pages デプロイ・リリース自動発火の確立
+- [x] **`package.json` / `src-tauri/Cargo.toml` の明示的バージョン管理への移行**:
+  - `"latest"` / `"*"` ワイルドカード指定では Dependabot が差分を検知できず PR が作成されない問題を解消するため、現行の最新安定版バージョン番号（Tauri 2.12.0, Vite 8.3.1, Vitest 5.0.2, Lucide React 1.48.0 等）を明示的に記載
+- [x] **`dependabot.yml` への `versioning-strategy: increase` 導入**:
+  - ロックファイル非同梱構成においても、パッチ・マイナー・メジャーすべての新バージョン公開時に Dependabot が確実にマニフェストのバージョン番号を引き上げて PR を作成するよう設定
+- [x] **`ci.yml` の再現性担保と `workflow_dispatch` での Pages デプロイ対応**:
+  - ビルド時の無差別な `npm update` / `cargo update` を撤去し、PR で検証されたバージョンと本番ビルドの完全一致を保証
+  - `Upload GitHub Pages artifact` および `deploy-pages` の実行条件に `workflow_dispatch` を追加し、さらに `latest` リリースタグが常に最新コミット SHA を指すよう更新ステップを追加
+- [x] **`dependabot-auto-merge.yml` からの本番デプロイ CI 明示的トリガー**:
+  - `GITHUB_TOKEN` による自動マージでは GitHub Actions の無限ループ防止仕様により `on: push` が発火しない問題を解決するため、マージ成功直後に `gh workflow run ci.yml --ref main` を自動実行する仕組みを導入
