@@ -227,7 +227,7 @@
 
 ## CL-16: Dependabot 完全連動 & 自動マージ後の Pages デプロイ・リリース自動発火の確立
 - [x] **`package.json` / `src-tauri/Cargo.toml` の明示的バージョン管理への移行**:
-  - `"latest"` / `"*"` ワイルドカード指定では Dependabot が差分を検知できず PR が作成されない問題を解消するため、現行の最新安定版バージョン番号（Tauri 2.12.0, Vite 8.3.1, Vitest 5.0.2, Lucide React 1.48.0 等）を明示的に記載
+  - `"latest"` / `"*"` ワイルドカード指定では Dependabot が差分を検知できず PR が作成されない問題を解消するため、現行の最新互換バージョン番号（Tauri 2.12.0, TypeScript 6.0.3, Vite 8.3.1, Vitest 5.0.2, Lucide React 1.48.0 等）を明示的に記載
 - [x] **`dependabot.yml` への `versioning-strategy: increase` 導入**:
   - ロックファイル非同梱構成においても、パッチ・マイナー・メジャーすべての新バージョン公開時に Dependabot が確実にマニフェストのバージョン番号を引き上げて PR を作成するよう設定
 - [x] **`ci.yml` の再現性担保と `workflow_dispatch` での Pages デプロイ対応**:
