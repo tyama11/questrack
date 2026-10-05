@@ -66,6 +66,7 @@ export default defineConfig(({ mode }) => {
       // 3. tell vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
-  };
+  },
+};
 });
 
