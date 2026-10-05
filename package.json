@@ -38,6 +38,17 @@
     "vitest": "^5.0.2"
   },
   "overrides": {
-    "typescript": "$typescript"
+    "typescript-eslint": {
+      "typescript": "npm:@typescript/typescript6@^6.0.2"
+    },
+    "@typescript-eslint/parser": {
+      "typescript": "npm:@typescript/typescript6@^6.0.2"
+    },
+    "@typescript-eslint/type-utils": {
+      "typescript": "npm:@typescript/typescript6@^6.0.2"
+    },
+    "@typescript-eslint/utils": {
+      "typescript": "npm:@typescript/typescript6@^6.0.2"
+    }
   }
 }
