@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:desktop": "tsc && vite build --mode desktop",
+    "build:pages": "tsc && vite build --mode pages",
     "preview": "vite preview",
     "tauri": "tauri",
     "lint": "eslint . --max-warnings 0",

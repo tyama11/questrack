@@ -247,3 +247,18 @@
 - [x] **CI 完了前の誤マージを防止する安全弁の確立**:
   - `dependabot-auto-merge.yml` において、ブランチ保護ルール未設定時に即時マージされてしまう `pull_request_target` の自動マージトリガーを撤去
   - 必ず `CI - Test, TypeCheck & Deploy Pages` が完全パス（`conclusion == 'success'`）した `workflow_run` イベントでのみ PR をマージし、main ブランチのデプロイ CI を安全にトリガーする堅牢なフローへ刷新
+
+---
+
+## CL-18: デスクトップアプリ完全同梱 & GitHub Pages の CDN (importmap) 取得のハイブリッド配信設計
+- [x] **GitHub Pages 向け CDN importmap 自動注入プラグインの導入**:
+  - `vite.config.ts` に `cdnImportMapPlugin` を新設
+  - Pages 配信向けビルド時、主要ライブラリ（`react`, `react-dom`, `lucide-react`, `clsx`, `tailwind-merge`）を Rollup の `external` に指定し、HTML の `<head>` へ `<script type="importmap">` を自動注入して esm.sh CDN から高速取得
+  - Web 版のバンドル転送量を最小化し、エッジ CDN キャッシュを最大限活用
+- [x] **デスクトップアプリ（Tauri）の完全自己完結・オフラインバンドル化**:
+  - `mode === "desktop"` または `TAURI_ENV_PLATFORM` 検出時は `external: []` かつ importmap 無効化でビルド
+  - すべての外部ライブラリをバイナリ内に完全付属（ローカル同梱）させ、オフライン環境でも一切の外部通信なしで 100% 安定動作
+- [x] **`src-tauri/tauri.conf.json` と `package.json` のビルドスクリプト自動分岐**:
+  - `package.json` に `"build:desktop"` および `"build:pages"` を追加
+  - `tauri.conf.json` の `beforeBuildCommand` を `"npm run build:desktop"` に指定し、アプリビルドと Pages ビルドのビルドモードを完全自動分離
+
