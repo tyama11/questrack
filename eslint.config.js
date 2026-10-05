@@ -13,6 +13,7 @@ export default tseslint.config(
       '*.config.js',
       '*.config.ts',
       'generate_icons.py',
+      'scripts/**',
     ],
   },
   js.configs.recommended,
