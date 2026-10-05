@@ -2,13 +2,13 @@ const fs = require('fs');
 const path = require('path');
 
 // TypeScript 7.0 (Go compiler) uses a modern native engine without the legacy JS Compiler API.
-// To allow typescript-eslint to perform AST linting side-by-side with TS 7.0 builds,
-// this script redirects typescript-eslint's internal typescript imports
-// to the official @typescript/typescript6 compatibility package.
+// To allow typescript-eslint and ts-api-utils to perform AST linting side-by-side with TS 7.0 builds,
+// this script redirects internal typescript imports to the official @typescript/typescript6 compatibility package.
 const rootDir = path.resolve(__dirname, '..');
 const dirsToPatch = [
   path.join(rootDir, 'node_modules/typescript-eslint'),
   path.join(rootDir, 'node_modules/@typescript-eslint'),
+  path.join(rootDir, 'node_modules/ts-api-utils'),
 ];
 
 function patchDir(dir) {
@@ -20,7 +20,7 @@ function patchDir(dir) {
       if (entry.name !== 'node_modules') {
         patchDir(fullPath);
       }
-    } else if (entry.isFile() && entry.name.endsWith('.js')) {
+    } else if (entry.isFile() && (entry.name.endsWith('.js') || entry.name.endsWith('.cjs') || entry.name.endsWith('.mjs'))) {
       let content = fs.readFileSync(fullPath, 'utf8');
       let modified = false;
       if (content.includes('require("typescript")') || content.includes("require('typescript')")) {
