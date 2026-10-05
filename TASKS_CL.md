@@ -238,12 +238,12 @@
 
 ---
 
-## CL-17: Dependabot 失敗原因の完全解決 & 堅牢な自動マージ安全弁の確立
+## CL-17: TypeScript 最新版 (v7.0.2) への昇格 & Dependabot 堅牢化の確立
 - [x] **GitHub リポジトリ Labels の整備**:
   - `dependabot.yml` で指定されていた `dependencies`, `frontend`, `rust`, `ci` ラベルを GitHub リポジトリ上に新規作成し、PR 作成時の「The following labels could not be found」エラー・警告を完全根絶
-- [x] **`typescript` を `^6.0.3` にロールバック & メジャー更新の `ignore` 設定**:
-  - `typescript-eslint` の peerDependencies 制約（`typescript: ">=4.8.4 <6.1.0"`）との互換性を保つため、`package.json` の `typescript` を `^6.0.3` へ復元
-  - `dependabot.yml` に `ignore: - dependency-name: "typescript", update-types: ["version-update:semver-major"]` を設定し、互換性のない TypeScript 7.x への自動バンプ PR の再発を防止
+- [x] **TypeScript 7.0.2 (最新版) への正式移行 & `overrides` / `.npmrc` による peer 解決**:
+  - `package.json` の `typescript` を現行最新版の `^7.0.2` へ更新
+  - `typescript-eslint` の peerDependencies 制約（`<6.1.0`）との衝突を解決するため、`package.json` に `overrides: { "typescript": "$typescript" }` を定義し、さらに `.npmrc` に `legacy-peer-deps=true` を設置して最先端 TypeScript 7 を安全に導入
 - [x] **CI 完了前の誤マージを防止する安全弁の確立**:
   - `dependabot-auto-merge.yml` において、ブランチ保護ルール未設定時に即時マージされてしまう `pull_request_target` の自動マージトリガーを撤去
   - 必ず `CI - Test, TypeCheck & Deploy Pages` が完全パス（`conclusion == 'success'`）した `workflow_run` イベントでのみ PR をマージし、main ブランチのデプロイ CI を安全にトリガーする堅牢なフローへ刷新
