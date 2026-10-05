@@ -3,26 +3,40 @@ const path = require('path');
 
 // TypeScript 7.0 (Go compiler) uses a modern native engine without the legacy JS Compiler API.
 // To allow typescript-eslint to perform AST linting side-by-side with TS 7.0 builds,
-// this script mounts the official @typescript/typescript6 compatibility package
-// into typescript-eslint's local node_modules hierarchy.
-const ts6Path = path.resolve(__dirname, '../node_modules/@typescript/typescript6');
-if (!fs.existsSync(ts6Path)) {
-  process.exit(0);
-}
-
-const targets = [
-  'node_modules/typescript-eslint/node_modules/typescript',
-  'node_modules/@typescript-eslint/parser/node_modules/typescript',
-  'node_modules/@typescript-eslint/type-utils/node_modules/typescript',
-  'node_modules/@typescript-eslint/utils/node_modules/typescript',
+// this script redirects typescript-eslint's internal typescript imports
+// to the official @typescript/typescript6 compatibility package.
+const rootDir = path.resolve(__dirname, '..');
+const dirsToPatch = [
+  path.join(rootDir, 'node_modules/typescript-eslint'),
+  path.join(rootDir, 'node_modules/@typescript-eslint'),
 ];
 
-for (const target of targets) {
-  const dest = path.resolve(__dirname, '..', target);
-  try {
-    fs.mkdirSync(path.dirname(dest), { recursive: true });
-    fs.cpSync(ts6Path, dest, { recursive: true });
-  } catch (err) {
-    // Ignore any non-critical filesystem errors
+function patchDir(dir) {
+  if (!fs.existsSync(dir)) return;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      if (entry.name !== 'node_modules') {
+        patchDir(fullPath);
+      }
+    } else if (entry.isFile() && entry.name.endsWith('.js')) {
+      let content = fs.readFileSync(fullPath, 'utf8');
+      let modified = false;
+      if (content.includes('require("typescript")') || content.includes("require('typescript')")) {
+        content = content
+          .replace(/require\("typescript"\)/g, 'require("@typescript/typescript6")')
+          .replace(/require\('typescript'\)/g, "require('@typescript/typescript6')");
+        modified = true;
+      }
+      if (modified) {
+        fs.writeFileSync(fullPath, content, 'utf8');
+        console.log(`[setup-ts-compat] Patched: ${path.relative(rootDir, fullPath)}`);
+      }
+    }
   }
+}
+
+for (const dir of dirsToPatch) {
+  patchDir(dir);
 }
