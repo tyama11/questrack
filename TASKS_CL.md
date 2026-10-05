@@ -243,7 +243,7 @@
   - `dependabot.yml` で指定されていた `dependencies`, `frontend`, `rust`, `ci` ラベルを GitHub リポジトリ上に新規作成し、PR 作成時の「The following labels could not be found」エラー・警告を完全根絶
 - [x] **TypeScript 7.0.2 (最新版) への正式移行 & `@typescript/typescript6` による Lint 互換性確立**:
   - `package.json` の `typescript` を現行最新版の `^7.0.2`（Go 実装・高速コンパイラ）へ更新
-  - `typescript-eslint` は TypeScript 7.0 の AST API を直接サポートしていないため（Issue #10940）、Microsoft 公式の互換パッケージ `@typescript/typescript6` を `package.json` の `overrides` に設定し、アプリ本体は TS 7.0.2 でビルド・型チェックしつつ、最厳格 Lint（ゼロ警告）を両立
+  - `typescript-eslint` は TypeScript 7.0 の AST API を直接サポートしていないため（Issue #10940）、Microsoft 公式の互換パッケージ `@typescript/typescript6` を `devDependencies` に導入し、`scripts/setup-ts-compat.cjs` 経由で `typescript-eslint` 内部へシームレスに結合。アプリ本体は最新の TS 7.0.2 でビルド・型チェック・テストを実行しつつ、最厳格 Lint（ゼロ警告）を両立
 - [x] **CI 完了前の誤マージを防止する安全弁の確立**:
   - `dependabot-auto-merge.yml` において、ブランチ保護ルール未設定時に即時マージされてしまう `pull_request_target` の自動マージトリガーを撤去
   - 必ず `CI - Test, TypeCheck & Deploy Pages` が完全パス（`conclusion == 'success'`）した `workflow_run` イベントでのみ PR をマージし、main ブランチのデプロイ CI を安全にトリガーする堅牢なフローへ刷新
