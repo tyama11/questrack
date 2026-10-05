@@ -22,6 +22,9 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   # Cargo / Rust dependencies (Tauri v2 / Rust Crates)
   - package-ecosystem: "cargo"

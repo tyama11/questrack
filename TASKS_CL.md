@@ -235,3 +235,15 @@
   - `Upload GitHub Pages artifact` および `deploy-pages` の実行条件に `workflow_dispatch` を追加し、さらに `latest` リリースタグが常に最新コミット SHA を指すよう更新ステップを追加
 - [x] **`dependabot-auto-merge.yml` からの本番デプロイ CI 明示的トリガー**:
   - `GITHUB_TOKEN` による自動マージでは GitHub Actions の無限ループ防止仕様により `on: push` が発火しない問題を解決するため、マージ成功直後に `gh workflow run ci.yml --ref main` を自動実行する仕組みを導入
+
+---
+
+## CL-17: Dependabot 失敗原因の完全解決 & 堅牢な自動マージ安全弁の確立
+- [x] **GitHub リポジトリ Labels の整備**:
+  - `dependabot.yml` で指定されていた `dependencies`, `frontend`, `rust`, `ci` ラベルを GitHub リポジトリ上に新規作成し、PR 作成時の「The following labels could not be found」エラー・警告を完全根絶
+- [x] **`typescript` を `^6.0.3` にロールバック & メジャー更新の `ignore` 設定**:
+  - `typescript-eslint` の peerDependencies 制約（`typescript: ">=4.8.4 <6.1.0"`）との互換性を保つため、`package.json` の `typescript` を `^6.0.3` へ復元
+  - `dependabot.yml` に `ignore: - dependency-name: "typescript", update-types: ["version-update:semver-major"]` を設定し、互換性のない TypeScript 7.x への自動バンプ PR の再発を防止
+- [x] **CI 完了前の誤マージを防止する安全弁の確立**:
+  - `dependabot-auto-merge.yml` において、ブランチ保護ルール未設定時に即時マージされてしまう `pull_request_target` の自動マージトリガーを撤去
+  - 必ず `CI - Test, TypeCheck & Deploy Pages` が完全パス（`conclusion == 'success'`）した `workflow_run` イベントでのみ PR をマージし、main ブランチのデプロイ CI を安全にトリガーする堅牢なフローへ刷新

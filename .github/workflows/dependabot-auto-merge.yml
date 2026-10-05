@@ -1,11 +1,6 @@
 name: Dependabot Auto-Merge
 
 on:
-  pull_request_target:
-    types:
-      - opened
-      - synchronize
-      - reopened
   workflow_run:
     workflows: ["CI - Test, TypeCheck & Deploy Pages"]
     types:
@@ -19,21 +14,9 @@ permissions:
 
 jobs:
   auto-merge:
-    name: Auto Approve and Merge (Major & Minor)
+    name: Auto Approve and Merge on CI Success
     runs-on: ubuntu-latest
     steps:
-      - name: Handle PR on creation (pull_request_target)
-        if: github.event_name == 'pull_request_target' && github.actor == 'dependabot[bot]'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PR_URL: ${{ github.event.pull_request.html_url }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          echo "Processing Dependabot PR #$PR_NUMBER: $PR_URL"
-          # PR を事前承認
-          gh pr review --approve "$PR_URL" || echo "Approve skipped or already approved"
-          # GitHub Native Auto-merge を設定（ブランチ保護有効時）
-          gh pr merge --auto --squash "$PR_URL" || echo "Auto-merge flag skipped (requires branch protection or repo auto-merge setting)"
 
       - name: Handle PR on CI Success (workflow_run)
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && startsWith(github.event.workflow_run.head_branch, 'dependabot/')
