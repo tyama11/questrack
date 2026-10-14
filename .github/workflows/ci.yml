@@ -84,10 +84,21 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v5
 
+  prepare-latest:
+    name: Reset latest Release
+    needs: test-and-typecheck
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete existing latest release and tag
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release delete latest --repo ${{ github.repository }} --cleanup-tag -y || true
+
   build-desktop-apps:
     name: Build Desktop App (${{ matrix.arch_name }})
-    needs: test-and-typecheck
-    if: (github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')) || startsWith(github.ref, 'refs/tags/v')
+    needs: [test-and-typecheck, prepare-latest]
+    if: always() && needs.test-and-typecheck.result == 'success' && needs.prepare-latest.result != 'failure' && ((github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')) || startsWith(github.ref, 'refs/tags/v'))
     strategy:
       fail-fast: false
       matrix:
@@ -130,17 +141,12 @@ jobs:
       - name: Install frontend dependencies
         run: npm install
 
-      - name: Update latest tag to current commit
-        if: "!startsWith(github.ref, 'refs/tags/v')"
-        run: |
-          git tag -f latest "${{ github.sha }}"
-          git push -f origin latest || true
-
       - name: Build Tauri Desktop Application & Release
         uses: tauri-apps/tauri-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          commitish: ${{ github.sha }}
           tagName: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'latest' }}
           releaseName: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || 'Questrack Desktop App (Latest)' }}
           releaseBody: |
