@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { AppProvider, ThemeProvider, I18nProvider } from './context';
 import './index.css';
+import { checkForAppUpdate } from './utils/updater';
 
 // 初期ロード時のFOUC（スタイルちらつき）防止
 try {
@@ -28,3 +29,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     </ThemeProvider>
   </React.StrictMode>
 );
+
+void checkForAppUpdate();

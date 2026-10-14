@@ -35,6 +35,15 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDc4NTY4NjhEMjAwRUE2ODAKUldTQXBnNGdqWVpXZUdsRHFPODhRVUhCV3VGRUREU2dQYk1aV3BEMy9UVVhjZG5RT1FQcDRoTWYK",
+      "endpoints": [
+        "https://github.com/tyama11/questrack/releases/download/latest/latest.json"
+      ]
+    }
   }
 }
