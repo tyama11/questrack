@@ -40,7 +40,7 @@
   },
   "plugins": {
     "updater": {
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDc4NTY4NjhEMjAwRUE2ODAKUldTQXBnNGdqWVpXZUdsRHFPODhRVUhCV3VGRUREU2dQYk1aV3BEMy9UVVhjZG5RT1FQcDRoTWYK",
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDk1MkE1NzY5NDQzQzlEMDYKUldRR25UeEVhVmNxbFJxU0hWYWFFYkxuM0ZqdG9NQU1yUTlhRXE0bDVwRDJ3ckhndXc0elFNS1kK",
       "endpoints": [
         "https://github.com/tyama11/questrack/releases/download/latest/latest.json"
       ]
