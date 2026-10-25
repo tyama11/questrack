@@ -3,12 +3,14 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath, URL } from "node:url";
 
+// React に依存するパッケージは ?external=react で importmap の react を共有させる
+// （esm.sh が別バージョンの react を解決すると React が二重に読み込まれ白画面になる）
 const cdnPackages: Record<string, string> = {
   react: "https://esm.sh/react@19.3.0",
   "react/jsx-runtime": "https://esm.sh/react@19.3.0/jsx-runtime",
-  "react-dom": "https://esm.sh/react-dom@19.3.0",
-  "react-dom/client": "https://esm.sh/react-dom@19.3.0/client",
-  "lucide-react": "https://esm.sh/lucide-react@1.48.0",
+  "react-dom": "https://esm.sh/react-dom@19.3.0?external=react",
+  "react-dom/client": "https://esm.sh/react-dom@19.3.0/client?external=react",
+  "lucide-react": "https://esm.sh/lucide-react@1.48.0?external=react",
   clsx: "https://esm.sh/clsx@2.1.1",
   "tailwind-merge": "https://esm.sh/tailwind-merge@3.7.0",
 };
