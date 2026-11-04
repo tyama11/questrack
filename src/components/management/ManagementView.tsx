@@ -288,11 +288,11 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             <AlertTriangle className="w-5 h-5 stroke-[2.5]" />
           </div>
           <div className="flex-1 space-y-2 min-w-0">
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center justify-between gap-2 min-w-0">
+              <div className="flex flex-wrap items-center gap-2 min-w-0">
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5 min-w-0">
                   <Globe className="w-4 h-4 text-brand-600 dark:text-brand-400 shrink-0" />
-                  <span className="truncate">{dict.management.webWarningTitle}</span>
+                  <span className="min-w-0 break-words sm:truncate">{dict.management.webWarningTitle}</span>
                 </h3>
                 <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full shrink-0 ${
                   !isTauri

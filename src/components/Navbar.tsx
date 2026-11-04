@@ -75,16 +75,16 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* タブ 1: 問題追跡 */}
             <button
               onClick={() => setActiveTab('tracker')}
-              className={`flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
+              className={`relative flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
                 activeTab === 'tracker'
                   ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm shadow-slate-200 dark:shadow-none'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/40'
               }`}
             >
               <Target className="w-4 h-4 shrink-0" />
-              <span className="truncate">{dict.nav.tracker}</span>
+              <span className="text-[11px] leading-tight text-center sm:text-sm sm:leading-normal">{dict.nav.tracker}</span>
               {activeStats && activeStats.incorrect > 0 && (
-                <span className="ml-1 shrink-0 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] sm:text-xs font-bold leading-none text-white bg-rose-500 rounded-full animate-pulse-subtle">
+                <span className="absolute top-0.5 right-0.5 sm:static ml-0 sm:ml-1 shrink-0 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] sm:text-xs font-bold leading-none text-white bg-rose-500 rounded-full animate-pulse-subtle">
                   {activeStats.incorrect}
                 </span>
               )}
@@ -93,15 +93,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* タブ 2: マネジメント */}
             <button
               onClick={() => setActiveTab('management')}
-              className={`flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
+              className={`relative flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
                 activeTab === 'management'
                   ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm shadow-slate-200 dark:shadow-none'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/40'
               }`}
             >
               <FolderKanban className="w-4 h-4 shrink-0" />
-              <span className="truncate">{dict.nav.management}</span>
-              <span className="ml-1 shrink-0 text-[10px] sm:text-xs px-1.5 py-0.5 rounded-full bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 font-medium">
+              <span className="text-[11px] leading-tight text-center sm:text-sm sm:leading-normal">{dict.nav.management}</span>
+              <span className="absolute top-0.5 right-0.5 sm:static ml-0 sm:ml-1 shrink-0 text-[10px] sm:text-xs px-1.5 py-0.5 rounded-full bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 font-medium">
                 {workbooks.length}
               </span>
             </button>
@@ -109,14 +109,14 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* タブ 3: データ移行・初期化 */}
             <button
               onClick={() => setActiveTab('data')}
-              className={`flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
+              className={`relative flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
                 activeTab === 'data'
                   ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm shadow-slate-200 dark:shadow-none'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/40'
               }`}
             >
               <Database className="w-4 h-4 shrink-0" />
-              <span className="truncate">{dict.nav.data}</span>
+              <span className="text-[11px] leading-tight text-center sm:text-sm sm:leading-normal">{dict.nav.data}</span>
             </button>
           </nav>
 
