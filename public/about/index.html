@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Questrack(クエストラック)| 間違えた問題だけを復習できる問題追跡アプリ</title>
+  <meta name="description" content="Questrackは資格試験や過去問などの問題演習で、正誤・未解答を記録し間違えた問題だけを効率よく復習できる問題追跡ツールです。">
+  <link rel="canonical" href="https://tyama11.github.io/questrack/about/">
+  <link rel="alternate" hreflang="ja" href="https://tyama11.github.io/questrack/about/">
+  <link rel="alternate" hreflang="en" href="https://tyama11.github.io/questrack/about/en/">
+  <link rel="alternate" hreflang="x-default" href="https://tyama11.github.io/questrack/about/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Questrack">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:title" content="Questrack(クエストラック)| 間違えた問題だけを復習できる問題追跡アプリ">
+  <meta property="og:description" content="Questrackは資格試験や過去問などの問題演習で、正誤・未解答を記録し間違えた問題だけを効率よく復習できる問題追跡ツールです。">
+  <meta property="og:url" content="https://tyama11.github.io/questrack/about/">
+  <meta property="og:image" content="https://tyama11.github.io/questrack/app-icon.png">
+  <meta name="twitter:card" content="summary">
+  <link rel="icon" type="image/png" href="/questrack/app-icon.png">
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #1f2937;
+      --muted-color: #4b5563;
+      --border-color: #e5e7eb;
+      --card-bg: #f9fafb;
+      --accent-color: #4f46e5;
+      --accent-hover: #4338ca;
+      --accent-contrast: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #111827;
+        --text-color: #f9fafb;
+        --muted-color: #9ca3af;
+        --border-color: #374151;
+        --card-bg: #1f2937;
+        --accent-color: #6366f1;
+        --accent-hover: #4f46e5;
+        --accent-contrast: #ffffff;
+      }
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      padding: 24px 16px;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 32px;
+    }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .header-logo img {
+      border-radius: 12px;
+      display: block;
+    }
+    .lang-switch {
+      color: var(--accent-color);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 6px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+    .lang-switch:hover {
+      text-decoration: underline;
+    }
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    h1 {
+      font-size: 1.85rem;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    h2 {
+      font-size: 1.35rem;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+    }
+    p {
+      color: var(--text-color);
+    }
+    .intro-cta {
+      margin-top: 12px;
+    }
+    .btn {
+      display: inline-block;
+      background-color: var(--accent-color);
+      color: var(--accent-contrast);
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.2s ease;
+    }
+    .btn:hover {
+      background-color: var(--accent-hover);
+    }
+    ul, ol {
+      padding-left: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    li {
+      color: var(--text-color);
+    }
+    kbd {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-size: 0.9em;
+      font-family: inherit;
+    }
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 8px;
+    }
+    footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted-color);
+    }
+    footer a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-logo">
+        <img src="/questrack/app-icon.png" alt="Questrack" width="64" height="64">
+      </div>
+      <a href="/questrack/about/en/" class="lang-switch" hreflang="en">English</a>
+    </header>
+
+    <main>
+      <section>
+        <h1>Questrack:間違えた問題だけを復習できる問題追跡アプリ</h1>
+        <p>Questrackは、資格試験の過去問演習や各種試験対策において、問題ごとの解答状況を素早く記録し、間違えた問題を集中的に復習して弱点克服を支援する問題追跡アプリです。</p>
+        <div class="intro-cta">
+          <a href="https://tyama11.github.io/questrack/" class="btn">Webアプリを開く</a>
+        </div>
+      </section>
+
+      <section>
+        <h2>特徴</h2>
+        <ul>
+          <li><strong>柔軟な問題数管理：</strong>科目ごとに10問、50問、100問、200問など、任意のサイズの問題集で正解・不正解・未解答を1問単位で追跡できます。</li>
+          <li><strong>キーボード入力に対応：</strong><kbd>O</kbd>で正解、<kbd>X</kbd>で不正解、<kbd>U</kbd>で未解答に戻します。<kbd>O</kbd>または<kbd>X</kbd>を入力すると、自動で次の問題へフォーカスが移動します。</li>
+          <li><strong>間違えた問題の抽出とメモ：</strong>フィルター機能で間違えた問題のみを表示できます。また、各問題に間違えた理由をメモとして記録可能です。</li>
+          <li><strong>復習モード：</strong>間違えた問題を1問ずつ大きなカード形式で表示し、再度解いて正解したらその場で正解として更新できます。</li>
+          <li><strong>リアルタイム進捗バーと正答率：</strong>進捗状況と正答率がリアルタイムでバー表示されます。</li>
+          <li><strong>環境に合わせた表示と多言語対応：</strong>OSの設定に連動するダークモードと、OSの言語設定に応じた日本語・英語UIの自動切り替えに対応しています。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>使い方</h2>
+        <ol>
+          <li>科目や問題集の単位を作成し、演習する問題数を設定します。</li>
+          <li>問題演習を進めながら、キーボード（<kbd>O</kbd> / <kbd>X</kbd> / <kbd>U</kbd>）または画面操作で各問題の正誤を入力します。</li>
+          <li>間違えた問題には必要に応じて原因や解説のメモを残し、フィルターを使って不正解の設問を確認します。</li>
+          <li>復習モードを活用して間違えた問題のみを1枚ずつ解き直し、理解できた問題を正解へと更新していきます。</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>主な活用例</h2>
+        <p>資格試験や受験の問題演習と復習に利用できます。</p>
+        <ul>
+          <li><strong>資格試験の過去問演習：</strong>ITパスポート、基本情報技術者、簿記、TOEIC、宅地建物取引士（宅建）、ファイナンシャル・プランナー（FP）などの過去問演習と弱点補強。</li>
+          <li><strong>大学受験・高校受験の演習：</strong>大学入学共通テスト各科目の過去問演習、単語テストの定着確認。</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Web版とデスクトップ版</h2>
+        <div class="card">
+          <p><strong>Web版：</strong>インストール不要でブラウザから直接利用できます。データはブラウザのローカルストレージに保存されます。キャッシュ消去時やプライベートブラウジング時にはデータが消失する可能性があるため、データタブ内のJSONエクスポート機能による定期的なバックアップが可能です。</p>
+        </div>
+        <div class="card">
+          <p><strong>デスクトップ版：</strong>macOS（Apple Silicon / Intel）およびWindows 10/11 64bitに対応しています。完全オフラインで動作し、データは端末内にローカル保存されます。<a href="https://github.com/tyama11/questrack/releases/tag/latest">最新リリースページ</a>よりダウンロード可能です。なお、macOSでは「未確認の開発元」の警告が表示される場合があります。その際はアプリを右クリックして「開く」を選択してください。</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p><a href="https://github.com/tyama11/questrack">GitHubリポジトリ (tyama11/questrack)</a></p>
+    </footer>
+  </div>
+</body>
+</html>

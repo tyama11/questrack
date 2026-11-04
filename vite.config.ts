@@ -27,6 +27,52 @@ function cdnImportMapPlugin(enabled: boolean): Plugin {
   };
 }
 
+const SEO_DESC =
+  "Questrack(クエストラック)は、問題演習で間違えた問題(✕)だけを抽出して復習できる問題追跡アプリです。資格試験や受験の過去問演習に。ブラウザまたはデスクトップアプリ(macOS / Windows)で使えます。";
+
+const SEO_JSONLD = JSON.stringify({
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "Questrack",
+  url: "https://tyama11.github.io/questrack/",
+  description: SEO_DESC,
+  applicationCategory: "EducationalApplication",
+  operatingSystem: "Web, macOS, Windows",
+  image: "https://tyama11.github.io/questrack/app-icon.png",
+});
+
+const SEO_HEAD_TAGS = [
+  '<meta name="google-site-verification" content="8gyf0epD2fOstHMcVqJ9szbLza7T4MvDH0SRVi2XlCc" />',
+  `<meta name="description" content="${SEO_DESC}" />`,
+  '<link rel="canonical" href="https://tyama11.github.io/questrack/" />',
+  '<meta property="og:type" content="website" />',
+  '<meta property="og:site_name" content="Questrack" />',
+  '<meta property="og:locale" content="ja_JP" />',
+  '<meta property="og:title" content="Questrack - 問題追跡・復習アプリ" />',
+  `<meta property="og:description" content="${SEO_DESC}" />`,
+  '<meta property="og:url" content="https://tyama11.github.io/questrack/" />',
+  '<meta property="og:image" content="https://tyama11.github.io/questrack/app-icon.png" />',
+  '<meta name="twitter:card" content="summary" />',
+  `<script type="application/ld+json">${SEO_JSONLD}</script>`,
+].join("\n    ");
+
+const SEO_BODY_TAGS =
+  '<nav aria-label="About Questrack" class="text-center text-xs text-slate-500 dark:text-slate-400 py-4"><a href="./about/">Questrack について</a> · <a href="./about/en/" hreflang="en">About Questrack</a></nav>';
+
+function pagesSeoPlugin(enabled: boolean): Plugin {
+  return {
+    name: "vite-plugin-pages-seo",
+    transformIndexHtml(html) {
+      if (!enabled) return html;
+      const headBlock = `\n    ${SEO_HEAD_TAGS}\n  `;
+      const bodyBlock = `\n    ${SEO_BODY_TAGS}\n  `;
+      return html
+        .replace("</head>", () => `${headBlock}</head>`)
+        .replace("</body>", () => `${bodyBlock}</body>`);
+    },
+  };
+}
+
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vitejs.dev/config/
@@ -36,7 +82,12 @@ export default defineConfig(({ mode }) => {
   const isDesktop = mode === "desktop" || Boolean(process.env.TAURI_ENV_PLATFORM);
 
   return {
-    plugins: [tailwindcss(), react(), cdnImportMapPlugin(!isDesktop)],
+    plugins: [
+      tailwindcss(),
+      react(),
+      cdnImportMapPlugin(!isDesktop),
+      pagesSeoPlugin(!isDesktop),
+    ],
     base: "./",
     resolve: {
       alias: {
