@@ -37,13 +37,13 @@ export const App: React.FC = () => {
 
       {/* フッター */}
       <footer className="border-t border-slate-200/80 dark:border-slate-800/80 py-4 bg-white/50 dark:bg-slate-900/50 backdrop-blur-xs text-center text-xs text-slate-400">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2.5 sm:gap-2">
+          <div className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 text-center sm:text-left">
             <span className="font-semibold text-slate-600 dark:text-slate-300">{dict.app.title}</span>
-            <span>—</span>
+            <span className="hidden sm:inline">—</span>
             <span>{dict.app.footerDesc}</span>
           </div>
-          <div className="flex items-center gap-4 text-[11px]">
+          <div className="flex items-center justify-center sm:justify-end gap-4 text-[11px]">
             <span>{dict.app.frameworkInfo}</span>
           </div>
         </div>

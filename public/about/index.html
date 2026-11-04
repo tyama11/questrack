@@ -109,6 +109,10 @@
     }
     p {
       color: var(--text-color);
+      overflow-wrap: anywhere;
+    }
+    a {
+      overflow-wrap: anywhere;
     }
     .intro-cta {
       margin-top: 12px;
@@ -134,6 +138,7 @@
     }
     li {
       color: var(--text-color);
+      overflow-wrap: anywhere;
     }
     kbd {
       background-color: var(--card-bg);
@@ -164,6 +169,39 @@
     }
     footer a:hover {
       text-decoration: underline;
+    }
+    @media (max-width: 480px) {
+      header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .header-logo img {
+        width: 48px;
+        height: 48px;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .lang-switch {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        width: 100%;
+        text-align: center;
+      }
+      ul, ol {
+        padding-left: 20px;
+        gap: 10px;
+      }
     }
   </style>
 </head>

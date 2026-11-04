@@ -39,27 +39,27 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   const [confirmBatchType, setConfirmBatchType] = useState<'correct' | 'unanswered' | null>(null);
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800 space-y-3">
+    <div className="bg-white dark:bg-slate-900 rounded-2xl p-3.5 sm:p-4 shadow-sm border border-slate-200 dark:border-slate-800 space-y-3">
       {/* 上段: フィルタートグル & 復習モード起動ボタン */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* ステータスフィルターボタン群 */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl w-full sm:w-auto">
           {/* 【最重要】 ✕ (不正解) のみ抽出ボタン */}
           <button
             onClick={() =>
               onStatusChange(currentStatus === 'incorrect_only' ? 'all' : 'incorrect_only')
             }
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all duration-150 shadow-sm ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all duration-150 shadow-sm min-h-[40px] sm:min-h-0 ${
               currentStatus === 'incorrect_only'
                 ? 'bg-rose-600 text-white shadow-rose-600/30 ring-2 ring-rose-400 dark:ring-rose-500'
                 : 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-rose-200 dark:border-rose-800/60'
             }`}
             title={dict.tracker.filterIncorrectTooltip}
           >
-            <XCircle className="w-4 h-4 stroke-[2.5]" />
+            <XCircle className="w-4 h-4 stroke-[2.5] shrink-0" />
             <span>{dict.tracker.filterIncorrectOnly}</span>
             <span
-              className={`px-1.5 py-0.5 rounded-full text-[11px] font-extrabold ${
+              className={`px-1.5 py-0.5 rounded-full text-[11px] font-extrabold shrink-0 ${
                 currentStatus === 'incorrect_only'
                   ? 'bg-rose-700 text-white'
                   : 'bg-rose-200 dark:bg-rose-800 text-rose-900 dark:text-rose-100'
@@ -72,74 +72,75 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           {/* すべて */}
           <button
             onClick={() => onStatusChange('all')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all min-h-[40px] sm:min-h-0 ${
               currentStatus === 'all'
                 ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
-            <ListFilter className="w-3.5 h-3.5" />
+            <ListFilter className="w-3.5 h-3.5 shrink-0" />
             <span>{dict.tracker.filterAll}</span>
-            <span className="text-[11px] text-slate-400 font-normal">({stats.total})</span>
+            <span className="text-[11px] text-slate-400 font-normal shrink-0">({stats.total})</span>
           </button>
 
           {/* ◯ (正解) のみ */}
           <button
             onClick={() => onStatusChange('correct_only')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all min-h-[40px] sm:min-h-0 ${
               currentStatus === 'correct_only'
                 ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/30'
                 : 'text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400'
             }`}
           >
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
             <span>{dict.tracker.filterCorrectOnly}</span>
-            <span className="text-[11px] opacity-80">({stats.correct})</span>
+            <span className="text-[11px] opacity-80 shrink-0">({stats.correct})</span>
           </button>
 
           {/* 未解答のみ */}
           <button
             onClick={() => onStatusChange('unanswered_only')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all min-h-[40px] sm:min-h-0 ${
               currentStatus === 'unanswered_only'
                 ? 'bg-slate-700 text-white dark:bg-slate-600 shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
             }`}
           >
-            <HelpCircle className="w-3.5 h-3.5 text-slate-400" />
+            <HelpCircle className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span>{dict.tracker.filterUnansweredOnly}</span>
-            <span className="text-[11px] opacity-80">({stats.unanswered})</span>
+            <span className="text-[11px] opacity-80 shrink-0">({stats.unanswered})</span>
           </button>
         </div>
 
         {/* 右側アクション: 集中復習モード & 一括操作メニュー */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           {/* 🎯 ✕のみ集中復習モード */}
           <button
             onClick={onOpenReviewModal}
             disabled={stats.incorrect === 0}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all min-h-[40px] sm:min-h-0 ${
               stats.incorrect > 0
                 ? 'bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white shadow-rose-500/25 active:scale-95'
                 : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed border border-slate-200 dark:border-slate-800'
             }`}
             title={dict.tracker.reviewModeTooltip}
           >
-            <Target className="w-4 h-4 stroke-[2.5]" />
+            <Target className="w-4 h-4 stroke-[2.5] shrink-0" />
             <span>{dict.tracker.startReview}</span>
             {stats.incorrect > 0 && (
-              <span className="bg-white/20 text-white text-[10px] px-1.5 py-0.5 rounded-full font-extrabold">
+              <span className="bg-white/20 text-white text-[10px] px-1.5 py-0.5 rounded-full font-extrabold shrink-0">
                 {stats.incorrect}{dict.stats.questionsUnit}
               </span>
             )}
           </button>
 
           {/* 一括操作ドロップダウン */}
-          <div className="relative">
+          <div className="relative shrink-0">
             <button
               onClick={() => setShowBatchMenu(!showBatchMenu)}
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors"
+              className="p-2 min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors"
               title={dict.tracker.batchMenu}
+              aria-label={dict.tracker.batchMenu}
             >
               <MoreHorizontal className="w-4 h-4" />
             </button>
@@ -159,9 +160,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                       setConfirmBatchType('correct');
                       setShowBatchMenu(false);
                     }}
-                    className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 text-slate-700 dark:text-slate-300"
+                    className="w-full text-left px-3 py-2.5 sm:py-2 min-h-[40px] sm:min-h-0 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 text-slate-700 dark:text-slate-300"
                   >
-                    <CheckCheck className="w-3.5 h-3.5 text-emerald-500" />
+                    <CheckCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                     <span>{dict.tracker.markAllCorrect}</span>
                   </button>
                   <button
@@ -169,9 +170,9 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                       setConfirmBatchType('unanswered');
                       setShowBatchMenu(false);
                     }}
-                    className="w-full text-left px-3 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 text-rose-600 dark:text-rose-400"
+                    className="w-full text-left px-3 py-2.5 sm:py-2 min-h-[40px] sm:min-h-0 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-2 text-rose-600 dark:text-rose-400"
                   >
-                    <RotateCcw className="w-3.5 h-3.5 text-rose-500" />
+                    <RotateCcw className="w-3.5 h-3.5 text-rose-500 shrink-0" />
                     <span>{dict.tracker.markAllUnanswered}</span>
                   </button>
                 </div>
@@ -185,18 +186,18 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/80">
         {/* 検索入力フィールド */}
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none shrink-0" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={dict.tracker.searchPlaceholder}
-            className="w-full pl-9 pr-8 py-1.5 text-xs bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-all"
+            className="w-full pl-9 pr-9 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 text-base sm:text-xs bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-all"
           />
           {searchQuery && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              className="absolute right-1 sm:right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center"
             >
               <X className="w-3.5 h-3.5" />
             </button>
