@@ -167,21 +167,21 @@ export const DataView: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
+    <div className="space-y-6 sm:space-y-8 max-w-5xl mx-auto">
       {/* ======================================================== */}
       {/* 1. ストレージ利用状況カード */}
       {/* ======================================================== */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-2 mb-4">
-          <HardDrive className="w-5 h-5 text-brand-600 dark:text-brand-400" />
+          <HardDrive className="w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0" />
           <h2 className="text-base font-bold text-slate-900 dark:text-white">
             {dict.data.storageSummaryTitle}
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-4">
+          <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
               {dict.data.registeredWorkbooks}
             </span>
             <div className="mt-1 flex items-baseline gap-1">
@@ -192,8 +192,8 @@ export const DataView: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+          <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
               {dict.data.registeredQuestions}
             </span>
             <div className="mt-1 flex items-baseline gap-1">
@@ -204,8 +204,8 @@ export const DataView: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+          <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
               {dict.data.registeredSubjects}
             </span>
             <div className="mt-1 flex items-baseline gap-1">
@@ -216,8 +216,8 @@ export const DataView: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+          <div className="p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block">
               {dict.data.storageUsage}
             </span>
             <div className="mt-1 flex items-baseline gap-1">
@@ -228,24 +228,24 @@ export const DataView: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400">
-          <span className="flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5" />
-            {t('data.lastUpdated', { date: new Date(storageSummary.lastUpdated).toLocaleString() })}
+        <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-0 text-xs text-slate-400">
+          <span className="flex items-center gap-1.5 min-w-0 break-words">
+            <Calendar className="w-3.5 h-3.5 shrink-0" />
+            <span className="break-words">{t('data.lastUpdated', { date: new Date(storageSummary.lastUpdated).toLocaleString() })}</span>
           </span>
-          <span>{dict.data.storageLocation}</span>
+          <span className="break-words">{dict.data.storageLocation}</span>
         </div>
       </div>
 
       {/* ======================================================== */}
       {/* 2. データ移行 (Export / Import) */}
       {/* ======================================================== */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* エクスポート (バックアップ) */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
                 <Download className="w-4 h-4" />
               </div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
@@ -260,19 +260,19 @@ export const DataView: React.FC = () => {
           <div className="space-y-2 pt-2">
             <button
               onClick={handleDownloadJson}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/30 transition-all active:scale-98"
+              className="w-full min-h-[40px] sm:min-h-0 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/30 transition-all active:scale-98"
             >
-              <FileJson className="w-4 h-4" />
+              <FileJson className="w-4 h-4 shrink-0" />
               <span>{dict.data.downloadJson}</span>
             </button>
           </div>
         </div>
 
         {/* インポート (復元・移行 - ファイル管理に一本化) */}
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-4">
+        <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
                 <Upload className="w-4 h-4" />
               </div>
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
@@ -288,11 +288,11 @@ export const DataView: React.FC = () => {
               <span className="text-[11px] font-bold text-slate-700 dark:text-slate-300">
                 {dict.data.importModeTitle}
               </span>
-              <div className="grid grid-cols-2 gap-2 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                 <button
                   type="button"
                   onClick={() => setImportMode('merge')}
-                  className={`p-2 rounded-lg text-left border transition-all ${
+                  className={`min-h-[40px] p-2.5 sm:p-2 rounded-lg text-left border transition-all ${
                     importMode === 'merge'
                       ? 'bg-white dark:bg-slate-700 border-brand-500 text-brand-600 dark:text-brand-400 font-bold shadow-xs'
                       : 'border-transparent text-slate-600 dark:text-slate-400 hover:bg-white/40'
@@ -307,7 +307,7 @@ export const DataView: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setImportMode('replace')}
-                  className={`p-2 rounded-lg text-left border transition-all ${
+                  className={`min-h-[40px] p-2.5 sm:p-2 rounded-lg text-left border transition-all ${
                     importMode === 'replace'
                       ? 'bg-white dark:bg-slate-700 border-rose-500 text-rose-600 dark:text-rose-400 font-bold shadow-xs'
                       : 'border-transparent text-slate-600 dark:text-slate-400 hover:bg-white/40'
@@ -327,7 +327,7 @@ export const DataView: React.FC = () => {
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            className={`border-2 border-dashed rounded-2xl p-5 text-center transition-all ${
+            className={`border-2 border-dashed rounded-2xl p-4 sm:p-5 text-center transition-all ${
               isDragging
                 ? 'border-brand-500 bg-brand-50/50 dark:bg-brand-950/30 scale-101'
                 : 'border-slate-200 dark:border-slate-700/80 bg-slate-50/50 dark:bg-slate-800/40 hover:border-slate-300 dark:hover:border-slate-600'
@@ -347,8 +347,8 @@ export const DataView: React.FC = () => {
               </div>
 
               {/* ファイル選択インプット */}
-              <label className="inline-flex items-center justify-center gap-2 py-2 px-4 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 cursor-pointer shadow-sm shadow-brand-600/30 transition-all active:scale-95">
-                <Upload className="w-3.5 h-3.5" />
+              <label className="w-full sm:w-auto min-h-[40px] sm:min-h-0 flex sm:inline-flex items-center justify-center gap-2 py-2.5 sm:py-2 px-4 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 cursor-pointer shadow-sm shadow-brand-600/30 transition-all active:scale-95">
+                <Upload className="w-3.5 h-3.5 shrink-0" />
                 <span>{dict.data.selectFile}</span>
                 <input
                   type="file"
@@ -365,16 +365,16 @@ export const DataView: React.FC = () => {
       {/* インポート結果アラート */}
       {importStatus.type && (
         <div
-          className={`p-4 rounded-2xl flex items-center justify-between text-xs font-medium border ${
+          className={`p-4 rounded-2xl flex items-start sm:items-center justify-between gap-3 text-xs font-medium border overflow-hidden ${
             importStatus.type === 'success'
               ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800'
               : 'bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-800'
           }`}
         >
-          <span>{importStatus.message}</span>
+          <span className="min-w-0 flex-1 break-all sm:break-words [overflow-wrap:anywhere]">{importStatus.message}</span>
           <button
             onClick={() => setImportStatus({ type: null, message: '' })}
-            className="p-1 rounded hover:bg-black/5"
+            className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center p-2 sm:p-1 rounded hover:bg-black/5 shrink-0 -mr-1 -my-1 sm:mr-0 sm:my-0"
           >
             <X className="w-4 h-4" />
           </button>
@@ -384,9 +384,9 @@ export const DataView: React.FC = () => {
       {/* ======================================================== */}
       {/* 3. 初期化・リセット (Reset & Initialization) */}
       {/* ======================================================== */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
         <div className="flex items-center gap-2">
-          <RefreshCw className="w-5 h-5 text-slate-600 dark:text-slate-400" />
+          <RefreshCw className="w-5 h-5 text-slate-600 dark:text-slate-400 shrink-0" />
           <h2 className="text-base font-bold text-slate-900 dark:text-white">
             {dict.data.sampleResetSection}
           </h2>
@@ -394,10 +394,10 @@ export const DataView: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
           {/* サンプルデータ復元 */}
-          <div className="p-5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 flex flex-col justify-between space-y-3">
+          <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200/80 dark:border-amber-900/40 flex flex-col justify-between space-y-3">
             <div>
               <h4 className="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5 mb-1">
-                <RefreshCw className="w-3.5 h-3.5" />
+                <RefreshCw className="w-3.5 h-3.5 shrink-0" />
                 <span>{dict.data.sampleRestoreCardTitle}</span>
               </h4>
               <p className="text-[11px] text-amber-700 dark:text-amber-400/90 leading-relaxed">
@@ -406,17 +406,17 @@ export const DataView: React.FC = () => {
             </div>
             <button
               onClick={() => setIsSampleResetModalOpen(true)}
-              className="py-2 px-3.5 rounded-xl text-xs font-bold text-amber-900 dark:text-amber-200 bg-amber-200/70 hover:bg-amber-300/80 dark:bg-amber-900/60 dark:hover:bg-amber-800 transition-colors"
+              className="w-full sm:w-auto min-h-[40px] sm:min-h-0 flex items-center justify-center py-2.5 sm:py-2 px-3.5 rounded-xl text-xs font-bold text-amber-900 dark:text-amber-200 bg-amber-200/70 hover:bg-amber-300/80 dark:bg-amber-900/60 dark:hover:bg-amber-800 transition-colors"
             >
               {dict.data.restoreSampleBtn}
             </button>
           </div>
 
           {/* 全データ完全初期化 (安全ガード付き) */}
-          <div className="p-5 rounded-2xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 flex flex-col justify-between space-y-3">
+          <div className="p-4 sm:p-5 rounded-2xl bg-rose-50/60 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 flex flex-col justify-between space-y-3">
             <div>
               <h4 className="text-xs font-bold text-rose-900 dark:text-rose-300 flex items-center gap-1.5 mb-1">
-                <Trash2 className="w-3.5 h-3.5" />
+                <Trash2 className="w-3.5 h-3.5 shrink-0" />
                 <span>{dict.data.clearAllCardTitle}</span>
               </h4>
               <p className="text-[11px] text-rose-700 dark:text-rose-400/90 leading-relaxed">
@@ -428,7 +428,7 @@ export const DataView: React.FC = () => {
                 setResetConfirmInput('');
                 setIsResetModalOpen(true);
               }}
-              className="py-2 px-3.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-sm shadow-rose-600/30 transition-all active:scale-98"
+              className="w-full sm:w-auto min-h-[40px] sm:min-h-0 flex items-center justify-center py-2.5 sm:py-2 px-3.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-sm shadow-rose-600/30 transition-all active:scale-98"
             >
               {dict.data.clearAllBtn}
             </button>
@@ -440,12 +440,12 @@ export const DataView: React.FC = () => {
       {/* 4. サンプル復元確認モーダル */}
       {/* ======================================================== */}
       {isSampleResetModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in overflow-y-auto">
           <div
-            className="w-full max-w-sm bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 space-y-4"
+            className="w-full max-w-sm max-h-[calc(100dvh-2rem)] sm:max-h-none overflow-y-auto my-auto bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto shrink-0">
               <RefreshCw className="w-6 h-6" />
             </div>
             <div className="text-center space-y-1">
@@ -456,18 +456,18 @@ export const DataView: React.FC = () => {
                 {dict.data.sampleModalDesc}
               </p>
             </div>
-            <div className="flex items-center justify-end gap-2 pt-2">
+            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setIsSampleResetModalOpen(false)}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
+                className="w-full sm:w-auto min-h-[40px] sm:min-h-0 px-4 py-2.5 sm:py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
               >
                 {dict.common.cancel}
               </button>
               <button
                 type="button"
                 onClick={handleRestoreSample}
-                className="px-4 py-2 text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 rounded-xl shadow-xs"
+                className="w-full sm:w-auto min-h-[40px] sm:min-h-0 px-4 py-2.5 sm:py-2 text-xs font-bold text-white bg-amber-600 hover:bg-amber-700 rounded-xl shadow-xs"
               >
                 {dict.data.sampleModalConfirm}
               </button>
@@ -480,12 +480,12 @@ export const DataView: React.FC = () => {
       {/* 5. 全データ完全初期化 二重確認モーダル */}
       {/* ======================================================== */}
       {isResetModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs animate-in fade-in">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs animate-in fade-in overflow-y-auto">
           <div
-            className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-rose-200 dark:border-rose-900 p-6 space-y-4"
+            className="w-full max-w-md max-h-[calc(100dvh-2rem)] sm:max-h-none overflow-y-auto my-auto bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-rose-200 dark:border-rose-900 p-5 sm:p-6 space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950 text-rose-600 flex items-center justify-center mx-auto ring-4 ring-rose-50 dark:ring-rose-900/40">
+            <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950 text-rose-600 flex items-center justify-center mx-auto ring-4 ring-rose-50 dark:ring-rose-900/40 shrink-0">
               <AlertTriangle className="w-6 h-6" />
             </div>
 
@@ -507,16 +507,16 @@ export const DataView: React.FC = () => {
                 value={resetConfirmInput}
                 onChange={(e) => setResetConfirmInput(e.target.value)}
                 placeholder={expectedKeyword}
-                className="w-full px-3 py-2 text-xs bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-center font-bold tracking-widest text-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                className="w-full px-3 py-2.5 sm:py-2 text-base sm:text-xs min-h-[40px] sm:min-h-0 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-lg text-center font-bold tracking-widest text-rose-600 focus:outline-none focus:ring-2 focus:ring-rose-500"
                 autoFocus
               />
             </div>
 
-            <div className="flex items-center justify-end gap-2 pt-2">
+            <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-2 pt-2">
               <button
                 type="button"
                 onClick={() => setIsResetModalOpen(false)}
-                className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
+                className="w-full sm:w-auto min-h-[40px] sm:min-h-0 px-4 py-2.5 sm:py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
               >
                 {dict.common.cancel}
               </button>
@@ -527,7 +527,7 @@ export const DataView: React.FC = () => {
                   resetConfirmInput.trim().toUpperCase() !== 'RESET'
                 }
                 onClick={handleClearAll}
-                className="px-5 py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl shadow-md shadow-rose-600/30 transition-all active:scale-95"
+                className="w-full sm:w-auto min-h-[40px] sm:min-h-0 px-5 py-2.5 sm:py-2 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl shadow-md shadow-rose-600/30 transition-all active:scale-95"
               >
                 {dict.data.clearAllConfirmAction}
               </button>

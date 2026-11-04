@@ -49,18 +49,18 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   return (
     <header className="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex flex-wrap sm:flex-nowrap items-center justify-between py-2.5 sm:py-0 sm:h-16 gap-y-2.5 sm:gap-y-0">
           {/* ロゴ & ブランド */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 ring-1 ring-white/20">
+          <div className="flex items-center gap-2.5 sm:gap-3 order-1 sm:order-none">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 ring-1 ring-white/20 shrink-0">
               <Target className="w-6 h-6 stroke-[2.5]" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-bold text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 dark:from-white dark:via-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <span className="font-bold text-lg sm:text-xl tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-slate-700 dark:from-white dark:via-slate-200 dark:to-slate-300 bg-clip-text text-transparent">
                   {dict.app.title}
                 </span>
-                <span className="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-brand-50 text-brand-600 dark:bg-brand-950/60 dark:text-brand-400 border border-brand-200 dark:border-brand-800">
+                <span className="text-[10px] font-semibold tracking-wider uppercase px-1.5 py-0.5 rounded-full bg-brand-50 text-brand-600 dark:bg-brand-950/60 dark:text-brand-400 border border-brand-200 dark:border-brand-800 shrink-0">
                   v3.0.0
                 </span>
               </div>
@@ -71,20 +71,20 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           </div>
 
           {/* 3つのメインタブ切り替え */}
-          <nav className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/70 p-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60">
+          <nav className="order-3 sm:order-none w-full sm:w-auto flex items-center gap-1 sm:gap-1.5 bg-slate-100 dark:bg-slate-800/70 p-1 sm:p-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60">
             {/* タブ 1: 問題追跡 */}
             <button
               onClick={() => setActiveTab('tracker')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-150 ${
+              className={`flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
                 activeTab === 'tracker'
                   ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm shadow-slate-200 dark:shadow-none'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/40'
               }`}
             >
-              <Target className="w-4 h-4" />
-              <span>{dict.nav.tracker}</span>
+              <Target className="w-4 h-4 shrink-0" />
+              <span className="truncate">{dict.nav.tracker}</span>
               {activeStats && activeStats.incorrect > 0 && (
-                <span className="ml-1 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-rose-500 rounded-full animate-pulse-subtle">
+                <span className="ml-1 shrink-0 inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] sm:text-xs font-bold leading-none text-white bg-rose-500 rounded-full animate-pulse-subtle">
                   {activeStats.incorrect}
                 </span>
               )}
@@ -93,15 +93,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* タブ 2: マネジメント */}
             <button
               onClick={() => setActiveTab('management')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-150 ${
+              className={`flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
                 activeTab === 'management'
                   ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm shadow-slate-200 dark:shadow-none'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/40'
               }`}
             >
-              <FolderKanban className="w-4 h-4" />
-              <span>{dict.nav.management}</span>
-              <span className="ml-1 text-xs px-1.5 py-0.5 rounded-full bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 font-medium">
+              <FolderKanban className="w-4 h-4 shrink-0" />
+              <span className="truncate">{dict.nav.management}</span>
+              <span className="ml-1 shrink-0 text-[10px] sm:text-xs px-1.5 py-0.5 rounded-full bg-slate-200 dark:bg-slate-600 text-slate-700 dark:text-slate-300 font-medium">
                 {workbooks.length}
               </span>
             </button>
@@ -109,19 +109,19 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* タブ 3: データ移行・初期化 */}
             <button
               onClick={() => setActiveTab('data')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-semibold transition-all duration-150 ${
+              className={`flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
                 activeTab === 'data'
                   ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm shadow-slate-200 dark:shadow-none'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/40'
               }`}
             >
-              <Database className="w-4 h-4" />
-              <span>{dict.nav.data}</span>
+              <Database className="w-4 h-4 shrink-0" />
+              <span className="truncate">{dict.nav.data}</span>
             </button>
           </nav>
 
           {/* 右側: 状況インジケーター & テーマ・言語設定 */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 order-2 sm:order-none">
             {/* ✕ 合計インジケーター */}
             <div className="hidden lg:flex items-center">
               {totalIncorrectAll > 0 ? (
@@ -143,7 +143,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* テーマ切り替えボタン (OS連動 / Light / Dark) */}
             <button
               onClick={cycleTheme}
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors flex items-center gap-1 text-xs"
+              className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors flex items-center justify-center gap-1 text-xs"
               title={
                 themeMode === 'system'
                   ? dict.nav.themeSystem
@@ -175,7 +175,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* 言語切り替えボタン (OS自動 / 日本語 / English) */}
             <button
               onClick={cycleLanguage}
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors flex items-center gap-1.5 text-xs font-semibold"
+              className="min-h-[40px] sm:min-h-0 p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors flex items-center justify-center gap-1.5 text-xs font-semibold"
               title={
                 languageMode === 'system'
                   ? dict.nav.langAuto

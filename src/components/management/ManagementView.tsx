@@ -182,55 +182,55 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
   };
 
   return (
-    <div className="space-y-8 max-w-6xl mx-auto">
+    <div className="space-y-8 max-w-6xl mx-auto w-full min-w-0">
       {/* ======================================================== */}
       {/* 1. 全体進捗統計カード (全教科横断ダッシュボード) */}
       {/* ======================================================== */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-5 h-5 text-brand-600 dark:text-brand-400" />
-          <h2 className="text-base font-bold text-slate-900 dark:text-white">
+          <TrendingUp className="w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0" />
+          <h2 className="text-base font-bold text-slate-900 dark:text-white truncate">
             {dict.management.title}
           </h2>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-          <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
+          <div className="p-3 sm:p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 min-w-0">
+            <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider block truncate">
               {dict.management.totalWorkbooksCard}
             </span>
-            <div className="mt-1 flex items-baseline gap-1.5">
+            <div className="mt-1 flex flex-wrap items-baseline gap-1.5">
               <span className="text-2xl font-black text-slate-900 dark:text-white">
                 {workbooks.length}
               </span>
-              <span className="text-xs text-slate-400">{dict.management.booksUnit} / {subjects.length} sub</span>
+              <span className="text-xs text-slate-400 truncate">{dict.management.booksUnit} / {subjects.length} sub</span>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40">
-            <span className="text-xs font-semibold text-blue-700 dark:text-blue-400 uppercase tracking-wider">
+          <div className="p-3 sm:p-4 rounded-2xl bg-blue-50/60 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 min-w-0">
+            <span className="text-xs font-semibold text-blue-700 dark:text-blue-400 uppercase tracking-wider block truncate">
               {dict.management.totalQuestionsCard}
             </span>
-            <div className="mt-1 flex items-baseline gap-1.5">
+            <div className="mt-1 flex flex-wrap items-baseline gap-1.5">
               <span className="text-2xl font-black text-blue-700 dark:text-blue-300">
                 {overallStats.totalQuestions}
               </span>
-              <span className="text-xs text-blue-600/70 dark:text-blue-400/70">
+              <span className="text-xs text-blue-600/70 dark:text-blue-400/70 break-words">
                 {dict.management.questionsUnit} {t('management.answeredRatio', { answered: overallStats.totalAnswered })}
               </span>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider">
+          <div className="p-3 sm:p-4 rounded-2xl bg-amber-50/60 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/40 min-w-0">
+            <div className="flex flex-wrap items-center justify-between gap-1">
+              <span className="text-xs font-bold text-amber-700 dark:text-amber-400 uppercase tracking-wider truncate">
                 {dict.management.totalUnansweredCard}
               </span>
-              <span className="text-[10px] bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-1 py-0.2 rounded font-extrabold">
+              <span className="text-[10px] bg-amber-200 dark:bg-amber-800 text-amber-800 dark:text-amber-100 px-1 py-0.2 rounded font-extrabold shrink-0">
                 {overallStats.unansweredRate}%
               </span>
             </div>
-            <div className="mt-1 flex items-baseline gap-1.5">
+            <div className="mt-1 flex flex-wrap items-baseline gap-1.5">
               <span className="text-2xl font-black text-amber-700 dark:text-amber-300">
                 {overallStats.totalUnanswered}
               </span>
@@ -240,11 +240,11 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40">
-            <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider">
+          <div className="p-3 sm:p-4 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40 min-w-0">
+            <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block truncate">
               {dict.management.overallAccuracyCard}
             </span>
-            <div className="mt-1 flex items-baseline gap-1.5">
+            <div className="mt-1 flex flex-wrap items-baseline gap-1.5">
               <span className="text-2xl font-black text-emerald-700 dark:text-emerald-300">
                 {overallStats.accuracyRate}%
               </span>
@@ -254,16 +254,16 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider">
+          <div className="col-span-2 sm:col-span-1 p-3 sm:p-4 rounded-2xl bg-rose-50/70 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 min-w-0">
+            <div className="flex flex-wrap items-center justify-between gap-1">
+              <span className="text-xs font-bold text-rose-700 dark:text-rose-400 uppercase tracking-wider truncate">
                 {dict.management.totalIncorrectCard}
               </span>
-              <span className="text-[10px] bg-rose-200 dark:bg-rose-800 text-rose-800 dark:text-rose-100 px-1 py-0.2 rounded font-extrabold">
+              <span className="text-[10px] bg-rose-200 dark:bg-rose-800 text-rose-800 dark:text-rose-100 px-1 py-0.2 rounded font-extrabold shrink-0">
                 {dict.management.needReviewBadge}
               </span>
             </div>
-            <div className="mt-1 flex items-baseline gap-1.5">
+            <div className="mt-1 flex flex-wrap items-baseline gap-1.5">
               <span className="text-2xl font-black text-rose-600 dark:text-rose-400">
                 {overallStats.totalIncorrect}
               </span>
@@ -287,14 +287,14 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
           }`}>
             <AlertTriangle className="w-5 h-5 stroke-[2.5]" />
           </div>
-          <div className="flex-1 space-y-2">
+          <div className="flex-1 space-y-2 min-w-0">
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <Globe className="w-4 h-4 text-brand-600 dark:text-brand-400" />
-                  {dict.management.webWarningTitle}
+                  <Globe className="w-4 h-4 text-brand-600 dark:text-brand-400 shrink-0" />
+                  <span className="truncate">{dict.management.webWarningTitle}</span>
                 </h3>
-                <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${
+                <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full shrink-0 ${
                   !isTauri
                     ? 'bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100'
                     : 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-300'
@@ -303,7 +303,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                 </span>
               </div>
             </div>
-            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">
+            <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed break-words">
               {dict.management.webWarningDesc}
             </p>
             <div className="pt-1 text-xs text-slate-600 dark:text-slate-400 flex flex-wrap items-center gap-2">
@@ -311,7 +311,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                 href="https://github.com/tyama11/questrack/releases/latest"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-1 font-bold text-brand-600 dark:text-brand-400 hover:underline"
+                className="inline-flex items-center gap-1 font-bold text-brand-600 dark:text-brand-400 hover:underline min-h-[40px] sm:min-h-0 py-2 sm:py-0"
               >
                 <span>{dict.management.downloadAppAction}</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -325,18 +325,18 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       {/* 2. 問題集管理セクション */}
       {/* ======================================================== */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
           <div className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-brand-600 dark:text-brand-400" />
+            <BookOpen className="w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0" />
             <h2 className="text-base font-bold text-slate-900 dark:text-white">
               {dict.management.workbooksSection}
             </h2>
-            <span className="text-xs text-slate-400">({workbooks.length})</span>
+            <span className="text-xs text-slate-400 shrink-0">({workbooks.length})</span>
           </div>
 
           <button
             onClick={handleOpenCreateWb}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/25 transition-all active:scale-95"
+            className="flex items-center justify-center gap-2 px-4 py-2.5 sm:py-2 min-h-[40px] sm:min-h-0 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/25 transition-all active:scale-95 w-full sm:w-auto"
           >
             <Plus className="w-4 h-4 stroke-[2.5]" />
             <span>{dict.management.createNewWorkbook}</span>
@@ -352,40 +352,40 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             return (
               <div
                 key={wb.id}
-                className="bg-white dark:bg-slate-900 rounded-2xl p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between hover:shadow-md transition-shadow"
+                className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between hover:shadow-md transition-shadow min-w-0"
               >
                 <div>
                   {/* 教科バッジ & 複製・編集・削除メニュー */}
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                     <span
-                      className="px-2.5 py-0.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5"
+                      className="px-2.5 py-0.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 max-w-[180px] sm:max-w-none"
                       style={{
                         backgroundColor: `${subject?.color || '#3B82F6'}18`,
                         color: subject?.color || '#3B82F6',
                       }}
                     >
-                      <span>{subject?.icon || '📚'}</span>
-                      <span>{subject?.name || dict.tracker.unclassified}</span>
+                      <span className="shrink-0">{subject?.icon || '📚'}</span>
+                      <span className="truncate">{subject?.name || dict.tracker.unclassified}</span>
                     </span>
 
-                    <div className="flex items-center gap-1">
+                    <div className="flex flex-wrap items-center gap-1">
                       <button
                         onClick={() => duplicateWorkbook(wb.id)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center p-2 sm:p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                         title={dict.common.duplicate}
                       >
                         <Copy className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => handleStartEditWb(wb)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center p-2 sm:p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                         title={dict.common.edit}
                       >
                         <Edit2 className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => setWbToDelete(wb)}
-                        className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                        className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center p-2 sm:p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
                         title={dict.common.delete}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
@@ -394,11 +394,11 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   </div>
 
                   {/* タイトル & 説明 */}
-                  <h3 className="font-bold text-slate-900 dark:text-white text-base line-clamp-1 mb-1">
+                  <h3 className="font-bold text-slate-900 dark:text-white text-base line-clamp-1 mb-1 break-words">
                     {wb.title}
                   </h3>
                   {wb.description ? (
-                    <p className="text-xs text-slate-500 line-clamp-2 mb-3">
+                    <p className="text-xs text-slate-500 line-clamp-2 mb-3 break-words">
                       {wb.description}
                     </p>
                   ) : (
@@ -409,7 +409,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
 
                   {/* 進捗と統計 */}
                   <div className="space-y-2 py-3 border-y border-slate-100 dark:border-slate-800">
-                    <div className="flex items-center justify-between text-xs">
+                    <div className="flex flex-wrap items-center justify-between gap-1 text-xs">
                       <span className="text-slate-500">
                         {t('tracker.allQuestions', { count: wb.totalQuestions })} ({stats.progressRate}%)
                       </span>
@@ -430,7 +430,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                       />
                     </div>
 
-                    <div className="flex items-center gap-3 text-[11px] pt-1">
+                    <div className="flex flex-wrap items-center gap-3 text-[11px] pt-1">
                       <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
                         <CheckCircle2 className="w-3 h-3" /> {stats.correct}
                       </span>
@@ -445,7 +445,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                 {/* トラッカーで開くボタン */}
                 <button
                   onClick={() => onOpenWorkbook(wb.id)}
-                  className="mt-4 w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 text-slate-700 dark:text-slate-300 font-semibold text-xs transition-colors"
+                  className="mt-4 w-full flex items-center justify-center gap-2 min-h-[40px] py-2.5 sm:py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 hover:text-brand-600 dark:hover:bg-brand-950/40 dark:hover:text-brand-400 text-slate-700 dark:text-slate-300 font-semibold text-xs transition-colors"
                 >
                   <span>{dict.management.openInTracker}</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
@@ -460,18 +460,18 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       {/* 3. 教科管理セクション */}
       {/* ======================================================== */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
           <div className="flex items-center gap-2">
-            <Palette className="w-5 h-5 text-brand-600 dark:text-brand-400" />
+            <Palette className="w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0" />
             <h2 className="text-base font-bold text-slate-900 dark:text-white">
               {dict.management.subjectsSection}
             </h2>
-            <span className="text-xs text-slate-400">({subjects.length})</span>
+            <span className="text-xs text-slate-400 shrink-0">({subjects.length})</span>
           </div>
 
           <button
             onClick={handleOpenCreateSubject}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors shadow-2xs"
+            className="flex items-center justify-center gap-1.5 px-3.5 py-2.5 sm:py-1.5 min-h-[40px] sm:min-h-0 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/60 transition-colors shadow-2xs w-full sm:w-auto"
           >
             <Plus className="w-3.5 h-3.5" />
             <span>{dict.management.createNewSubject}</span>
@@ -486,7 +486,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             return (
               <div
                 key={sub.id}
-                className="bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3"
+                className="bg-white dark:bg-slate-900 rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 min-w-0"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div
@@ -508,7 +508,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                 <div className="flex items-center gap-1 shrink-0">
                   <button
                     onClick={() => handleStartEditSubject(sub)}
-                    className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                    className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center p-2 sm:p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                     title={dict.common.edit}
                   >
                     <Edit2 className="w-3.5 h-3.5" />
@@ -521,7 +521,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                       setSubjectToDelete(sub);
                     }}
                     disabled={subjects.length <= 1}
-                    className={`p-1 rounded-lg transition-colors ${
+                    className={`min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center p-2 sm:p-1 rounded-lg transition-colors ${
                       subjects.length <= 1
                         ? 'text-slate-300 dark:text-slate-700 cursor-not-allowed'
                         : 'text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40'
@@ -543,16 +543,16 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       {isCreateWbOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
           <div
-            className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+            className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-y-auto max-h-[90dvh]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 sticky top-0 bg-white dark:bg-slate-900 z-10">
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
                 {dict.management.createWbModalTitle}
               </h3>
               <button
                 onClick={() => setIsCreateWbOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600"
+                className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center p-2 sm:p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -569,7 +569,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   value={wbTitle}
                   onChange={(e) => setWbTitle(e.target.value)}
                   placeholder={dict.management.wbTitlePlaceholder}
-                  className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-3.5 py-2 text-base sm:text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 min-h-[40px] sm:min-h-0"
                   autoFocus
                 />
               </div>
@@ -581,7 +581,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                 <select
                   value={wbSubjectId}
                   onChange={(e) => setWbSubjectId(e.target.value)}
-                  className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100"
+                  className="w-full px-3.5 py-2 text-base sm:text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100 min-h-[40px] sm:min-h-0"
                 >
                   {subjects.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -595,22 +595,22 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   {dict.management.wbTotalQuestionsLabel}
                 </label>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                   <input
                     type="number"
                     min={1}
                     max={1000}
                     value={wbTotalQuestions}
                     onChange={(e) => setWbTotalQuestions(Number(e.target.value) || 1)}
-                    className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
+                    className="w-full px-3.5 py-2 text-base sm:text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 min-h-[40px] sm:min-h-0"
                   />
-                  <div className="flex gap-1">
+                  <div className="flex gap-1 shrink-0">
                     {[50, 100, 150].map((count) => (
                       <button
                         key={count}
                         type="button"
                         onClick={() => setWbTotalQuestions(count)}
-                        className={`px-2 py-1 text-xs rounded-lg border ${
+                        className={`flex-1 sm:flex-none px-2 py-1 min-h-[40px] sm:min-h-0 text-xs rounded-lg border flex items-center justify-center ${
                           wbTotalQuestions === count
                             ? 'bg-brand-50 border-brand-500 text-brand-600 font-bold'
                             : 'bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-600'
@@ -632,21 +632,21 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   value={wbDescription}
                   onChange={(e) => setWbDescription(e.target.value)}
                   placeholder={dict.management.wbDescPlaceholder}
-                  className="w-full p-3 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full p-3 text-base sm:text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setIsCreateWbOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
+                  className="px-4 py-2.5 sm:py-2 min-h-[40px] sm:min-h-0 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl flex items-center justify-center"
                 >
                   {dict.management.cancel}
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/30"
+                  className="px-5 py-2.5 sm:py-2 min-h-[40px] sm:min-h-0 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/30 flex items-center justify-center"
                 >
                   {dict.management.createButton}
                 </button>
@@ -662,16 +662,16 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       {editingWb && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
           <div
-            className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+            className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-y-auto max-h-[90dvh]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 sticky top-0 bg-white dark:bg-slate-900 z-10">
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
                 {dict.management.editWbModalTitle}
               </h3>
               <button
                 onClick={() => setEditingWb(null)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600"
+                className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center p-2 sm:p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -687,7 +687,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   required
                   value={editWbTitle}
                   onChange={(e) => setEditWbTitle(e.target.value)}
-                  className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-3.5 py-2 text-base sm:text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 min-h-[40px] sm:min-h-0"
                 />
               </div>
 
@@ -698,7 +698,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                 <select
                   value={editWbSubjectId}
                   onChange={(e) => setEditWbSubjectId(e.target.value)}
-                  className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100"
+                  className="w-full px-3.5 py-2 text-base sm:text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 text-slate-900 dark:text-slate-100 min-h-[40px] sm:min-h-0"
                 >
                   {subjects.map((s) => (
                     <option key={s.id} value={s.id}>
@@ -718,7 +718,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   max={1000}
                   value={editWbTotalQuestions}
                   onChange={(e) => setEditWbTotalQuestions(Number(e.target.value) || 1)}
-                  className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-3.5 py-2 text-base sm:text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 min-h-[40px] sm:min-h-0"
                 />
                 <p className="text-[11px] text-slate-400 mt-1">
                   {dict.management.wbTotalQuestionsHelp}
@@ -733,21 +733,21 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   rows={3}
                   value={editWbDescription}
                   onChange={(e) => setEditWbDescription(e.target.value)}
-                  className="w-full p-3 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full p-3 text-base sm:text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setEditingWb(null)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
+                  className="px-4 py-2.5 sm:py-2 min-h-[40px] sm:min-h-0 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl flex items-center justify-center"
                 >
                   {dict.management.cancel}
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/30"
+                  className="px-5 py-2.5 sm:py-2 min-h-[40px] sm:min-h-0 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/30 flex items-center justify-center"
                 >
                   {dict.management.saveChanges}
                 </button>
@@ -763,16 +763,16 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       {isSubjectModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
           <div
-            className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden"
+            className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-y-auto max-h-[90dvh]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 sticky top-0 bg-white dark:bg-slate-900 z-10">
               <h3 className="text-base font-bold text-slate-900 dark:text-white">
                 {editingSubject ? dict.management.editSubjectModalTitle : dict.management.createSubjectModalTitle}
               </h3>
               <button
                 onClick={() => setIsSubjectModalOpen(false)}
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-600"
+                className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center p-2 sm:p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -789,7 +789,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   value={subjectName}
                   onChange={(e) => setSubjectName(e.target.value)}
                   placeholder={dict.management.subjectNamePlaceholder}
-                  className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-3.5 py-2 text-base sm:text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 min-h-[40px] sm:min-h-0"
                   autoFocus
                 />
               </div>
@@ -799,18 +799,18 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                 <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">
                   {dict.management.subjectColorLabel}
                 </label>
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   {COLOR_PRESETS.map((color) => (
                     <button
                       key={color}
                       type="button"
                       onClick={() => setSubjectColor(color)}
-                      className={`w-7 h-7 rounded-full flex items-center justify-center transition-all ${
+                      className={`w-10 h-10 sm:w-7 sm:h-7 rounded-full flex items-center justify-center transition-all ${
                         subjectColor === color ? 'ring-2 ring-offset-2 ring-brand-500 scale-110' : ''
                       }`}
                       style={{ backgroundColor: color }}
                     >
-                      {subjectColor === color && <Check className="w-3.5 h-3.5 text-white stroke-[3]" />}
+                      {subjectColor === color && <Check className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-white stroke-[3]" />}
                     </button>
                   ))}
                 </div>
@@ -827,7 +827,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                       key={icon}
                       type="button"
                       onClick={() => setSubjectIcon(icon)}
-                      className={`w-8 h-8 rounded-xl flex items-center justify-center text-sm border transition-all ${
+                      className={`w-10 h-10 sm:w-8 sm:h-8 rounded-xl flex items-center justify-center text-base sm:text-sm border transition-all ${
                         subjectIcon === icon
                           ? 'border-brand-500 bg-brand-50 dark:bg-brand-950/40 scale-110'
                           : 'border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
@@ -848,21 +848,21 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
                   value={subjectDescription}
                   onChange={(e) => setSubjectDescription(e.target.value)}
                   placeholder={dict.management.subjectDescPlaceholder}
-                  className="w-full px-3.5 py-2 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500"
+                  className="w-full px-3.5 py-2 text-base sm:text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-500 min-h-[40px] sm:min-h-0"
                 />
               </div>
 
-              <div className="flex items-center justify-end gap-2 pt-2">
+              <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-2">
                 <button
                   type="button"
                   onClick={() => setIsSubjectModalOpen(false)}
-                  className="px-4 py-2 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl"
+                  className="px-4 py-2.5 sm:py-2 min-h-[40px] sm:min-h-0 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl flex items-center justify-center"
                 >
                   {dict.management.cancel}
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/30"
+                  className="px-5 py-2.5 sm:py-2 min-h-[40px] sm:min-h-0 text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 rounded-xl shadow-md shadow-brand-600/30 flex items-center justify-center"
                 >
                   {dict.common.save}
                 </button>

@@ -155,7 +155,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
 
   if (questions.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-12 text-center border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+      <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-12 text-center border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
         <div className="w-16 h-16 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center">
           <AlertCircle className="w-8 h-8" />
         </div>
@@ -176,20 +176,20 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
   return (
     <div
       ref={containerRef}
-      className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800"
+      className="bg-white dark:bg-slate-900 rounded-3xl p-3.5 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800"
     >
       {/* グリッドヘッダー・件数 */}
-      <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800 text-xs">
-        <span className="font-semibold text-slate-600 dark:text-slate-300">
+      <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800 text-xs gap-2">
+        <span className="font-semibold text-slate-600 dark:text-slate-300 truncate">
           {t('tracker.gridShowing', { showing: questions.length, total: allQuestionsCount })}
         </span>
-        <span className="text-[11px] text-slate-400 hidden sm:inline">
+        <span className="text-[11px] text-slate-400 hidden sm:inline shrink-0">
           {dict.tracker.clickToCycle}
         </span>
       </div>
 
       {/* 10列レスポンシブグリッド */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-10 gap-2.5">
+      <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-8 xl:grid-cols-10 gap-2 sm:gap-2.5">
         {questions.map((q) => {
           const isFocused = focusedNumber === q.number;
           const hasNote = Boolean(q.note && q.note.trim().length > 0);
@@ -199,7 +199,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
               key={q.id}
               data-question-number={q.number}
               onClick={() => setFocusedNumber(q.number)}
-              className={`group relative flex flex-col rounded-2xl p-2.5 transition-all duration-150 select-none ${
+              className={`group relative flex flex-col rounded-2xl p-2 sm:p-2.5 transition-all duration-150 select-none ${
                 isFocused
                   ? 'ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-slate-900 shadow-md scale-102 z-10'
                   : 'hover:shadow-md hover:scale-101 border'
@@ -212,7 +212,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
               }`}
             >
               {/* セル上部: 問題番号 & メモアイコン */}
-              <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center justify-between mb-1 sm:mb-1.5">
                 <span className="font-mono text-xs font-bold tracking-tight">
                   #{q.number}
                 </span>
@@ -224,14 +224,14 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                     e.stopPropagation();
                     onOpenNoteModal(q);
                   }}
-                  className={`p-1 rounded-lg transition-all ${
+                  className={`min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 sm:p-1 flex items-center justify-center rounded-lg transition-all ${
                     hasNote
                       ? 'bg-amber-100 text-amber-600 dark:bg-amber-950 dark:text-amber-300 shadow-xs'
-                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 opacity-60 group-hover:opacity-100'
+                      : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 opacity-100 sm:opacity-60 sm:group-hover:opacity-100'
                   }`}
                   title={hasNote ? t('tracker.noteTooltip', { note: q.note }) : dict.tracker.addNote}
                 >
-                  <MessageSquare className={`w-3 h-3 ${hasNote ? 'fill-amber-400' : ''}`} />
+                  <MessageSquare className={`w-3.5 h-3.5 sm:w-3 sm:h-3 ${hasNote ? 'fill-amber-400' : ''}`} />
                 </button>
               </div>
 
@@ -242,7 +242,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                   e.stopPropagation();
                   handleToggleStatusAndAdvance(q.number);
                 }}
-                className="flex-1 py-1.5 flex flex-col items-center justify-center rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                className="flex-1 min-h-[40px] sm:min-h-0 py-2 sm:py-1.5 flex flex-col items-center justify-center rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
                 title={dict.tracker.clickToCycle}
               >
                 {q.status === 'correct' && (
@@ -278,14 +278,14 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
               </button>
 
               {/* セル下部: ◯ / ✕ クイックダイレクトボタン */}
-              <div className="flex items-center gap-1 mt-1 pt-1.5 border-t border-black/5 dark:border-white/5 opacity-70 group-hover:opacity-100 transition-opacity">
+              <div className="flex items-center gap-1.5 sm:gap-1 mt-1 pt-1.5 border-t border-black/5 dark:border-white/5 opacity-100 sm:opacity-70 sm:group-hover:opacity-100 transition-opacity">
                 <button
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleRecordStatusAndAdvance(q.number, 'correct');
                   }}
-                  className={`flex-1 py-0.5 text-[10px] font-bold rounded flex items-center justify-center transition-colors ${
+                  className={`flex-1 min-h-[40px] sm:min-h-0 py-2 sm:py-0.5 text-xs sm:text-[10px] font-bold rounded-lg sm:rounded flex items-center justify-center transition-colors ${
                     q.status === 'correct'
                       ? 'bg-emerald-600 text-white'
                       : 'bg-emerald-100/70 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-200'
@@ -300,7 +300,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                     e.stopPropagation();
                     handleRecordStatusAndAdvance(q.number, 'incorrect');
                   }}
-                  className={`flex-1 py-0.5 text-[10px] font-bold rounded flex items-center justify-center transition-colors ${
+                  className={`flex-1 min-h-[40px] sm:min-h-0 py-2 sm:py-0.5 text-xs sm:text-[10px] font-bold rounded-lg sm:rounded flex items-center justify-center transition-colors ${
                     q.status === 'incorrect'
                       ? 'bg-rose-600 text-white'
                       : 'bg-rose-100/70 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 hover:bg-rose-200'
@@ -313,7 +313,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
 
               {/* メモがある場合のホバープレビューツールチップ */}
               {hasNote && (
-                <div className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-[11px] leading-snug shadow-xl z-30 pointer-events-none border border-slate-700 font-sans">
+                <div className="hidden sm:group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 rounded-xl bg-slate-900 dark:bg-slate-800 text-white text-[11px] leading-snug shadow-xl z-30 pointer-events-none border border-slate-700 font-sans">
                   <div className="font-bold text-amber-300 mb-0.5 flex items-center gap-1">
                     <FileText className="w-3 h-3" />
                     <span>{dict.tracker.addNote}</span>
