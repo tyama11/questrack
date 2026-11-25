@@ -1,0 +1,43 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["typescript", "react", "oxc"],
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/exhaustive-deps": "warn",
+    "react/only-export-components": ["error", { "allowConstantExport": true }],
+    "typescript/no-explicit-any": "error",
+    "no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+    "no-console": ["error", { "allow": ["warn", "error"] }]
+  },
+  "overrides": [
+    {
+      "files": ["src/__tests__/**/*.{ts,tsx}"],
+      "rules": {
+        "typescript/no-explicit-any": "off",
+        "typescript/no-non-null-assertion": "off",
+        "no-empty-function": "off",
+        "typescript/no-dynamic-delete": "off"
+      }
+    }
+  ],
+  "ignorePatterns": [
+    "dist/**",
+    "src-tauri/**",
+    "node_modules/**",
+    "coverage/**",
+    "*.config.js",
+    "*.config.ts",
+    "generate_icons.py",
+    "scripts/**"
+  ]
+}

@@ -10,9 +10,8 @@
     "build:pages": "tsrs --noEmit --fast && vite build --mode pages",
     "preview": "vite preview",
     "tauri": "tauri",
-    "lint": "eslint . --max-warnings 0",
-    "test": "vitest run",
-    "postinstall": "node scripts/setup-ts-compat.cjs"
+    "lint": "TSRS_FAST=1 oxlint --type-aware --deny-warnings .",
+    "test": "vitest run"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.12.0",
@@ -26,25 +25,17 @@
     "tailwind-merge": "^3.7.0"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
     "@tailwindcss/vite": "^4.3.3",
     "@tauri-apps/cli": "^2.12.0",
     "@types/node": "^26.6.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@typescript/typescript6": "^6.0.2",
     "@vitejs/plugin-react": "^6.1.1",
-    "eslint": "^10.11.0",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.7",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
-    "typescript-eslint": "^8.70.1",
     "vite": "^8.3.1",
     "vitest": "^5.0.2",
-    "tsrs": "7.1.0-beta.tsrs5"
-  },
-  "overrides": {
-    "typescript": "$typescript"
+    "tsrs": "7.1.0-beta.tsrs5",
+    "oxlint": "1.95.0"
   }
 }
