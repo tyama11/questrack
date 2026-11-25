@@ -10,7 +10,7 @@
     "build:pages": "tsrs --noEmit --fast && vite build --mode pages",
     "preview": "vite preview",
     "tauri": "tauri",
-    "lint": "TSRS_FAST=1 oxlint --type-aware --deny-warnings .",
+    "lint": "TSRS_FAST=1 oxlint --type-aware --type-check --deny-warnings .",
     "test": "vitest run"
   },
   "dependencies": {
