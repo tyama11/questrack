@@ -39,17 +39,17 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   const [confirmBatchType, setConfirmBatchType] = useState<'correct' | 'unanswered' | null>(null);
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl p-3.5 sm:p-4 shadow-sm border border-slate-200 dark:border-slate-800 space-y-3">
+    <div className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] p-3.5 sm:p-4 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60 space-y-3">
       {/* 上段: フィルタートグル & 復習モード起動ボタン */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         {/* ステータスフィルターボタン群 */}
-        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl w-full sm:w-auto">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-[#ece6f0] dark:bg-[#2b2930] rounded-full w-full sm:w-auto">
           {/* 【最重要】 ✕ (不正解) のみ抽出ボタン */}
           <button
             onClick={() =>
               onStatusChange(currentStatus === 'incorrect_only' ? 'all' : 'incorrect_only')
             }
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-xs font-bold transition-all duration-150 shadow-sm min-h-[40px] sm:min-h-0 ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-full text-xs font-bold transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] shadow-sm min-h-[40px] sm:min-h-0 ${
               currentStatus === 'incorrect_only'
                 ? 'bg-rose-600 text-white shadow-rose-600/30 ring-2 ring-rose-400 dark:ring-rose-500'
                 : 'bg-rose-50 dark:bg-rose-950/50 text-rose-700 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/40 border border-rose-200 dark:border-rose-800/60'
@@ -72,7 +72,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           {/* すべて */}
           <button
             onClick={() => onStatusChange('all')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all min-h-[40px] sm:min-h-0 ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium transition-all min-h-[40px] sm:min-h-0 ${
               currentStatus === 'all'
                 ? 'bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
@@ -86,7 +86,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           {/* ◯ (正解) のみ */}
           <button
             onClick={() => onStatusChange('correct_only')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all min-h-[40px] sm:min-h-0 ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium transition-all min-h-[40px] sm:min-h-0 ${
               currentStatus === 'correct_only'
                 ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-600/30'
                 : 'text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400'
@@ -100,7 +100,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           {/* 未解答のみ */}
           <button
             onClick={() => onStatusChange('unanswered_only')}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all min-h-[40px] sm:min-h-0 ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium transition-all min-h-[40px] sm:min-h-0 ${
               currentStatus === 'unanswered_only'
                 ? 'bg-slate-700 text-white dark:bg-slate-600 shadow-xs'
                 : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
@@ -118,10 +118,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <button
             onClick={onOpenReviewModal}
             disabled={stats.incorrect === 0}
-            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition-all min-h-[40px] sm:min-h-0 ${
+            className={`flex-1 sm:flex-initial flex items-center justify-center gap-2 px-4 py-2 rounded-full text-xs font-bold shadow-sm transition-all min-h-[40px] sm:min-h-0 ${
               stats.incorrect > 0
                 ? 'bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white shadow-rose-500/25 active:scale-95'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed border border-slate-200 dark:border-slate-800'
+                : 'bg-slate-100 dark:bg-slate-800 text-slate-400 dark:text-slate-600 cursor-not-allowed border border-[#cac4d0]/60 dark:border-[#49454f]/60'
             }`}
             title={dict.tracker.reviewModeTooltip}
           >
@@ -138,7 +138,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <div className="relative shrink-0">
             <button
               onClick={() => setShowBatchMenu(!showBatchMenu)}
-              className="p-2 min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center rounded-xl border border-slate-200 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors"
+              className="p-2 min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center rounded-full border border-[#cac4d0]/60 dark:border-[#49454f]/60 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-400 transition-colors"
               title={dict.tracker.batchMenu}
               aria-label={dict.tracker.batchMenu}
             >
@@ -192,7 +192,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder={dict.tracker.searchPlaceholder}
-            className="w-full pl-9 pr-9 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 text-base sm:text-xs bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-all"
+            className="w-full pl-9 pr-9 py-2 sm:py-1.5 min-h-[40px] sm:min-h-0 text-base sm:text-xs bg-slate-50 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700 rounded-full text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-all"
           />
           {searchQuery && (
             <button

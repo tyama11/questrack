@@ -47,12 +47,12 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <header className="sticky top-0 z-30 bg-[#f7f2fa]/95 dark:bg-[#1d1b20]/95 backdrop-blur-md border-b border-[#cac4d0]/60 dark:border-[#49454f]/60 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-wrap sm:flex-nowrap items-center justify-between py-2.5 sm:py-0 sm:h-16 gap-y-2.5 sm:gap-y-0">
           {/* ロゴ & ブランド */}
           <div className="flex items-center gap-2.5 sm:gap-3 order-1 sm:order-none">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 ring-1 ring-white/20 shrink-0">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 ring-1 ring-white/20 shrink-0">
               <Target className="w-6 h-6 stroke-[2.5]" />
             </div>
             <div>
@@ -71,13 +71,13 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
           </div>
 
           {/* 3つのメインタブ切り替え */}
-          <nav className="order-3 sm:order-none w-full sm:w-auto flex items-center gap-1 sm:gap-1.5 bg-slate-100 dark:bg-slate-800/70 p-1 sm:p-1.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60">
+          <nav className="order-3 sm:order-none w-full sm:w-auto flex items-center gap-1 sm:gap-1.5 bg-[#ece6f0] dark:bg-[#2b2930] p-1 sm:p-1.5 rounded-full">
             {/* タブ 1: 問題追跡 */}
             <button
               onClick={() => setActiveTab('tracker')}
-              className={`relative flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
+              className={`relative flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
                 activeTab === 'tracker'
-                  ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm shadow-slate-200 dark:shadow-none'
+                  ? 'bg-[#e4dfff] dark:bg-[#4121d0] text-[#170065] dark:text-[#e4dfff]'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/40'
               }`}
             >
@@ -93,9 +93,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* タブ 2: マネジメント */}
             <button
               onClick={() => setActiveTab('management')}
-              className={`relative flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
+              className={`relative flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
                 activeTab === 'management'
-                  ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm shadow-slate-200 dark:shadow-none'
+                  ? 'bg-[#e4dfff] dark:bg-[#4121d0] text-[#170065] dark:text-[#e4dfff]'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/40'
               }`}
             >
@@ -109,9 +109,9 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* タブ 3: データ移行・初期化 */}
             <button
               onClick={() => setActiveTab('data')}
-              className={`relative flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all duration-150 ${
+              className={`relative flex-1 sm:flex-initial min-w-0 min-h-[40px] sm:min-h-0 flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2 px-2 sm:px-3.5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
                 activeTab === 'data'
-                  ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm shadow-slate-200 dark:shadow-none'
+                  ? 'bg-[#e4dfff] dark:bg-[#4121d0] text-[#170065] dark:text-[#e4dfff]'
                   : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-white/50 dark:hover:bg-slate-700/40'
               }`}
             >
@@ -125,7 +125,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* ✕ 合計インジケーター */}
             <div className="hidden lg:flex items-center">
               {totalIncorrectAll > 0 ? (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-700 dark:text-rose-300 text-xs font-medium">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/60 text-rose-700 dark:text-rose-300 text-xs font-medium">
                   <XCircle className="w-3.5 h-3.5 text-rose-500" />
                   <span>{dict.nav.reviewNeeded}</span>
                   <span className="font-bold text-rose-600 dark:text-rose-400 text-sm">
@@ -133,7 +133,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
                   </span>
                 </div>
               ) : (
-                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xs font-medium">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xs font-medium">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
                   <span>{dict.nav.allCleared}</span>
                 </div>
@@ -143,7 +143,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* テーマ切り替えボタン (OS連動 / Light / Dark) */}
             <button
               onClick={cycleTheme}
-              className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors flex items-center justify-center gap-1 text-xs"
+              className="min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 p-2 rounded-full bg-[#ece6f0] dark:bg-[#2b2930] hover:bg-[#e4dfff] dark:hover:bg-[#4a4458] text-slate-600 dark:text-slate-300 transition-colors flex items-center justify-center gap-1 text-xs"
               title={
                 themeMode === 'system'
                   ? dict.nav.themeSystem
@@ -175,7 +175,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, setActiveTab }) => {
             {/* 言語切り替えボタン (OS自動 / 日本語 / English) */}
             <button
               onClick={cycleLanguage}
-              className="min-h-[40px] sm:min-h-0 p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors flex items-center justify-center gap-1.5 text-xs font-semibold"
+              className="min-h-[40px] sm:min-h-0 p-2 rounded-full bg-[#ece6f0] dark:bg-[#2b2930] hover:bg-[#e4dfff] dark:hover:bg-[#4a4458] text-slate-600 dark:text-slate-300 transition-colors flex items-center justify-center gap-1.5 text-xs font-semibold"
               title={
                 languageMode === 'system'
                   ? dict.nav.langAuto

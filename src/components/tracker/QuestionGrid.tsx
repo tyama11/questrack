@@ -155,7 +155,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
 
   if (questions.length === 0) {
     return (
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 sm:p-12 text-center border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+      <div className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] p-8 sm:p-12 text-center border border-[#cac4d0]/60 dark:border-[#49454f]/60 shadow-sm space-y-4">
         <div className="w-16 h-16 mx-auto rounded-2xl bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center">
           <AlertCircle className="w-8 h-8" />
         </div>
@@ -176,7 +176,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
   return (
     <div
       ref={containerRef}
-      className="bg-white dark:bg-slate-900 rounded-3xl p-3.5 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800"
+      className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] p-3.5 sm:p-6 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60"
     >
       {/* グリッドヘッダー・件数 */}
       <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-100 dark:border-slate-800 text-xs gap-2">
@@ -199,7 +199,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
               key={q.id}
               data-question-number={q.number}
               onClick={() => setFocusedNumber(q.number)}
-              className={`group relative flex flex-col rounded-2xl p-2 sm:p-2.5 transition-all duration-150 select-none ${
+              className={`group relative flex flex-col rounded-2xl p-2 sm:p-2.5 transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] select-none ${
                 isFocused
                   ? 'ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-slate-900 shadow-md scale-102 z-10'
                   : 'hover:shadow-md hover:scale-101 border'
@@ -224,7 +224,7 @@ export const QuestionGrid: React.FC<QuestionGridProps> = ({
                     e.stopPropagation();
                     onOpenNoteModal(q);
                   }}
-                  className={`min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 sm:p-1 flex items-center justify-center rounded-lg transition-all ${
+                  className={`min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 sm:p-1 flex items-center justify-center rounded-2xl transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-105 active:scale-95 ${
                     hasNote
                       ? 'bg-amber-100 text-amber-600 dark:bg-amber-950 dark:text-amber-300 shadow-xs'
                       : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-700/60 opacity-100 sm:opacity-60 sm:group-hover:opacity-100'

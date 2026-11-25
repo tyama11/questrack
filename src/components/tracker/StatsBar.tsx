@@ -16,12 +16,12 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
   const unansweredPercent = stats.total > 0 ? (stats.unanswered / stats.total) * 100 : 0;
 
   return (
-    <div className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 dark:border-slate-800 transition-all">
+    <div className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] p-4 sm:p-5 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60 transition-all">
       {/* 上段: 数値サマリーカードグリッド */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {/* 正答率 */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5 p-3 sm:p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 min-w-0">
-          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
+        <div className="flex items-center gap-2.5 sm:gap-3.5 p-3 sm:p-3.5 rounded-3xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 min-w-0">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-3xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
             <Award className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div className="min-w-0 flex-1">
@@ -40,8 +40,8 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
         </div>
 
         {/* 正解 (◯) */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5 p-3 sm:p-3.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40 min-w-0">
-          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+        <div className="flex items-center gap-2.5 sm:gap-3.5 p-3 sm:p-3.5 rounded-3xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40 min-w-0">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-3xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
             <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div className="min-w-0 flex-1">
@@ -60,8 +60,8 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
         </div>
 
         {/* 不正解 (✕) - 最重要強調 */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5 p-3 sm:p-3.5 rounded-xl bg-rose-50/80 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 shadow-sm shadow-rose-500/5 min-w-0">
-          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 ring-2 ring-rose-200 dark:ring-rose-800">
+        <div className="flex items-center gap-2.5 sm:gap-3.5 p-3 sm:p-3.5 rounded-3xl bg-rose-50/80 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/50 shadow-sm shadow-rose-500/5 min-w-0">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-3xl bg-rose-100 dark:bg-rose-900/60 text-rose-600 dark:text-rose-400 flex items-center justify-center shrink-0 ring-2 ring-rose-200 dark:ring-rose-800">
             <XCircle className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div className="min-w-0 flex-1">
@@ -85,8 +85,8 @@ export const StatsBar: React.FC<StatsBarProps> = ({ stats }) => {
         </div>
 
         {/* 未解答 */}
-        <div className="flex items-center gap-2.5 sm:gap-3.5 p-3 sm:p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 min-w-0">
-          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 flex items-center justify-center shrink-0">
+        <div className="flex items-center gap-2.5 sm:gap-3.5 p-3 sm:p-3.5 rounded-3xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 min-w-0">
+          <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-3xl bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 flex items-center justify-center shrink-0">
             <HelpCircle className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div className="min-w-0 flex-1">

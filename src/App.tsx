@@ -18,7 +18,7 @@ export const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
+    <div className="min-h-screen flex flex-col bg-[#fdf7ff] text-[#1d1b20] dark:bg-[#141218] dark:text-[#e6e0e9] transition-colors">
       {/* グローバルヘッダー & ナビゲーションバー */}
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 

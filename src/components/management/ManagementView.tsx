@@ -186,7 +186,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       {/* ======================================================== */}
       {/* 1. 全体進捗統計カード (全教科横断ダッシュボード) */}
       {/* ======================================================== */}
-      <div className="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+      <div className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] p-4 sm:p-6 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60">
         <div className="flex items-center gap-2 mb-4">
           <TrendingUp className="w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0" />
           <h2 className="text-base font-bold text-slate-900 dark:text-white truncate">
@@ -279,7 +279,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       <div className={`p-4 sm:p-5 rounded-2xl border transition-all shadow-sm ${
         !isTauri
           ? 'bg-amber-500/10 dark:bg-amber-500/15 border-amber-300 dark:border-amber-700/60'
-          : 'bg-slate-50 dark:bg-slate-800/40 border-slate-200 dark:border-slate-800'
+          : 'bg-slate-50 dark:bg-slate-800/40 border-[#cac4d0]/60 dark:border-[#49454f]/60'
       }`}>
         <div className="flex items-start gap-3.5">
           <div className={`p-2 rounded-xl text-white shrink-0 mt-0.5 shadow-sm ${
@@ -352,7 +352,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             return (
               <div
                 key={wb.id}
-                className="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between hover:shadow-md transition-shadow min-w-0"
+                className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] p-4 sm:p-5 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60 flex flex-col justify-between hover:shadow-md transition-shadow min-w-0"
               >
                 <div>
                   {/* 教科バッジ & 複製・編集・削除メニュー */}
@@ -486,7 +486,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
             return (
               <div
                 key={sub.id}
-                className="bg-white dark:bg-slate-900 rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-3 min-w-0"
+                className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] p-3 sm:p-4 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60 flex items-center justify-between gap-3 min-w-0"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div
@@ -543,7 +543,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       {isCreateWbOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
           <div
-            className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-y-auto max-h-[90dvh]"
+            className="w-full max-w-md bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] shadow-2xl border border-[#cac4d0]/60 dark:border-[#49454f]/60 overflow-y-auto max-h-[90dvh]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 sticky top-0 bg-white dark:bg-slate-900 z-10">
@@ -662,7 +662,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       {editingWb && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
           <div
-            className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-y-auto max-h-[90dvh]"
+            className="w-full max-w-md bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] shadow-2xl border border-[#cac4d0]/60 dark:border-[#49454f]/60 overflow-y-auto max-h-[90dvh]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 sticky top-0 bg-white dark:bg-slate-900 z-10">
@@ -763,7 +763,7 @@ export const ManagementView: React.FC<ManagementViewProps> = ({ onOpenWorkbook }
       {isSubjectModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
           <div
-            className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-y-auto max-h-[90dvh]"
+            className="w-full max-w-md bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] shadow-2xl border border-[#cac4d0]/60 dark:border-[#49454f]/60 overflow-y-auto max-h-[90dvh]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800 sticky top-0 bg-white dark:bg-slate-900 z-10">

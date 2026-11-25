@@ -65,7 +65,7 @@ export const NoteModal: React.FC<NoteModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
       <div
-        className="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col max-h-[90dvh] animate-in zoom-in-95 duration-150"
+        className="w-full max-w-lg bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] shadow-2xl border border-[#cac4d0]/60 dark:border-[#49454f]/60 overflow-hidden flex flex-col max-h-[90dvh] animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* モーダルヘッダー */}

@@ -35,7 +35,7 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
       <div
-        className="w-full max-w-md max-h-[90dvh] overflow-y-auto bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 space-y-4 sm:space-y-5 animate-in zoom-in-95 duration-150"
+        className="w-full max-w-md max-h-[90dvh] overflow-y-auto bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] sm:rounded-3xl shadow-2xl border border-[#cac4d0]/60 dark:border-[#49454f]/60 p-4 sm:p-6 space-y-4 sm:space-y-5 animate-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start gap-3 sm:gap-4">

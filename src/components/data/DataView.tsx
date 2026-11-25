@@ -171,7 +171,7 @@ export const DataView: React.FC = () => {
       {/* ======================================================== */}
       {/* 1. ストレージ利用状況カード */}
       {/* ======================================================== */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+      <div className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60">
         <div className="flex items-center gap-2 mb-4">
           <HardDrive className="w-5 h-5 text-brand-600 dark:text-brand-400 shrink-0" />
           <h2 className="text-base font-bold text-slate-900 dark:text-white">
@@ -242,7 +242,7 @@ export const DataView: React.FC = () => {
       {/* ======================================================== */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* エクスポート (バックアップ) */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-4">
+        <div className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60 flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center shrink-0">
@@ -269,7 +269,7 @@ export const DataView: React.FC = () => {
         </div>
 
         {/* インポート (復元・移行 - ファイル管理に一本化) */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 flex flex-col justify-between space-y-4">
+        <div className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60 flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <div className="w-8 h-8 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
@@ -384,7 +384,7 @@ export const DataView: React.FC = () => {
       {/* ======================================================== */}
       {/* 3. 初期化・リセット (Reset & Initialization) */}
       {/* ======================================================== */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+      <div className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60 space-y-4">
         <div className="flex items-center gap-2">
           <RefreshCw className="w-5 h-5 text-slate-600 dark:text-slate-400 shrink-0" />
           <h2 className="text-base font-bold text-slate-900 dark:text-white">
@@ -442,7 +442,7 @@ export const DataView: React.FC = () => {
       {isSampleResetModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in overflow-y-auto">
           <div
-            className="w-full max-w-sm max-h-[calc(100dvh-2rem)] sm:max-h-none overflow-y-auto my-auto bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 space-y-4"
+            className="w-full max-w-sm max-h-[calc(100dvh-2rem)] sm:max-h-none overflow-y-auto my-auto bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] sm:rounded-3xl shadow-2xl border border-[#cac4d0]/60 dark:border-[#49454f]/60 p-5 sm:p-6 space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-12 h-12 rounded-2xl bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto shrink-0">
@@ -482,7 +482,7 @@ export const DataView: React.FC = () => {
       {isResetModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-xs animate-in fade-in overflow-y-auto">
           <div
-            className="w-full max-w-md max-h-[calc(100dvh-2rem)] sm:max-h-none overflow-y-auto my-auto bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-rose-200 dark:border-rose-900 p-5 sm:p-6 space-y-4"
+            className="w-full max-w-md max-h-[calc(100dvh-2rem)] sm:max-h-none overflow-y-auto my-auto bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] sm:rounded-3xl shadow-2xl border border-rose-200 dark:border-rose-900 p-5 sm:p-6 space-y-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950 text-rose-600 flex items-center justify-center mx-auto ring-4 ring-rose-50 dark:ring-rose-900/40 shrink-0">

@@ -3,17 +3,17 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-brand-50: #eff6ff;
-  --color-brand-100: #dbeafe;
-  --color-brand-200: #bfdbfe;
-  --color-brand-300: #93c5fd;
-  --color-brand-400: #60a5fa;
-  --color-brand-500: #3b82f6;
-  --color-brand-600: #2563eb;
-  --color-brand-700: #1d4ed8;
-  --color-brand-800: #1e40af;
-  --color-brand-900: #1e3a8a;
-  --color-brand-950: #172554;
+  --color-brand-50: #f6f2ff;
+  --color-brand-100: #e4dfff;
+  --color-brand-200: #d0c8ff;
+  --color-brand-300: #b8aaff;
+  --color-brand-400: #9a87ff;
+  --color-brand-500: #7a62f5;
+  --color-brand-600: #583de8;
+  --color-brand-700: #4628d4;
+  --color-brand-800: #3a1fb0;
+  --color-brand-900: #2a009f;
+  --color-brand-950: #170065;
 }
 
 @layer base {
@@ -70,4 +70,23 @@
 /* 集中復習カード用トランジション */
 .perspective-1000 {
   perspective: 1000px;
+}
+
+/* Material 3 Expressive */
+:root {
+  --m3-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+button {
+  transition-timing-function: var(--m3-spring);
+}
+
+button:not(:disabled):active {
+  transform: scale(0.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button {
+    transition-duration: 0.01ms !important;
+  }
 }

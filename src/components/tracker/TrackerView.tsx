@@ -56,7 +56,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
       {/* ======================================================== */}
       {/* 1. 問題集クイックセレクター (横スクロール対応カルーセル) */}
       {/* ======================================================== */}
-      <div className="bg-white dark:bg-slate-900 rounded-2xl p-3 sm:p-4 shadow-sm border border-slate-200 dark:border-slate-800">
+      <div className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] p-3 sm:p-4 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60">
         <div className="flex items-center justify-between mb-3 px-1">
           <div className="flex items-center gap-2 min-w-0">
             <Layers className="w-4 h-4 text-brand-600 dark:text-brand-400 shrink-0" />
@@ -86,9 +86,9 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
               <button
                 key={wb.id}
                 onClick={() => setActiveWorkbookId(wb.id)}
-                className={`shrink-0 flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-medium transition-all duration-150 border text-left min-h-[40px] sm:min-h-0 ${
+                className={`shrink-0 flex items-center gap-2.5 px-3.5 py-2 rounded-full text-xs font-medium transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] border text-left min-h-[40px] sm:min-h-0 ${
                   isSelected
-                    ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 border-transparent shadow-md'
+                    ? 'bg-[#583de8] text-white dark:bg-[#c7bfff] dark:text-[#2a009f] border-transparent shadow-md'
                     : 'bg-slate-50 dark:bg-slate-800/70 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800'
                 }`}
               >
@@ -135,7 +135,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
       {/* 2. 問題集未選択時のプレースホルダー */}
       {/* ======================================================== */}
       {!activeWorkbook || !stats ? (
-        <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-12 text-center border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+        <div className="bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] p-6 sm:p-12 text-center border border-[#cac4d0]/60 dark:border-[#49454f]/60 shadow-sm space-y-4">
           <div className="w-16 h-16 mx-auto rounded-3xl bg-brand-50 dark:bg-brand-950/60 text-brand-600 dark:text-brand-400 flex items-center justify-center">
             <BookOpen className="w-8 h-8" />
           </div>
@@ -149,7 +149,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
           </div>
           <button
             onClick={onNavigateToManagement}
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/30 transition-all active:scale-95 min-h-[40px] sm:min-h-0"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold text-white bg-brand-600 hover:bg-brand-700 shadow-md shadow-brand-600/30 transition-all active:scale-95 min-h-[40px] sm:min-h-0"
           >
             <span>{dict.tracker.manageWorkbooks}</span>
             <ArrowRight className="w-4 h-4" />
@@ -161,7 +161,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
         /* ======================================================== */
         <div className="space-y-6">
           {/* 問題集タイトル & ヘッダー情報 */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 dark:border-slate-800">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#f7f2fa] dark:bg-[#1d1b20] rounded-[28px] p-4 sm:p-5 shadow-sm border border-[#cac4d0]/60 dark:border-[#49454f]/60">
             <div className="flex items-start sm:items-center gap-3.5 min-w-0">
               {/* 教科アイコン / バッジ */}
               <div
@@ -211,7 +211,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => duplicateWorkbook(activeWorkbook.id)}
-                  className="p-2.5 sm:p-1.5 min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="p-2.5 sm:p-1.5 min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
                   title={dict.tracker.duplicateTooltip}
                   aria-label={dict.tracker.duplicateTooltip}
                 >
@@ -219,7 +219,7 @@ export const TrackerView: React.FC<TrackerViewProps> = ({ onNavigateToManagement
                 </button>
                 <button
                   onClick={() => setIsDeleteModalOpen(true)}
-                  className="p-2.5 sm:p-1.5 min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                  className="p-2.5 sm:p-1.5 min-h-[40px] min-w-[40px] sm:min-h-0 sm:min-w-0 flex items-center justify-center rounded-full text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
                   title={dict.tracker.deleteTooltip}
                   aria-label={dict.tracker.deleteTooltip}
                 >
