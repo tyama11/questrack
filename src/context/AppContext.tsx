@@ -427,7 +427,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
     setFilterOptions((prev) => ({ ...prev, searchQuery: query }));
   }, []);
 
-  const setSubjectFilter = useCallback((subjectId: string | 'all') => {
+  const setSubjectFilter = useCallback((subjectId: string) => {
     setFilterOptions((prev) => ({ ...prev, subjectId }));
   }, []);
 

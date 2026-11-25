@@ -64,7 +64,7 @@ export type FilterStatus = 'all' | 'incorrect_only' | 'correct_only' | 'unanswer
 export interface FilterOptions {
   status: FilterStatus;
   searchQuery: string;      // 問題番号またはメモ内容の部分一致検索
-  subjectId: string | 'all';// 教科による絞り込み ('all' は全教科)
+  subjectId: string;        // 教科による絞り込み ('all' は全教科)
 }
 
 /**
@@ -165,7 +165,7 @@ export interface AppContextType {
   // フィルター操作 (Filter Actions)
   setStatusFilter: (status: FilterStatus) => void;
   setSearchQuery: (query: string) => void;
-  setSubjectFilter: (subjectId: string | 'all') => void;
+  setSubjectFilter: (subjectId: string) => void;
   resetFilters: () => void;
 
   // 統計計算ヘルパー (Stats Helper)

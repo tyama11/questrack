@@ -13,7 +13,7 @@ describe('SEO and public static assets', () => {
     delete process.env.TAURI_ENV_PLATFORM;
 
     const { default: configFn } = await import('../../vite.config');
-    const result: any = await configFn({ mode: 'production', command: 'build' });
+    const result: any = configFn({ mode: 'production', command: 'build' });
 
     const plugins = Array.isArray(result.plugins) ? result.plugins.flat(Infinity) : [];
     const seoPlugin = plugins.find((plugin: any) => plugin?.name === 'vite-plugin-pages-seo');
@@ -46,7 +46,7 @@ describe('SEO and public static assets', () => {
 
   it('preserves html identically in desktop mode', async () => {
     const { default: configFn } = await import('../../vite.config');
-    const result: any = await configFn({ mode: 'desktop', command: 'build' });
+    const result: any = configFn({ mode: 'desktop', command: 'build' });
 
     const plugins = Array.isArray(result.plugins) ? result.plugins.flat(Infinity) : [];
     const seoPlugin = plugins.find((plugin: any) => plugin?.name === 'vite-plugin-pages-seo');
