@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "build:desktop": "tsc && vite build --mode desktop",
-    "build:pages": "tsc && vite build --mode pages",
+    "build": "tsrs --noEmit --fast && vite build",
+    "build:desktop": "tsrs --noEmit --fast && vite build --mode desktop",
+    "build:pages": "tsrs --noEmit --fast && vite build --mode pages",
     "preview": "vite preview",
     "tauri": "tauri",
     "lint": "eslint . --max-warnings 0",
@@ -41,7 +41,8 @@
     "typescript": "^7.0.2",
     "typescript-eslint": "^8.70.1",
     "vite": "^8.3.1",
-    "vitest": "^5.0.2"
+    "vitest": "^5.0.2",
+    "tsrs": "7.1.0-beta.tsrs5"
   },
   "overrides": {
     "typescript": "$typescript"
