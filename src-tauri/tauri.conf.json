@@ -4,15 +4,15 @@
   "version": "3.0.0",
   "identifier": "com.questrack.app",
   "build": {
-    "beforeDevCommand": "npm run dev",
+    "beforeDevCommand": "pnpm run dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "npm run build:desktop",
+    "beforeBuildCommand": "pnpm run build:desktop",
     "frontendDist": "../dist"
   },
   "app": {
     "windows": [
       {
-        "title": "Questrack - 問題追跡・復習アプリ",
+        "title": "Questrack - \u554f\u984c\u8ffd\u8de1\u30fb\u5fa9\u7fd2\u30a2\u30d7\u30ea",
         "width": 1100,
         "height": 780,
         "minWidth": 900,
